@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>subcon_module</name>
+  <version>0.1.0</version>
+  <description>
+    Subcon module for STM32, to handle IMU and Buttons.
+  </description>
+  <license>Apache 2.0</license>
+  <author email="falahnzk.dev@gmail.com">Falah Naufal Zaki</author>
+  <maintainer email="altairgmrt@gmail.com">Altair</maintainer>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>dynamixel_sdk</depend>
+  <depend>robotis_controller_msgs</depend>
+  <depend>ament_cmake</depend>
+  <depend>robotis_framework_common</depend>
+  <depend>robotis_device</depend>
+  <depend>robotis_math</depend>
+  <depend>eigen</depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

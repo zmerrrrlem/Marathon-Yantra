@@ -1,0 +1,59 @@
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="alfarobi_gazebo" params="prefix">
+
+    <!-- ros_control plugin -->
+    <gazebo>
+      <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+        <parameters>$(find quintic_walk)/config/controller.yaml</parameters>
+      </plugin>
+    </gazebo>
+
+    <plugin filename="gz-sim-sensors-system"
+      name="gz::sim::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+
+
+
+
+    <gazebo reference="cam_gazebo_link">
+      <sensor name="camera" type="camera">
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <update_rate>30</update_rate>
+        <topic>gazebo/camera/image_raw</topic>
+        <gz_frame_id>cam_link</gz_frame_id>
+        <camera name="__default__">
+          <camera_info_topic>gazebo/camera/camera_info</camera_info_topic>
+          <horizontal_fov>1.012300</horizontal_fov>
+          <image>
+            <width>320</width>
+            <height>200</height>
+          </image>
+          <clip>
+            <near>0.001000</near>
+            <far>100.000000</far>
+          </clip>
+        </camera>
+      </sensor>
+    </gazebo>
+
+
+    <!-- imu sensor -->
+    <gazebo reference="imu_link">
+      <gravity>true</gravity>
+      <sensor name="imu_sensor" type="imu">
+        <plugin filename="gz-sim-imu-system"
+          name="gz::sim::systems::Imu">
+        </plugin> 
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>true</visualize>
+        <topic>gazebo/imu</topic>
+        <pose>0 0 0 0 0 0</pose>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

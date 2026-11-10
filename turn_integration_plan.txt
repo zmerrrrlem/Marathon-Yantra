@@ -1,0 +1,25 @@
+Multiphase plan: integrate turning into cubic_walk
+
+Phase 1: Telemetry & state plumbing
+- Add yaw source subscription (IMU or odometry) and yaw extraction (quaternion->yaw, filtered).
+- Add turn state enum + parameters (capture band, settle tol, timeout, yaw sign, max angular).
+- Publish /altair_turn/state and /target_yaw.
+
+Phase 2: Turn request interface
+- Subscribe /altair_turn/request (Float64) to set target yaw = current yaw + request.
+- Validate preconditions (walking/controllable state, fresh yaw).
+- Abort on timeout/stale data.
+
+Phase 3: Control integration
+- In cmdVelCb, when turning, override angular_z with P/PD correction to target (clamped to trunk_yaw limits).
+- Keep linear motion from cmd_vel; support in-place turns (linear_speed=0).
+- Publish zero turn command on done/abort.
+
+Phase 4: State machine
+- IDLE -> TURNING (on request) -> SETTLING (within capture band) -> DONE (settle ticks) -> IDLE.
+- Abort on walk engine stop, stale yaw, timeout.
+
+Phase 5: Validation & cleanup
+- Remove dependency on heading_hold, /subcon/euler_data, /altair_walk/walk_status, cmd_mux (or keep cmd_mux for mission commands).
+- Test in Gazebo: walking + 90 deg turns, check stability, angular error, no falls.
+- Run envelope sweep (turn_test equivalent) and tune gains/limits.

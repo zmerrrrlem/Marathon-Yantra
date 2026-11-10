@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- altair_manager manager -->
+  <include file="$(find-pkg-share altair_manager)/launch/altair_manager.launch.py"/>
+  
+  <!-- op3 demo -->
+  <node pkg="op3_demo" exec="op_demo_node" output="screen">
+    <param name="grass_demo" value="False" />
+    <param name="p_gain" value="0.45" />
+    <param name="d_gain" value="0.045" />
+  </node>
+</launch>

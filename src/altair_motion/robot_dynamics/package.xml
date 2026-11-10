@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>robot_dynamics</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <author email="falahnzk.dev@gmail.com">Falah N. Zaki</author>
+  <maintainer email="altairgmrt@gmail.com">Altair</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>ament_index_cpp</build_depend>
+  <build_depend>PkgConfig</build_depend>
+  <build_depend>altair_msgs</build_depend>
+  <build_depend>biped_interfaces</build_depend>
+  <build_depend>control_toolbox</build_depend>
+  <build_depend>generate_parameter_library</build_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>parameter_traits</build_depend>
+  <build_depend>quintic_splines</build_depend>
+  <build_depend>rclcpp</build_depend>
+  <build_depend>robotis_device</build_depend>
+  <build_depend>robotis_framework_common</build_depend>
+  <build_depend>robotis_controller_msgs</build_depend>
+  <build_depend>robotis_math</build_depend>
+  <build_depend>rot_conv</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>Eigen3</build_depend>
+  <build_depend>pinocchio</build_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

@@ -1,0 +1,97 @@
+/**:
+  ros__parameters:
+    use_sim_time: true
+walking:
+  ros__parameters:
+    engine:
+      double_support_ratio: 0.094
+      foot_distance: 0.081
+      foot_rise: 0.075
+      freq: 2.962
+      trunk_height: 0.200
+      trunk_phase: 0.017
+      trunk_pitch: 0.284
+      trunk_pitch_p_coef_forward: 1.538
+      trunk_pitch_p_coef_turn: -0.254
+      trunk_swing: 0.018
+      trunk_x_offset: 0.022
+      trunk_y_offset: -0.000
+      trunk_z_movement: 0.020
+      first_step_swing_factor: 1.000
+      first_step_trunk_phase: -0.500
+      foot_apex_phase: 0.500
+      foot_overshoot_phase: 1.000
+      foot_overshoot_ratio: 0.000
+      foot_put_down_phase: 1.000
+      foot_put_down_z_offset: 0.000
+      foot_z_pause: 0.000
+      trunk_pause: 0.000
+      trunk_x_offset_p_coef_forward: 0.000
+      trunk_x_offset_p_coef_turn: 0.000
+
+      kick_length: 0.120
+      kick_vel: 0.200
+      kick_phase: 0.280
+      kick_put_down_phase: 0.800
+      kick_rise_factor: 1.500
+    node:
+      # update frequency of the engine
+      engine_freq: 125.000
+
+      # parameters for bioIK
+      ik:
+        timeout: 0.010
+        reset: False
+
+      debug_active: True
+
+      max_step_x: 1000.000
+      max_step_y: 1000.000
+      max_step_xy: 1000.000
+      max_step_z: 1000.000
+      max_step_angular: 1000.000
+
+      stability_stop:
+        imu:
+          active: False
+          pitch:
+            threshold: 0.190
+            vel_threshold: 1.300
+          roll:
+            threshold: 0.400
+            vel_threshold: 5.700
+        pause_duration: 3.000
+
+      imu_y_acc_tau: 0.100
+
+      phase_reset:
+        min_phase: 0.250
+        foot_pressure:
+          active: False
+          ground_min_pressure: 1.500
+        effort:
+          active: False
+          joint_min_effort: 3.000
+        imu:
+          active: False
+          y_acceleration_threshold: 2.000
+
+      x_speed_multiplier: 1.000
+      y_speed_multiplier: 1.000
+      yaw_speed_multiplier: 1.000
+
+      trunk_pid:
+        pitch:
+          p: 0.000
+          i: 0.000
+          d: 0.000
+          i_clamp_min: 0.000
+          i_clamp_max: 0.000
+          antiwindup: False
+        roll:
+          p: 0.000
+          i: 0.000
+          d: 0.000
+          i_clamp_min: 0.000
+          i_clamp_max: 0.000
+          antiwindup: False

@@ -1,0 +1,29 @@
+build
+install
+log
+.vscode
+walk_engine_trajectory.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Local tooling
+.idea/
+.cache/

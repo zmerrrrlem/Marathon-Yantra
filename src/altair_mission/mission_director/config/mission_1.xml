@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root BTCPP_format="4" main_tree_to_execute="mission_1">
+  <BehaviorTree ID="mission_1">
+    <Sequence name="jalan-maju">
+      <set_module name="Set module to quintic walk" />
+      <set_robot_state_walking_init name="Set the robot to walking init pose" />
+    </Sequence>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="set_module" />
+    <Action ID="set_robot_state_controllable" />
+    <Action ID="set_robot_state_falling" />
+    <Action ID="set_robot_state_fallen" />
+    <Action ID="set_robot_state_getting_up" />
+    <Action ID="set_robot_state_animation_running" />
+    <Action ID="set_robot_state_penalty" />
+    <Action ID="set_robot_state_walking_init" />
+    <Action ID="set_robot_state_walking" />
+    <Action ID="set_robot_state_motor_off" />
+    <Action ID="set_robot_state_picked_up" />
+    <Action ID="set_robot_state_kicking" />
+  </TreeNodesModel>
+
+</root>

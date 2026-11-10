@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>altair_walk_module</name>
+  <version>0.2.1</version>
+  <description>The altair_walk_module package</description>
+  <license>Apache-2.0</license>
+  <maintainer email="altairgmrt@gmail.com">Altair</maintainer>
+  <author email="falahnzk.dev@gmail.com">Falah Naufal Zaki</author>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>ament_index_cpp</depend>
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>robotis_controller_msgs</depend>
+  <depend>robotis_framework_common</depend>
+  <depend>robotis_device</depend>
+  <depend>robotis_math</depend>
+  <depend>op3_kinematics_dynamics</depend>
+  <depend>eigen</depend>
+  <depend>yaml-cpp</depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

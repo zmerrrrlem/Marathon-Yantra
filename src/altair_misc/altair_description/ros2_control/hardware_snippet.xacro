@@ -1,0 +1,452 @@
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Macro for servo by dynamixel_hardware COMMUNITY version -->
+  <xacro:macro name="hardware_snippet_real" params="offset_file">
+    <!-- parse initial_position for the joint -->
+    <xacro:property name="offset"
+      value="${xacro.load_yaml(offset_file)['offset']}" />
+
+    <joint name="r_sho_pitch">
+      <param name="id">1</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_sho_pitch']}</param>
+    </joint>
+
+    <joint name="l_sho_pitch">
+      <param name="id">2</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_sho_pitch']}</param>
+    </joint>
+
+    <joint name="r_sho_roll">
+      <param name="id">3</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_sho_roll']}</param>
+    </joint>
+
+    <joint name="l_sho_roll">
+      <param name="id">4</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_sho_roll']}</param>
+      <param name="Drive_Mode">1</param>
+    </joint>
+
+    <joint name="r_el">
+      <param name="id">5</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_el']}</param>
+    </joint>
+
+    <joint name="l_el">
+      <param name="id">6</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_el']}</param>
+    </joint>
+
+    <joint name="r_hip_yaw">
+      <param name="id">7</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_hip_yaw']}</param>
+    </joint>
+
+    <joint name="l_hip_yaw">
+      <param name="id">8</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_hip_yaw']}</param>
+    </joint>
+
+    <joint name="r_hip_roll">
+      <param name="id">9</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_hip_roll']}</param>
+    </joint>
+
+    <joint name="l_hip_roll">
+      <param name="id">10</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_hip_roll']}</param>
+    </joint>
+
+    <joint name="r_hip_pitch">
+      <param name="id">11</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_hip_pitch']}</param>
+      <param name="Drive_Mode">1</param>
+    </joint>
+
+    <joint name="l_hip_pitch">
+      <param name="id">12</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_hip_pitch']}</param>
+      <param name="Drive_Mode">1</param>
+    </joint>
+
+    <joint name="r_knee">
+      <param name="id">13</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_knee']}</param>
+      <param name="Drive_Mode">1</param>
+      <param name="Position_P_Gain">850</param>
+    </joint>
+
+    <joint name="l_knee">
+      <param name="id">14</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_knee']}</param>
+      <param name="Drive_Mode">1</param>
+      <param name="Position_P_Gain">850</param>
+    </joint>
+
+    <joint name="r_ank_pitch">
+      <param name="id">15</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_ank_pitch']}</param>
+      <param name="Drive_Mode">1</param>
+    </joint>
+
+    <joint name="l_ank_pitch">
+      <param name="id">16</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_ank_pitch']}</param>
+      <param name="Drive_Mode">1</param>
+    </joint>
+
+    <joint name="r_ank_roll">
+      <param name="id">17</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['r_ank_roll']}</param>
+    </joint>
+
+    <joint name="l_ank_roll">
+      <param name="id">18</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['l_ank_roll']}</param>
+    </joint>
+
+    <joint name="head_pan">
+      <param name="id">19</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['head_pan']}</param>
+      <param name="Drive_Mode">0</param>
+    </joint>
+
+    <joint name="head_tilt">
+      <param name="id">20</param>
+      <state_interface name="position" />
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      <param name="offset">${offset['head_tilt']}</param>
+      <param name="Drive_Mode">1</param>
+    </joint>
+  </xacro:macro>
+
+
+  <!--  Macro for joint in sim/ mock environment -->
+  <xacro:macro name="hardware_snippet_mock" params="initial_position_file">
+    <!-- parse initial_position for the joint -->
+    <xacro:property name="initial_position"
+      value="${xacro.load_yaml(initial_position_file)['initial_position']}" />
+
+    <joint name="head_pan">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['head_pan']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+    <joint name="head_tilt">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['head_tilt']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="l_el">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_el']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="l_sho_roll">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_sho_roll']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="l_sho_pitch">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_sho_pitch']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="r_el">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_el']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="r_sho_roll">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_sho_roll']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="r_sho_pitch">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_sho_pitch']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="l_ank_roll">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_ank_roll']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="l_ank_pitch">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_ank_pitch']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      
+    </joint>
+
+    <joint name="l_knee">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_knee']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      
+    </joint>
+
+    <joint name="l_hip_pitch">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_hip_pitch']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      
+    </joint>
+
+    <joint name="l_hip_roll">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_hip_roll']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="l_hip_yaw">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_hip_yaw']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="r_ank_roll">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_ank_roll']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="r_ank_pitch">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_ank_pitch']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      
+    </joint>
+
+    <joint name="r_knee">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_knee']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="r_hip_pitch">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_hip_pitch']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+      
+    </joint>
+
+    <joint name="r_hip_roll">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_hip_roll']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+
+    <joint name="r_hip_yaw">
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_hip_yaw']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
+      <command_interface name="position">
+        <param name="min">-2.8</param>
+        <param name="max">2.8</param>
+      </command_interface>
+    </joint>
+  </xacro:macro>
+</robot>

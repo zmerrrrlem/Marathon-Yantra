@@ -1,0 +1,6 @@
+[submodule "src/altair_msgs/dynamixel_msgs"]
+	path = src/altair_msgs/dynamixel_msgs
+	url = https://github.com/Altair-Humanoid-GMRT/dynamixel_msgs.git
+[submodule "src/altair_misc/DynamixelSDK"]
+	path = src/altair_misc/DynamixelSDK
+	url = https://github.com/Altair-Humanoid-GMRT/DynamixelSDK.git

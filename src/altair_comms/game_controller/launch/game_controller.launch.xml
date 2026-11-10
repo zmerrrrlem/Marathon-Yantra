@@ -1,0 +1,14 @@
+<launch>
+    <!-- Launch Arguments -->
+    <arg name="namespace" default="" description="node namespace"/>
+    
+    <!-- New parameters (CHANGE THIS PARAMETER) -->
+    <arg name="team_id" default="5" description="team identifier"/>
+    <arg name="robot_id" default="1" description="robot identifier"/> 
+    
+    <!-- Nodes -->
+    <node pkg="game_controller" exec="game_controller" name="game_controller" namespace="$(var namespace)" output="screen">
+        <param name="team_id" value="$(var team_id)"/>
+        <param name="robot_id" value="$(var robot_id)"/>
+    </node>
+</launch>

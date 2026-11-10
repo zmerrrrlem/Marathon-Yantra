@@ -1,0 +1,21 @@
+offset:
+  head_pan: -0.06981
+  head_tilt: -0.44331
+  l_ank_pitch: 0.176
+  l_ank_roll: 0.12898
+  l_el: 0.0
+  l_hip_pitch: -0.07819
+  l_hip_roll: -0.03264
+  l_hip_yaw: 0.03578
+  l_knee: 0.01204
+  l_sho_pitch: 0.0
+  l_sho_roll: 0.05061
+  r_ank_pitch: -0.81488
+  r_ank_roll: -0.17645
+  r_el: 0.0
+  r_hip_pitch: 0.11537
+  r_hip_roll: 0.04276
+  r_hip_yaw: 0.09826
+  r_knee: 0.02548
+  r_sho_pitch: 0.0
+  r_sho_roll: -0.08430

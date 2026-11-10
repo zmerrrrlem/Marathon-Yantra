@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>altair_manager</name>
+  <version>0.2.1</version>
+  <description>
+    The altair_manager package
+  </description>
+  <license>Apache 2.0</license>
+  <author email="falahnzk.dev@gmail.com">Falah Naufal Zaki</author>
+  <maintainer email="altairgmrt@gmail.com">Altair</maintainer>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  
+  <depend>rclcpp</depend>
+  <depend>ament_index_cpp</depend>
+  
+  <!-- robotis_framework -->
+  <depend>dynamixel_sdk</depend>
+  <depend>robotis_framework_common</depend>
+  <depend>robotis_device</depend>
+  <depend>robotis_controller</depend>
+  <depend>robotis_math</depend>
+  
+  <!-- altair_simulation -->
+  <depend>altair_description</depend>
+  <depend>altair_gazebo_ros2</depend>
+  <depend>altair_gz_bridge</depend>
+  
+  <!-- op3_simulation -->
+  <depend>op3_description</depend>
+  <depend>op3_gazebo_ros2</depend>
+  <depend>rf_gz_bridge</depend>
+  
+  <!-- msgs -->
+  <depend>altair_msgs</depend>
+  <depend>robotis_controller_msgs</depend>
+  <depend>op3_action_module_msgs</depend>
+
+  <!-- module -->
+  <depend>op3_base_module</depend>
+  <depend>op3_action_module</depend>
+  <depend>experiment_module</depend>
+  <depend>quintic_splines</depend>
+  <depend>quintic_walk</depend>
+  <depend>robot_dynamics</depend>
+  <!-- <depend>subcon_module</depend> -->
+
+  <depend>microcontroller_hardware_node</depend>
+  
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

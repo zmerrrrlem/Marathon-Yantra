@@ -1,0 +1,8 @@
+[device info]
+model_name  = STM-32
+device_type = sensor
+
+[control table]
+# addr | item name                | length | access | memory |   min value   |  max value  | signed
+   
+   

@@ -1,0 +1,97 @@
+RUN ALTAIR - CUBIC WALK (PRIMARY WALKING ENGINE)
+================================================================================
+# NOTE: altair_walk (Python walking engine) is DEPRECATED.
+# All walking now uses cubic_walk (C++ ros2_control plugin with MoveIt IK).
+# Compatibility utilities from altair_walk are still used.
+
+EVERY NEW TERMINAL
+------------------
+altair_start        # sets ROS_DOMAIN_ID=96, cd's to altair_lab, sources install/setup.bash
+
+BUILD
+-----
+altair_start
+colcon build --symlink-install --packages-select cubic_walk cubic_splines altair_description altair_walk altair_turn --executor sequential
+
+COLD START (integrated launch - recommended)
+-------------------------------------------
+# Single command: Gazebo + cubic_walk + heading_hold + fall_detector + joint_command_bridge + distance_tracker
+altair_start
+ros2 launch cubic_walk cubic_walk_integrated.launch.py world:=arena
+
+VERIFY
+------
+ros2 topic echo /walk_engine_odometry    # should show increasing x/y as robot walks
+ros2 topic echo /altair_walk/walk_status # walk state (0=idle, etc.)
+
+START WALKING
+-------------
+# publish velocity at 10 Hz (keep running)
+ros2 topic pub -r 10 /cmd_vel_input geometry_msgs/msg/Twist "{linear: {x: 0.02, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
+# Note: use /cmd_vel_input (not /cmd_vel) when heading_hold is running
+
+ROBOT MODE (sprinting vs marathon)
+----------------------------------
+# Default: marathon (mode 0) - efficient, upright, longer steps
+# Switch to sprinting (mode 1) - aggressive, lower COM, faster
+ros2 topic pub --once /robot_mode std_msgs/msg/Int32 "{data: 1}"
+
+# Switch back to marathon
+ros2 topic pub --once /robot_mode std_msgs/msg/Int32 "{data: 0}"
+
+# Monitor current mode
+ros2 topic echo /altair_walk/robot_mode   # 0=marathon, 1=sprinting
+
+# Monitor transition state (0=idle, 1=transitioning, 2=wind-up, 3=ready)
+ros2 topic echo /altair_walk/mode_transition_state
+
+TURN
+----
+# request a relative turn (+ = left, radians) - handled by cubic_walk internally
+ros2 topic pub --once /altair_turn/request std_msgs/msg/Float64 "{data: 1.5708}"
+ros2 topic echo /altair_turn/state     # 0 idle, 1 turning, 2 settling, 3 done, 4 aborted
+
+TRACK MARATHON DISTANCE
+-----------------------
+ros2 topic echo /walk_distance_m          # cumulative meters walked
+ros2 topic echo /walk_distance_completed   # True when 400m reached
+
+FALL DETECTION
+--------------
+ros2 topic echo /is_falling               # True when fall detected
+
+OP3 FRAMEWORK (hardware)
+------------------------
+# Bridge converts /walking_motor_goals (JointCommand) -> /altair_walk/joint_state (JointState)
+# altair_walk_module subscribes to /altair_walk/joint_state and drives Dynamixels
+ros2 service call /robotis/set_present_ctrl_modules robotis_controller_msgs/srv/SetModule "{module_name: 'altair_walk_module'}"
+
+TUNE TURNING (runtime)
+----------------------
+ros2 param set /cubic_walk turn.kp 0.5
+ros2 param set /cubic_walk turn.kd 0.1
+ros2 param set /cubic_walk turn.max_angular 0.5
+
+ARM SWING (default: enabled)
+---------------------------
+# Turn off arm swing
+ros2 param set /cubic_walk engine.arm_swing_enabled false
+
+# Turn on arm swing
+ros2 param set /cubic_walk engine.arm_swing_enabled true
+
+# Adjust amplitude
+ros2 param set /cubic_walk engine.arm_shoulder_pitch_amp 0.4
+ros2 param set /cubic_walk engine.arm_shoulder_roll_amp 0.15
+
+RESET ROBOT (before every run)
+------------------------------
+gz service -s /world/empty/set_pose --reqtype gz.msgs.Pose --reptype gz.msgs.Boolean --timeout 3000 --req 'name: "altair", position: {x: 0, y: 0, z: 0.35}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}'
+
+STOP WALKING
+------------
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0}, angular: {z: 0.0}}"
+
+KILL EVERYTHING
+---------------
+altair_end

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- altair_manager manager -->
+    <include file="$(find-pkg-share altair_manager)/launch/altair_manager.launch.py" />
+
+
+    <!-- Soccer Demo Node -->
+    <node pkg="op3_demo" exec="op3_demo_node" name="op3_demo_node" output="screen">
+        <param name="debug_print" value="true" />
+    </node>
+    
+</launch>
