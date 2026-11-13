@@ -1,0 +1,64 @@
+ekf_filter_node:
+  ros__parameters:
+    use_sim_time: true
+    publish_tf: true
+    publish_acceleration: false
+    publish_tf_with_uncertainty: false
+
+    # Frame names
+    base_link_frame: body_link
+    odom_frame: odom
+    world_frame: odom
+
+    # --- Sensor 0: IMU (orientation only) ---
+    # Provides yaw, roll, pitch from IMU
+    imu0: /imu_sensor_broadcaster/imu
+    imu0_config: [false, false, false,   # x, y, z position
+                   true,  true,  true,   # roll, pitch, yaw orientation
+                   false, false, false,   # x, y, z linear velocity
+                   true,  true,  true]    # roll, pitch, yaw angular velocity
+    imu0_nodelay: false
+    imu0_differential: false
+    imu0_relative: false
+    imu0_remove_gravitational_acceleration: true
+    imu0_queue_size: 10
+    imu0_nodelay: false
+
+    # IMU covariance - orientation only, position/velocity set high (ignored)
+    imu0_covariance: [0.01, 0.0, 0.0, 0.0, 0.0, 0.0,
+                      0.0, 0.01, 0.0, 0.0, 0.0, 0.0,
+                      0.0, 0.0, 0.01, 0.0, 0.0, 0.0,
+                      0.0, 0.0, 0.0, 0.01, 0.0, 0.0,
+                      0.0, 0.0, 0.0, 0.0, 0.01, 0.0,
+                      0.0, 0.0, 0.0, 0.0, 0.0, 0.01]
+
+    # --- Sensor 1: Walk engine odometry (position only) ---
+    odom0: /walk_engine_odometry
+    odom0_config: [true,  true,  false,   # x, y, z position
+                    false, false, false,   # roll, pitch, yaw orientation
+                    false, false, false,   # x, y, z linear velocity
+                    false, false, false]   # roll, pitch, yaw angular velocity
+    odom0_nodelay: false
+    odom0_differential: false
+    odom0_relative: false
+    odom0_queue_size: 10
+
+    # Odometry covariance - position only, orientation/velocity set high (ignored)
+    odom0_covariance: [0.05, 0.0, 0.0, 0.0, 0.0, 0.0,
+                       0.0, 0.05, 0.0, 0.0, 0.0, 0.0,
+                       0.0, 0.0, 0.1, 0.0, 0.0, 0.0,
+                       0.0, 0.0, 0.0, 0.1, 0.0, 0.0,
+                       0.0, 0.0, 0.0, 0.0, 0.1, 0.0,
+                       0.0, 0.0, 0.0, 0.0, 0.0, 0.1]
+
+    # Frequency settings
+    frequency: 50.0
+    sensor_timeout: 1.0
+    two_d_mode: false
+    transform_time_offset: 0.0
+    transform_timeout: 0.0
+    print_diagnostics: true
+    debug: false
+    debug_out_file: /tmp/ekf_debug.txt
+    self_diagnose: false
+    stale_threshold: 1.0

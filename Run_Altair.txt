@@ -27,7 +27,7 @@ ros2 topic echo /altair_walk/walk_status # walk state (0=idle, etc.)
 START WALKING
 -------------
 # publish velocity at 10 Hz (keep running)
-ros2 topic pub -r 10 /cmd_vel_input geometry_msgs/msg/Twist "{linear: {x: 0.02, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
+ros2 topic pub -r 10 /cmd_vel_input geometry_msgs/msg/Twist "{linear: {x: 0.05, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
 # Note: use /cmd_vel_input (not /cmd_vel) when heading_hold is running
 
 ROBOT MODE (sprinting vs marathon)

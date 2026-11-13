@@ -37,6 +37,11 @@ namespace cubic_walk {
     // call IK two times, since we have two legs
     bool success;
 
+    // Save previous joint positions so we can restore them if IK fails
+    std::vector<std::string> joint_names = legs_joints_group_->getActiveJointModelNames();
+    std::vector<double> prev_joint_goals;
+    goal_state_->copyJointGroupPositions(legs_joints_group_, prev_joint_goals);
+
     // we have to do this otherwise there is an error
     goal_state_->updateLinkTransforms();
 
@@ -45,14 +50,11 @@ namespace cubic_walk {
 
     success &= goal_state_->setFromIK(right_leg_joints_group_, right_foot_goal_msg, config_.timeout, moveit::core::GroupStateValidityCallbackFn());
 
-    // if (!success) {
-    //   RCLCPP_ERROR(node_->get_logger(), "IK failed with no solution found");
-    // }
-    // else {
-    //   RCLCPP_INFO(node_->get_logger(), "IK success");
-    // }
+    if (!success) {
+      RCLCPP_ERROR(node_->get_logger(), "IK failed with no solution found, holding last joint goals");
+      goal_state_->setJointGroupPositions(legs_joints_group_, prev_joint_goals);
+    }
 
-    std::vector<std::string> joint_names = legs_joints_group_->getActiveJointModelNames();
     std::vector<double> joint_goals;
     goal_state_->copyJointGroupPositions(legs_joints_group_, joint_goals);
 

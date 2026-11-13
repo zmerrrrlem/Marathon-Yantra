@@ -43,8 +43,6 @@ namespace cubic_walk
     std::cout << "=====================on_configure=====================" << std::endl;
     try
     {
-      tf_broadcaster = std::make_shared<tf2_ros::TransformBroadcaster>(node_);
-
       auto moveit_node = std::make_shared<rclcpp::Node>("walking_moveit_node");
       // Provide robot_description to the MoveIt model loader from the controller node
       // Fetch robot_description from robot_state_publisher (Gazebo does not inject it into controllers)
@@ -153,10 +151,16 @@ namespace cubic_walk
       turn_request_sub_ = node_->create_subscription<std_msgs::msg::Float64>(
         "/altair_turn/request", 10, [this](const std_msgs::msg::Float64::SharedPtr msg) {
           if (turn_state_ == TURN_TURNING || turn_state_ == TURN_SETTLING) return;
+          if (!has_imu_data_) {
+            RCLCPP_ERROR(node_->get_logger(), "Turn request ignored: no IMU data received yet");
+            return;
+          }
           turn_target_yaw_ = turn_current_yaw_ + msg->data;
           turn_state_ = TURN_TURNING;
           turn_settle_count_ = 0;
           turn_start_time_ = get_node()->get_clock()->now();
+          prev_turn_err_ = 0.0;
+          last_turn_cmd_time_ = get_node()->get_clock()->now();
         });
       turn_state_pub_ = node_->create_publisher<std_msgs::msg::Int32>("/altair_turn/state", 10);
       target_yaw_pub_ = node_->create_publisher<std_msgs::msg::Float64>("/target_yaw", 10);
@@ -421,6 +425,10 @@ namespace cubic_walk
 
   void CubicWalk::jointStateCb(const sensor_msgs::msg::JointState::SharedPtr msg) {
     if (!current_state_ || !kinematic_model_) return;
+    if (msg->position.size() != msg->name.size()) {
+      RCLCPP_WARN(node_->get_logger(), "JointState position/name size mismatch, ignoring message");
+      return;
+    }
     std::vector<std::string> names = msg->name;
     std::vector<double> goals = msg->position;
     for (size_t i = 0; i < names.size(); i++) {
@@ -478,6 +486,7 @@ namespace cubic_walk
     }
 
     turn_current_yaw_ = yaw;
+    has_imu_data_ = true;
 
     // get angular velocities
     double roll_vel = msg->angular_velocity.x;
@@ -551,18 +560,28 @@ namespace cubic_walk
       double kp = node_->get_parameter("turn.kp").as_double();
       double kd = node_->get_parameter("turn.kd").as_double();
       double max_ang = node_->get_parameter("turn.max_angular").as_double();
-      double correction = -kp * err;
+      auto now = get_node()->get_clock()->now();
+      double dt = (now - last_turn_cmd_time_).seconds();
+      last_turn_cmd_time_ = now;
+      if (dt <= 0.0) {
+        dt = 0.005;
+      }
+      double correction = -kp * err - kd * (err - prev_turn_err_) / dt;
+      prev_turn_err_ = err;
       correction = std::max(-max_ang, std::min(max_ang, correction));
       current_request_.angular_z = correction;
     } else {
+      prev_turn_err_ = 0.0;
       current_request_.angular_z = step[3];
     }
 
     // stop_walk should be true when all velocity components are effectively zero
-    current_request_.stop_walk = (std::fabs(msg->linear.x) < 1e-6 &&
-                                 std::fabs(msg->linear.y) < 1e-6 &&
-                                 std::fabs(msg->linear.z) < 1e-6 &&
-                                 std::fabs(msg->angular.z) < 1e-6);
+    // Threshold is 1e-3 m/s / rad/s to ignore noise-level commands from deprecated
+    // altair_walk utilities (heading_hold, etc.) that publish small non-zero values.
+    current_request_.stop_walk = (std::fabs(msg->linear.x) < 1e-3 &&
+                                 std::fabs(msg->linear.y) < 1e-3 &&
+                                 std::fabs(msg->linear.z) < 1e-3 &&
+                                 std::fabs(msg->angular.z) < 1e-3);
   }
 
   void CubicWalk::checkPhaseRestAndReset()
@@ -642,18 +661,6 @@ namespace cubic_walk
     twist.angular.z = current_request_.angular_z * walk_engine_->getFreq() * 2 / config_.node.yaw_speed_multiplier;
 
     odom_msg_.twist.twist = twist;
-
-    // update the tf odom in rviz ============= ONLY FOR DEBUG, PLEASE REMOVE THIS IN THE FUTURE AND CREATE ODOMOTRY_FUSER PACKAGE
-    geometry_msgs::msg::TransformStamped transform;
-    transform.header.stamp = current_time;
-    transform.header.frame_id = "odom";
-    transform.child_frame_id = "body_link";
-    transform.transform.translation.x = pos[0];
-    transform.transform.translation.y = pos[1];
-    transform.transform.translation.z = pos[2];
-    transform.transform.rotation = quat_msg;
-
-    tf_broadcaster->sendTransform(transform);
 
     return odom_msg_;
   }
@@ -791,7 +798,31 @@ namespace cubic_walk
         if (turn_state_ == TURN_TURNING || turn_state_ == TURN_SETTLING) {
           double err = std::atan2(std::sin(turn_current_yaw_ - turn_target_yaw_), std::cos(turn_current_yaw_ - turn_target_yaw_));
           double elapsed = (get_node()->get_clock()->now() - turn_start_time_).seconds();
-          if (elapsed > 60.0) {
+
+          // Abort on stale IMU data (no update for more than 1.0 second)
+          bool imu_stale = false;
+          if (last_imu_measurement_time_) {
+            double imu_age = (get_node()->get_clock()->now() - last_imu_measurement_time_.value()).seconds();
+            if (imu_age > 1.0) {
+              imu_stale = true;
+            }
+          } else {
+            imu_stale = true;
+          }
+
+          // Abort if the walk engine is not actively walking
+          bool engine_stopped = (walk_engine_->getState() == WalkState::IDLE ||
+                                 walk_engine_->getState() == WalkState::PAUSED);
+
+          if (imu_stale || engine_stopped) {
+            turn_state_ = TURN_ABORTED;
+            turn_settle_count_ = 0;
+            if (imu_stale) {
+              RCLCPP_WARN(node_->get_logger(), "Turn aborted: stale IMU data");
+            } else {
+              RCLCPP_WARN(node_->get_logger(), "Turn aborted: walk engine stopped");
+            }
+          } else if (elapsed > 60.0) {
             turn_state_ = TURN_ABORTED;
             turn_settle_count_ = 0;
           } else {
@@ -809,7 +840,19 @@ namespace cubic_walk
               }
             }
           }
-        } else if (turn_state_ == TURN_DONE || turn_state_ == TURN_ABORTED) {
+        } else if (turn_state_ == TURN_DONE) {
+          double tol = 0.0349066; // 2 deg
+          double err = std::atan2(std::sin(turn_current_yaw_ - turn_target_yaw_), std::cos(turn_current_yaw_ - turn_target_yaw_));
+          if (std::fabs(err) <= tol) {
+            turn_settle_count_++;
+          } else {
+            turn_settle_count_ = 0;
+          }
+          if (turn_settle_count_ >= 10) {
+            turn_state_ = TURN_IDLE;
+            turn_settle_count_ = 0;
+          }
+        } else if (turn_state_ == TURN_ABORTED) {
           turn_settle_count_++;
           if (turn_settle_count_ >= 10) {
             turn_state_ = TURN_IDLE;
@@ -829,18 +872,6 @@ namespace cubic_walk
         // perform all the actual calculations
         altair_msgs::msg::JointCommand joint_goals = step(dt);
 
-        // if (init_position_ == true) {
-        //   for (uint8_t i = 0; i < joint_size_ - 6; ++i) {
-        //     // Apply move smoother for each joint to gradually reach target position 0
-        //     joint_goals.positions[i] = state_interfaces_[i].get_value();
-        //     move_smoother(joint_goals.positions[i], joint_goals.positions[i]);
-        //   }
-        //   pub_controller_command_->publish(joint_goals);
-        //   if (mot_cont_ > 0) --mot_cont_;
-        //   else {
-        //     init_position_ = false;
-        //   }
-        // }
         // only publish goals if we are not idle
         if (walk_engine_->getState() != WalkState::IDLE) {
           pub_controller_command_->publish(joint_goals);
@@ -849,12 +880,15 @@ namespace cubic_walk
           // Passing joints command value to the shared memory hardware_interface, minus 6 to exclude the arm
           for (uint8_t i = 0; i < joint_goals.joint_names.size(); ++i) {
             // access the joint name from the joint_goals msg step(dt) and set the value to the corresponding joint index
-            command_interfaces_[joint_map_[joint_goals.joint_names[i]]].set_value(joint_goals.positions[i]);
+            auto joint_it = joint_map_.find(joint_goals.joint_names[i]);
+            if (joint_it == joint_map_.end()) {
+              RCLCPP_ERROR_THROTTLE(node_->get_logger(), *node_->get_clock(), 5,
+                "Unknown joint name in IK output: %s, skipping command",
+                joint_goals.joint_names[i].c_str());
+              continue;
+            }
+            (void)command_interfaces_[joint_it->second].set_value(joint_goals.positions[i]);
           }
-          // set command for the hands
-          // command_interfaces_[joint_map_["r_el"]].set_value(-120 * M_PI / 180);
-          // command_interfaces_[joint_map_["l_el"]].set_value(-120 * M_PI / 180);
-
           // publish current support state
           biped_interfaces::msg::Phase support_state;
           if (walk_engine_->isDoubleSupport()) {

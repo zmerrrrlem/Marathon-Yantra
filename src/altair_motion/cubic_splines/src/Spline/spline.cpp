@@ -5,6 +5,7 @@ https://github.com/Rhoban/model/
 */
 #include "cubic_splines/spline.hpp"
 
+#include <cmath>
 #include <iomanip>
 #include <stdexcept>
 
@@ -130,10 +131,11 @@ double Spline::interpolation(double x, double (Polynom::*func)(double) const) co
 }
 
 double Spline::interpolationMod(double x, double (Polynom::*func)(double) const) const {
+  // Wrap x into [0, 1) for periodic spline evaluation
   if (x < 0.0) {
-    x = 1.0 + (x - ((int)x / 1));
+    x = 1.0 + std::fmod(x, 1.0);
   } else if (x > 1.0) {
-    x = (x - ((int)x / 1));
+    x = std::fmod(x, 1.0);
   }
   return interpolation(x, func);
 }

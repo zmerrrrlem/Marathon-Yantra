@@ -8,6 +8,7 @@ https://github.com/Rhoban/model/
 #include <math.h>
 
 #include <algorithm>
+#include <iostream>
 #include <stdexcept>
 
 namespace cubic_splines {
@@ -35,6 +36,9 @@ void SmoothSpline::computeSplines() {
       Spline::splines_.push_back(
           {polynomFit(time, points_[i - 1].position, points_[i - 1].velocity, points_[i].position, points_[i].velocity),
            points_[i - 1].time, points_[i].time});
+    } else {
+      std::cerr << "[SmoothSpline] Warning: skipping zero-duration interval at t="
+                << points_[i - 1].time << " (duplicate spline point time)" << std::endl;
     }
   }
 }

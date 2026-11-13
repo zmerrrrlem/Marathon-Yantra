@@ -532,12 +532,17 @@ void WalkEngine::buildTrajectories(WalkEngine::TrajectoryType type) {
   }
   foot_spline_.pitch()->addPoint(half_period, 0.0);
 
+  // Unwrap yaw values so spline interpolation takes the short path across +/-M_PI
+  double ref_yaw = foot_orientation_pos_at_last_foot_change_.z();
+  double last_euler_z = unwrapYaw(getLastEuler().z(), ref_yaw);
+  double next_euler_z = unwrapYaw(getNextEuler().z(), ref_yaw);
+
   foot_spline_.yaw()->addPoint(0.0, foot_orientation_pos_at_last_foot_change_.z(),
                                foot_orientation_vel_at_last_foot_change_.z());
-  foot_spline_.yaw()->addPoint(double_support_length, getLastEuler().z());
+  foot_spline_.yaw()->addPoint(double_support_length, last_euler_z);
   foot_spline_.yaw()->addPoint(double_support_length + single_support_length * config_.foot_put_down_phase,
-                               getNextEuler().z());
-  foot_spline_.yaw()->addPoint(half_period, getNextEuler().z());
+                               next_euler_z);
+  foot_spline_.yaw()->addPoint(half_period, next_euler_z);
 
   // Half pause length of trunk swing
   // lateral oscillation
@@ -614,16 +619,20 @@ void WalkEngine::buildTrajectories(WalkEngine::TrajectoryType type) {
   trunk_spline_.z()->addPoint(period + double_support_length / 2, trunk_height_including_foot_z_movement);
 
   // Define trunk rotation as roll pitch yaw
+  double trunk_ref_yaw = trunk_orientation_pos_at_last_foot_change_.z();
+  double trunk_euler_support_z = unwrapYaw(0.5 * getLastEuler().z() + 0.5 * getNextEuler().z(), trunk_ref_yaw);
+  double trunk_euler_next_z = unwrapYaw(getNextEuler().z(), trunk_ref_yaw);
+
   tf2::Vector3 euler_at_support =
       tf2::Vector3(0.0,
                    config_.trunk_pitch + config_.trunk_pitch_p_coef_forward * support_to_next_.getOrigin().x() +
                        config_.trunk_pitch_p_coef_turn * fabs(getNextEuler().z()),
-                   0.5 * getLastEuler().z() + 0.5 * getNextEuler().z());
+                   trunk_euler_support_z);
   tf2::Vector3 euler_at_next =
       tf2::Vector3(0.0,
                    config_.trunk_pitch + config_.trunk_pitch_p_coef_forward * support_to_next_.getOrigin().x() +
                        config_.trunk_pitch_p_coef_turn * fabs(getNextEuler().z()),
-                   getNextEuler().z());
+                   trunk_euler_next_z);
 
   // we set a velocity for the points in yaw since we want to keep the speed in turning direction for next step
   // in roll and pitch, no velocity is set since changes are only minor when speed changes
@@ -642,8 +651,8 @@ void WalkEngine::buildTrajectories(WalkEngine::TrajectoryType type) {
 
   trunk_spline_.yaw()->addPoint(0.0, trunk_orientation_pos_at_last_foot_change_.z(),
                                 trunk_orientation_vel_at_last_foot_change_.z());
-  trunk_spline_.yaw()->addPoint(half_period + time_shift, euler_at_support.z(), axis_vel.z());
-  trunk_spline_.yaw()->addPoint(period + time_shift, euler_at_next.z(), axis_vel.z());
+  trunk_spline_.yaw()->addPoint(half_period + time_shift, trunk_euler_support_z, axis_vel.z());
+  trunk_spline_.yaw()->addPoint(period + time_shift, trunk_euler_next_z, axis_vel.z());
 }
 
 void WalkEngine::buildWalkDisableTrajectories(bool foot_in_idle_position) {
@@ -878,6 +887,19 @@ tf2::Vector3 WalkEngine::getLastEuler() {
   double roll, pitch, yaw;
   tf2::Matrix3x3(support_to_last_.getRotation()).getRPY(roll, pitch, yaw);
   return {roll, pitch, yaw};
+}
+
+double WalkEngine::unwrapYaw(double current, double reference) {
+  // Wrap current into [reference - M_PI, reference + M_PI] so spline interpolation
+  // takes the shortest path across the +/-M_PI boundary instead of the long way around.
+  double wrapped = current;
+  while (wrapped - reference > M_PI) {
+    wrapped -= 2.0 * M_PI;
+  }
+  while (wrapped - reference < -M_PI) {
+    wrapped += 2.0 * M_PI;
+  }
+  return wrapped;
 }
 
 tf2::Transform WalkEngine::getLeft() { return left_in_world_; }

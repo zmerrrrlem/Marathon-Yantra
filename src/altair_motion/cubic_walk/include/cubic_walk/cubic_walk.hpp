@@ -156,7 +156,6 @@ namespace cubic_walk
     
     
 
-    std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster;
 
     void checkPhaseRestAndReset();
     std::array<double, 4> get_step_from_vel(geometry_msgs::msg::Twist::SharedPtr msg);
@@ -188,7 +187,10 @@ namespace cubic_walk
     TurnState turn_state_ = TURN_IDLE;
     double turn_target_yaw_ = 0.0;
     double turn_current_yaw_ = 0.0;
+    bool has_imu_data_ = false;
+    double prev_turn_err_ = 0.0;
     rclcpp::Time turn_start_time_;
+    rclcpp::Time last_turn_cmd_time_;
     int turn_settle_count_ = 0;
     rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr turn_request_sub_;
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr turn_state_pub_;

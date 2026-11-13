@@ -186,6 +186,12 @@ class WalkEngine : public cubic_splines::AbstractEngine<WalkRequest, WalkRespons
    */
   tf2::Vector3 getLastEuler();
   tf2::Vector3 getNextEuler();
+
+  /**
+   * Unwrap yaw so that it is within +/-M_PI of the reference angle.
+   * Prevents spline interpolation from taking the long way around when crossing the +/-pi boundary.
+   */
+  static double unwrapYaw(double current, double reference);
 };
 
 }  // namespace cubic_walk

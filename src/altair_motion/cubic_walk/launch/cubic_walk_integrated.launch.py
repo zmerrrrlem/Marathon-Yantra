@@ -1,7 +1,6 @@
 import os
-import subprocess
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, OpaqueFunction, TimerAction
+from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, TimerAction
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -11,13 +10,6 @@ from xacro import process_file
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 
-def launch_gazebo_control_in_terminal(context, *args, **kwargs):
-    control_script_path = os.path.join(
-        get_package_share_directory('altair_description'), 'launch', 'gazebo.control.py'
-    )
-    subprocess.Popen([
-        "gnome-terminal", "--", "python3", control_script_path
-    ])
 
 def generate_launch_description():
     env_vars = [
@@ -61,12 +53,10 @@ def generate_launch_description():
     cubic_walk_controller = Node(namespace=namespace, package='controller_manager', executable='spawner',
         arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60'], output='screen')
 
-    # Compatibility utilities from altair_walk (ported for cubic_walk)
-    heading_hold = TimerAction(period=5.0, actions=[Node(
-        package='altair_walk', executable='heading_hold', name='heading_hold', output='screen',
-        parameters=[{'use_sim_time': True}],
-    )])
-
+    # Compatibility utilities from altair_walk (DEPRECATED - to be replaced by cubic_walk-native equivalents)
+    # TODO: Replace these with cubic_walk-native nodes once available
+    # heading_hold removed - was publishing noise-level angular.z causing spurious walking
+    # Use /cmd_vel directly instead of /cmd_vel_input
     fall_detector = TimerAction(period=5.0, actions=[Node(
         package='altair_walk', executable='fall_detector', name='fall_detector', output='screen',
         parameters=[{'use_sim_time': True}],
@@ -92,6 +82,18 @@ def generate_launch_description():
         parameters=[{'use_sim_time': True, 'default_mode': 0}],
     )])
 
+    # Odometry fuser - fuses walk engine odometry with IMU data
+    odometry_fuser_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            PathJoinSubstitution([
+                FindPackageShare('altair_odometry_fuser'),
+                'launch',
+                'odometry_fuser.launch.py'
+            ])
+        ]),
+        launch_arguments={'use_sim_time': 'True'}.items()
+    )
+
     return LaunchDescription([
         robot_namespace_arg,
         *env_vars,
@@ -102,10 +104,9 @@ def generate_launch_description():
         robot_state_publisher,
         spawn_robot,
         TimerAction(period=10.0, actions=[imu_broadcaster, joint_state_broadcaster, cubic_walk_controller]),
-        heading_hold,
+        TimerAction(period=12.0, actions=[odometry_fuser_launch]),
         fall_detector,
         joint_command_bridge,
         distance_tracker,
         robot_mode_controller,
-        OpaqueFunction(function=launch_gazebo_control_in_terminal),
     ])

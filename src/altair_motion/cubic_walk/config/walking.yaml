@@ -1,3 +1,6 @@
+# NOTE: This file must stay in sync with src/cubic_walk_parameters.yaml
+# (the schema/validation source used by generate_parameter_library).
+# Parameter names and defaults here must match the YAML schema exactly.
 /cubic_walk:
   ros__parameters:
     engine:
@@ -77,19 +80,19 @@
       trunk_pid:
         pitch:
           antiwindup: false
-          d: 0.0
+          d: 0.05
           i: 0.0
           i_clamp_max: 0.0
           i_clamp_min: 0.0
-          p: 0.0
+          p: 0.3
           save_i_term: false
         roll:
           antiwindup: false
-          d: 0.01
+          d: 0.05
           i: 0.0
           i_clamp_max: 0.0
           i_clamp_min: 0.0
-          p: 0.05
+          p: 0.3
           save_i_term: false
       x_bias: 0.0
       x_speed_multiplier: 1.0
@@ -108,5 +111,5 @@
     start_type_description_service: true
     thread_priority: 50
     update_rate: 75
-    use_sim_time: false
+    use_sim_time: true
 
