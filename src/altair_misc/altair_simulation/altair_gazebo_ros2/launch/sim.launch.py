@@ -1,12 +1,9 @@
 import os
-import xacro
 from pathlib import Path
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription
-from launch.actions import RegisterEventHandler, SetEnvironmentVariable
-from launch.event_handlers import OnProcessExit
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
@@ -17,18 +14,35 @@ def generate_launch_description():
     # Launch Arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
 
-    # find op3 packages
-    altair_description_path = os.path.join(get_package_share_directory('altair_description'))
-    xacro_file = os.path.join(altair_description_path, 'urdf', 'altair.urdf.xacro')
+    # DEPRECATED: Altair model is deprecated; gazebo now loads Yantravira (yantravira_urdf1).
+    import os as _os
+
+    def _workspace_root(start_path):
+        cur = _os.path.abspath(start_path)
+        for _ in range(8):
+            if _os.path.exists(_os.path.join(cur, 'configure.py')):
+                return cur
+            nxt = _os.path.dirname(cur)
+            if nxt == cur:
+                break
+            cur = nxt
+        return cur
+
+    altair_lab_root = _workspace_root(__file__)
+    yantra_description_dir = _os.path.join(altair_lab_root, 'src', 'yantravira_urdf1')
+    yantra_urdf_path = _os.path.join(yantra_description_dir, 'urdf', 'yantravira_urdf1.urdf')
+    with open(yantra_urdf_path, 'r') as f:
+        robot_desc = f.read()
 
     altair_gazebo_path = os.path.join(get_package_share_directory('altair_gazebo_ros2'))
 
-    # Set gazebo sim resource path
+    # Set gazebo sim resource path (include yantravira_urdf1 meshes)
     gazebo_resource_path = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
         value=[
             os.path.join(altair_gazebo_path, 'worlds'), ':' +
-            str(Path(altair_description_path).parent.resolve())
+            altair_lab_root, ':' +
+            _os.path.join(altair_lab_root, 'src')
             ]
         )
 
@@ -50,11 +64,8 @@ def generate_launch_description():
                 ]
              )
 
-    doc = xacro.process_file(xacro_file, mappings={'use_sim' : 'true'})
-    robot_desc = doc.toprettyxml(indent='  ')
-
     params = {'robot_description': robot_desc}
-    
+
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
@@ -67,19 +78,19 @@ def generate_launch_description():
         executable='create',
         output='screen',
         arguments=['-string', robot_desc,
-                   '-x', '0.0', 
+                   '-x', '0.0',
                    '-y', '0.0',
-                   '-z', '0.35',
+                   '-z', '0.8',
                    '-R', '0.0',
                    '-P', '0.0',
                    '-Y', '0.0',
-                   '-name', 'altair',
+                   '-name', 'yantra',
                    '-allow_renaming', 'true'],
     )
 
     altair_gz_bridge_pkg_path = FindPackageShare('altair_gz_bridge')
     altair_joint_list_path = PathJoinSubstitution([altair_gz_bridge_pkg_path, 'config', 'altair_joint_list.yaml'])
-    
+
     altair_gz_bridge = Node(
         package='altair_gz_bridge',
         executable='altair_gz_bridge_node',
@@ -99,25 +110,25 @@ def generate_launch_description():
     )
 
     controller_params = os.path.join(altair_gazebo_path, 'config', 'altair_gazebo_config.yaml')
-    
+
     joint_state_broadcaster = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['joint_state_broadcaster', '--controller-manager', '/controller_manager'],
         output='screen'
     )
-    
+
     imu_broadcaster = Node(
         package='controller_manager',
         executable='spawner',
         arguments=['imu_sensor_broadcaster', '--controller-manager', '/controller_manager', '-p', 'sensor_name:=imu_sensor'],
         output='screen'
     )
-    
+
     forward_position_controller = Node(
             package="controller_manager",
             executable="spawner",
-            arguments=["altair_position_command", '--controller-manager', '/controller_manager'],
+            arguments=["yantra_position_command", '--controller-manager', '/controller_manager'],
         )
 
     return LaunchDescription([

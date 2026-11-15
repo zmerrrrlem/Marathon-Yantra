@@ -17,7 +17,7 @@ COLD START (integrated launch - recommended)
 -------------------------------------------
 # Single command: Gazebo + cubic_walk + heading_hold + fall_detector + joint_command_bridge + distance_tracker
 altair_start
-ros2 launch cubic_walk cubic_walk_integrated.launch.py world:=arena
+ros2 launch cubic_walk cubic_walk_integrated.launch.py world:=empty.sdf
 
 VERIFY
 ------
@@ -86,7 +86,7 @@ ros2 param set /cubic_walk engine.arm_shoulder_roll_amp 0.15
 
 RESET ROBOT (before every run)
 ------------------------------
-gz service -s /world/empty/set_pose --reqtype gz.msgs.Pose --reptype gz.msgs.Boolean --timeout 3000 --req 'name: "altair", position: {x: 0, y: 0, z: 0.35}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}'
+gz service -s /world/empty/set_pose --reqtype gz.msgs.Pose --reptype gz.msgs.Boolean --timeout 3000 --req 'name: "yantra", position: {x: 0, y: 0, z: 0.8}, orientation: {x: 0.0, y: 0.0, z: 0.0, w: 1.0}'
 
 STOP WALKING
 ------------

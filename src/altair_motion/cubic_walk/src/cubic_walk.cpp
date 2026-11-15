@@ -187,10 +187,9 @@ namespace cubic_walk
       this->initializeEngine();
 
       // Initialize Joints
-      joint_names_ = { "l_ank_roll", "l_ank_pitch", "l_knee", "l_hip_pitch", "l_hip_roll", "l_hip_yaw",
-                        "r_ank_roll", "r_ank_pitch", "r_knee", "r_hip_pitch", "r_hip_roll", "r_hip_yaw",
-                        "l_sho_pitch", "l_sho_roll", "l_el", "r_sho_pitch", "r_sho_roll", "r_el"
-      };
+      joint_names_ = { "left_leg_roll_5_joint", "left_leg_pitch_5_joint", "left_leg_pitch_3_joint", "left_leg_pitch_1_joint", "left_leg_roll_1_joint", "left_leg_yaw_1_joint",
+                        "right_leg_roll_6_joint", "right_leg_pitch_6_joint", "right_leg_pitch_4_joint", "right_leg_pitch_2_joint", "right_leg_roll_2_joint", "right_leg_yaw_2_joint",
+                        "left_arm_pitch_3_joint", "left_arm_roll_1_joint", "left_claw_joint", "right_arm_pitch_4_joint", "right_arm_roll_2_joint", "right_claw_joint" };
       // "l_sho_pitch", "l_sho_roll", "l_el", "r_sho_pitch", "r_sho_roll", "r_el" 
       joint_size_ = joint_names_.size();
       // Map joint names to indices in unordered_map for easier access
@@ -367,7 +366,7 @@ namespace cubic_walk
   {
     moveit::core::RobotStatePtr goal_state = ik_->get_goal_state();
     geometry_msgs::msg::Pose pose;
-    tf2::convert(goal_state->getGlobalLinkTransform("l_sole"), pose);
+    tf2::convert(goal_state->getGlobalLinkTransform("left_leg_roll_5"), pose);
     return pose;
   }
 
@@ -375,7 +374,7 @@ namespace cubic_walk
   {
     moveit::core::RobotStatePtr goal_state = ik_->get_goal_state();
     geometry_msgs::msg::Pose pose;
-    tf2::convert(goal_state->getGlobalLinkTransform("r_sole"), pose);
+    tf2::convert(goal_state->getGlobalLinkTransform("right_leg_roll_6"), pose);
     return pose;
   }
 
@@ -433,7 +432,13 @@ namespace cubic_walk
     std::vector<double> goals = msg->position;
     for (size_t i = 0; i < names.size(); i++) {
       // besides its name, this method only changes a single joint position...
-      current_state_->setJointPositions(names[i], &goals[i]);
+      const moveit::core::JointModel* jm = current_state_->getJointModel(names[i]);
+      if (jm) {
+        current_state_->setJointPositions(names[i], &goals[i]);
+      } else {
+        RCLCPP_WARN_THROTTLE(node_->get_logger(), *node_->get_clock(), 5,
+          "Joint '%s' not found in URDF, skipping joint state update", names[i].c_str());
+      }
     }
 
     // compute the effort that is currently on the flying leg to check if it has ground contact

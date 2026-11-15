@@ -47,7 +47,8 @@ class RobotModeController(Node):
     def __init__(self):
         super().__init__("robot_mode_controller")
 
-        self.declare_parameter("default_mode", 0)
+        if not self.has_parameter("default_mode"):
+            self.declare_parameter("default_mode", 0)
         self.robot_mode = self.get_parameter("default_mode").value
         self.transition_state = 0  # 0=idle, 1=transitioning, 2=wind-up, 3=ready
         self.transitioning = False
@@ -133,7 +134,8 @@ def main(args=None):
         pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == "__main__":

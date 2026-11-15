@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, SetEnvironmentVariable
 from launch.actions import RegisterEventHandler
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -23,30 +23,40 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 import launch_ros.descriptions
 
+import os
+from ament_index_python.packages import get_package_share_directory
+
 
 def generate_launch_description():
     # Launch Arguments
     use_sim_time = LaunchConfiguration('use_sim_time', default=True)
 
-    # Get URDF via xacro
-    robot_description_content = Command(
-        [
-            PathJoinSubstitution([FindExecutable(name='xacro')]),
-            ' ',
-            PathJoinSubstitution(
-                [FindPackageShare('altair_description'),
-                 'urdf', 'alfarobi_compose.urdf.xacro']
-            ),
-            ' ',
-            'sim_mode:=true'
-        ]
-    )
-    robot_description ={"robot_description": launch_ros.parameter_descriptions.ParameterValue(robot_description_content, value_type=str)}
+    # DEPRECATED: Altair model is deprecated; gazebo now loads Yantravira (yantravira_urdf1).
+    import os as _os
+
+    def _workspace_root(start_path):
+        cur = _os.path.abspath(start_path)
+        for _ in range(8):
+            if _os.path.exists(_os.path.join(cur, 'configure.py')):
+                return cur
+            nxt = _os.path.dirname(cur)
+            if nxt == cur:
+                break
+            cur = nxt
+        return cur
+
+    altair_lab_root = _workspace_root(__file__)
+    yantra_description_dir = _os.path.join(altair_lab_root, 'src', 'yantravira_urdf1')
+    yantra_urdf_path = _os.path.join(yantra_description_dir, 'urdf', 'yantravira_urdf1.urdf')
+    with open(yantra_urdf_path, 'r') as f:
+        robot_description_content = f.read()
+    robot_description = {"robot_description": robot_description_content}
     robot_controllers = PathJoinSubstitution(
         [
-            FindPackageShare('altair_description'),
+            FindPackageShare('yantravira_urdf1'),
             'config',
-            'alfarobi_config.yaml',
+            'gazebo_sim',
+            'controller.yaml',
         ]
     )
 
@@ -62,8 +72,8 @@ def generate_launch_description():
         executable='create',
         output='screen',
         arguments=['-topic', 'robot_description', '-name',
-                   'alfarobi', '-allow_renaming', 'true',
-                   '-x', '0', '-y', '0', '-z', '0.29'],
+                   'yantra', '-allow_renaming', 'true',
+                   '-x', '0', '-y', '0', '-z', '0.8'],
     )
 
     joint_state_broadcaster_spawner = Node(
@@ -91,6 +101,11 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        # Make yantravira_urdf1 meshes resolvable in Gazebo
+        SetEnvironmentVariable(
+            name='GZ_SIM_RESOURCE_PATH',
+            value=[altair_lab_root, ':', _os.path.join(altair_lab_root, 'src')]
+        ),
         # Launch gazebo environment
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(

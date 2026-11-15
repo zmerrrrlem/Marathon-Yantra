@@ -5,6 +5,12 @@
   <version>0.0.0</version>
   <description>Descriptions of Altair Humanoid Robot</description>
 
+  <!--
+    DEPRECATED: The Altair humanoid model is deprecated.
+    The robot has been fully migrated to Yantravira (yantravira_urdf1).
+    Gazebo launches now load yantravira_urdf1 by default.
+  -->
+
   <maintainer email="falahnzk@gmail.com">Falah Naufal Zaki</maintainer>
 
   <license>Apache-2.0</license>

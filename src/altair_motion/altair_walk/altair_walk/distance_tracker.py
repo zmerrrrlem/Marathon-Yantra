@@ -20,7 +20,8 @@ class DistanceTracker(Node):
         self.declare_parameter('target_distance_m', 400.0)
         self.declare_parameter('reset_threshold_m', 5.0)
         self.declare_parameter('publish_rate_hz', 10.0)
-        self.declare_parameter('use_sim_time', False)
+        if not self.has_parameter('use_sim_time'):
+            self.declare_parameter('use_sim_time', False)
 
         self.target_distance = self.get_parameter('target_distance_m').value
         self.reset_threshold = self.get_parameter('reset_threshold_m').value
@@ -87,7 +88,8 @@ def main(args=None):
         pass
     finally:
         node.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == '__main__':

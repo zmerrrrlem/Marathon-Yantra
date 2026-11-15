@@ -169,8 +169,8 @@ bool PyWalkWrapper::reset_and_test_if_speed_possible(py::bytes cmd_vel, double p
     goal_state->updateLinkTransforms();
 
     // read out forward kinematics and compare
-    l_transform = goal_state->getGlobalLinkTransform("l_sole").translation();
-    r_transform = goal_state->getGlobalLinkTransform("r_sole").translation();
+    l_transform = goal_state->getGlobalLinkTransform("left_leg_roll_5").translation();
+    r_transform = goal_state->getGlobalLinkTransform("right_leg_roll_6").translation();
     tf2::convert(l_transform, tf_vec_left);
     tf2::convert(r_transform, tf_vec_right);
     if (current_response.is_left_support_foot) {

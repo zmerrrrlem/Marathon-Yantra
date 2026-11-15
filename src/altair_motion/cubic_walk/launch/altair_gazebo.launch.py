@@ -1,15 +1,13 @@
 import os
 import subprocess
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, OpaqueFunction, TimerAction
+from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable, OpaqueFunction, TimerAction, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
-from xacro import process_file
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+
 
 def launch_gazebo_control_in_terminal(context, *args, **kwargs):
     """Function to launch gazebo.control.py in a new terminal."""
@@ -20,7 +18,29 @@ def launch_gazebo_control_in_terminal(context, *args, **kwargs):
         "gnome-terminal", "--", "python3", control_script_path
     ])
 
+
 def generate_launch_description():
+    # ======================== DEPRECATION NOTICE ========================
+    # The Altair model is deprecated. Gazebo now loads Yantravira (yantravira_urdf1).
+    import os as _os
+
+    def _workspace_root(start_path):
+        cur = _os.path.abspath(start_path)
+        for _ in range(8):
+            if _os.path.exists(_os.path.join(cur, 'configure.py')):
+                return cur
+            nxt = _os.path.dirname(cur)
+            if nxt == cur:
+                break
+            cur = nxt
+        return cur
+
+    altair_lab_root = _workspace_root(__file__)
+    yantra_description_dir = _os.path.join(altair_lab_root, 'src', 'yantravira_urdf1')
+    yantra_urdf_path = _os.path.join(yantra_description_dir, 'urdf', 'yantravira_urdf1.urdf')
+    with open(yantra_urdf_path, 'r') as f:
+        robot_description = f.read()
+
     # ======================== ENVIRONMENT SETUP ========================
     env_vars = [
         # Required for Gazebo-ROS 2 communication
@@ -28,25 +48,20 @@ def generate_launch_description():
             name='GZ_SIM_SYSTEM_PLUGIN_PATH',
             value=[FindPackageShare('ros_gz_sim'), '/lib']
         ),
+        # Make yantravira_urdf1 meshes resolvable in Gazebo
         SetEnvironmentVariable(
             name='GZ_SIM_RESOURCE_PATH',
-            value=[FindPackageShare('altair_description'), '/urdf']
+            value=[altair_lab_root, ':', _os.path.join(altair_lab_root, 'src')]
         ),
     ]
 
-    # ======================== ROBOT DESCRIPTION ========================
-    # Declare launch argument for robot namespace
+    # ======================== LAUNCH ARGUMENTS ========================
     robot_namespace_arg = DeclareLaunchArgument(
         "robot",
         default_value="",
         description='Namespace for the robot'
     )
-
-    # Get the value of the robot namespace
     namespace = LaunchConfiguration("robot")
-    altair_description = get_package_share_directory('altair_description')
-    robot_xacro_path = os.path.join(altair_description, 'urdf', 'altair_compose.urdf.xacro')
-    robot_description = process_file(robot_xacro_path, mappings={'sim_mode': 'true'}).toxml()
 
     # ======================== GAZEBO SETUP ========================
     gazebo_launch = IncludeLaunchDescription(
@@ -91,10 +106,10 @@ def generate_launch_description():
         name='spawn_robot',
         arguments=[
             '-topic', [namespace, '/robot_description'],
-            '-name', 'altair',
-            '-z', '0.35',
+            '-name', 'yantra',
+            '-z', '0.8',
+            '-R', '0', '-P', '0', '-Y', '0',
             '-allow_renaming', 'true',
-            '--ros-args --remap', 'sim_mode:=true'  # Pass xacro arguments directly
         ],
         parameters=[{'use_sim_time': True}],
         output='screen'
@@ -141,14 +156,14 @@ def generate_launch_description():
         namespace=namespace,
         package='controller_manager',
         executable='spawner',
-        arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60'],
+        arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60', '--ros-args', '-r', 'cmd_vel:=/cmd_vel_input'],
         output='screen'
     )
 
     return LaunchDescription([
         robot_namespace_arg,
         *env_vars,
-        
+
         # Core simulation
         gazebo_launch,
         clock_bridge,
@@ -157,10 +172,10 @@ def generate_launch_description():
 
         # Robot description
         robot_state_publisher,
-        
-        # Robot
+
+        # Robot (Yantravira)
         spawn_robot,
-        
+
         # Control stack (hosted by Gazebo gz_ros2_control plugin), delayed for Gazebo readiness
         TimerAction(period=10.0, actions=[imu_broadcaster, joint_state_broadcaster, cubic_walk_controller]),
 
