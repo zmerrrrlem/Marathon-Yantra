@@ -1,4 +1,4 @@
-"""Command mux: single writer to /cmd_vel_input with turn priority."""
+"""Command mux: single writer to /cmd_vel with turn priority."""
 
 from geometry_msgs.msg import Twist
 import rclpy
@@ -31,7 +31,7 @@ class CmdMux(Node):
         self.create_subscription(Twist, '/altair_turn/cmd_vel', self.turn_cb, 10)
         self.create_subscription(Int32, '/altair_turn/state', self.state_cb, 10)
 
-        self.pub = self.create_publisher(Twist, '/cmd_vel_input', 10)
+        self.pub = self.create_publisher(Twist, '/cmd_vel', 10)
         rate = max(1.0, self.get_parameter('publish_rate_hz').value)
         self.create_timer(1.0 / rate, self.timer_cb)
 

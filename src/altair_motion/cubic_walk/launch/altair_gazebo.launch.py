@@ -156,7 +156,7 @@ def generate_launch_description():
         namespace=namespace,
         package='controller_manager',
         executable='spawner',
-        arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60', '--ros-args', '-r', 'cmd_vel:=/cmd_vel_input'],
+        arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60'],
         output='screen'
     )
 

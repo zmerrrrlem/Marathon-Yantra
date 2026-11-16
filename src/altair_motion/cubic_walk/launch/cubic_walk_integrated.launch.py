@@ -73,12 +73,11 @@ def generate_launch_description():
     imu_broadcaster = Node(namespace=namespace, package='controller_manager', executable='spawner',
         arguments=['imu_sensor_broadcaster', '--param-file', controller_params, '--controller-manager-timeout', '60'], output='screen')
     cubic_walk_controller = Node(namespace=namespace, package='controller_manager', executable='spawner',
-        arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60', '--ros-args', '-r', 'cmd_vel:=/cmd_vel_input'], output='screen')
+        arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60'], output='screen')
 
     # Compatibility utilities from altair_walk (DEPRECATED - to be replaced by cubic_walk-native equivalents)
     # TODO: Replace these with cubic_walk-native nodes once available
     # heading_hold removed - was publishing noise-level angular.z causing spurious walking
-    # Use /cmd_vel directly instead of /cmd_vel_input
     fall_detector = TimerAction(period=5.0, actions=[Node(
         package='altair_walk', executable='fall_detector', name='fall_detector', output='screen',
         parameters=[{'use_sim_time': True}],
