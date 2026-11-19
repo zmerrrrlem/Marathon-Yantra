@@ -32,6 +32,7 @@
 #include <std_msgs/msg/int16.hpp>
 #include <std_msgs/msg/int32.hpp>
 #include <std_msgs/msg/string.hpp>
+#include <std_srvs/srv/trigger.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 #include "sensor_msgs/msg/joint_state.hpp"
@@ -74,6 +75,7 @@
 #include <std_msgs/msg/char.hpp>
 #include <std_msgs/msg/float64.hpp>
 #include <std_msgs/msg/string.hpp>
+#include <std_srvs/srv/trigger.hpp>
 #include <string>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
 #include <visualization_msgs/msg/marker.hpp>
@@ -164,6 +166,9 @@ namespace cubic_walk
     void kickCb(std_msgs::msg::Bool::SharedPtr msg);
     void jointStateCb(sensor_msgs::msg::JointState::SharedPtr msg);
     void imuCb(sensor_msgs::msg::Imu::SharedPtr msg);
+    void resetPoseCallback(
+      const std::shared_ptr<std_srvs::srv::Trigger::Request> request,
+      std::shared_ptr<std_srvs::srv::Trigger::Response> response);
     double getTimeDelta();
 
     // Declare parameter listener and struct from the generate_parameter_library
@@ -259,6 +264,7 @@ namespace cubic_walk
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr joint_state_sub_;
     rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr kick_sub_;
     rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_sub_;
+    rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr reset_pose_service_;
   };
 
 }  // namespace cubic_walk

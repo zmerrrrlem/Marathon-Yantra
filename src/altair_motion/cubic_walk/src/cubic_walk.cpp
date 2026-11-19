@@ -149,6 +149,11 @@ namespace cubic_walk
         "joint_states", 1, std::bind(&CubicWalk::jointStateCb, this, _1));
       kick_sub_ = node_->create_subscription<std_msgs::msg::Bool>("kick", 1, std::bind(&CubicWalk::kickCb, this, _1));
 
+      // Service to reset robot to default standing pose
+      reset_pose_service_ = node_->create_service<std_srvs::srv::Trigger>(
+        "~/reset_pose",
+        std::bind(&CubicWalk::resetPoseCallback, this, std::placeholders::_1, std::placeholders::_2));
+
       turn_request_sub_ = node_->create_subscription<std_msgs::msg::Float64>(
         "/altair_turn/request", 10, [this](const std_msgs::msg::Float64::SharedPtr msg) {
           if (turn_state_ == TURN_TURNING || turn_state_ == TURN_SETTLING) return;
@@ -628,6 +633,53 @@ namespace cubic_walk
   void CubicWalk::kickCb(const std_msgs::msg::Bool::SharedPtr msg)
   {
     walk_engine_->requestKick(msg->data);
+  }
+
+  void CubicWalk::resetPoseCallback(
+    const std::shared_ptr<std_srvs::srv::Trigger::Request> /*request*/,
+    std::shared_ptr<std_srvs::srv::Trigger::Response> response)
+  {
+    RCLCPP_INFO(node_->get_logger(), "Reset pose service called - returning robot to default standing pose");
+
+    // Reset walk engine and stabilizer to stop any ongoing motion
+    walk_engine_->reset();
+    stabilizer_->reset();
+
+    // Clear current request so the engine doesn't continue walking
+    current_request_ = WalkRequest{.stop_walk = true};
+
+    // Build and publish a default standing pose (all joints at 0.0)
+    altair_msgs::msg::JointCommand command;
+    command.header.stamp = node_->get_clock()->now();
+    command.header.frame_id = "base_link";
+
+    for (const auto& joint_name : joint_names_) {
+      command.joint_names.push_back(joint_name);
+      command.positions.push_back(0.0);
+      command.velocities.push_back(-1.0);
+      command.accelerations.push_back(-1.0);
+      command.max_currents.push_back(-1.0);
+    }
+
+    pub_controller_command_->publish(command);
+
+    // Also set command interfaces directly for immediate effect
+    for (uint8_t i = 0; i < joint_names_.size(); ++i) {
+      auto joint_it = joint_map_.find(joint_names_[i]);
+      if (joint_it != joint_map_.end() && i < command_interfaces_.size()) {
+        (void)command_interfaces_[joint_it->second].set_value(0.0);
+      }
+    }
+
+    // Publish support state as double stance (both feet on ground)
+    biped_interfaces::msg::Phase support_state;
+    support_state.phase = biped_interfaces::msg::Phase::DOUBLE_STANCE;
+    support_state.header.stamp = node_->get_clock()->now();
+    pub_support_->publish(support_state);
+
+    response->success = true;
+    response->message = "Robot reset to default standing pose";
+    RCLCPP_INFO(node_->get_logger(), "Reset pose complete");
   }
 
   nav_msgs::msg::Odometry CubicWalk::getOdometry()

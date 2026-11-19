@@ -39,6 +39,7 @@
     <depend>ros2_python_extension</depend>
     <depend>rot_conv</depend>
     <depend>std_msgs</depend>
+    <depend>std_srvs</depend>
     <depend>tf2_eigen</depend>
     <depend>tf2_geometry_msgs</depend>
     <depend>tf2_ros</depend>
