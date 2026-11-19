@@ -3,7 +3,7 @@
     This is a format for representing semantic information about the robot structure.
     A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
 -->
-<robot name="altair">
+<robot name="yantravira_urdf1">
     <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
     <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
     <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
@@ -44,12 +44,14 @@
     <group name="RightArm">
         <link name="right_claw"/>
         <joint name="right_claw_joint"/>
+        <joint name="right_arm_pitch_2_joint"/>
         <joint name="right_arm_pitch_4_joint"/>
         <joint name="right_arm_roll_2_joint"/>
     </group>
     <group name="LeftArm">
         <link name="left_claw"/>
         <joint name="left_claw_joint"/>
+        <joint name="left_arm_pitch_1_joint"/>
         <joint name="left_arm_pitch_3_joint"/>
         <joint name="left_arm_roll_1_joint"/>
     </group>
@@ -57,9 +59,11 @@
         <link name="left_claw"/>
         <link name="right_claw"/>
         <joint name="left_claw_joint"/>
+        <joint name="left_arm_pitch_1_joint"/>
         <joint name="left_arm_pitch_3_joint"/>
         <joint name="left_arm_roll_1_joint"/>
         <joint name="right_claw_joint"/>
+        <joint name="right_arm_pitch_2_joint"/>
         <joint name="right_arm_pitch_4_joint"/>
         <joint name="right_arm_roll_2_joint"/>
     </group>
@@ -77,11 +81,13 @@
         <joint name="left_leg_roll_1_joint"/>
         <joint name="left_leg_yaw_1_joint"/>
         <joint name="left_leg_pitch_3_joint"/>
+        <joint name="left_arm_pitch_1_joint"/>
         <joint name="left_arm_pitch_3_joint"/>
         <joint name="left_arm_roll_1_joint"/>
         <joint name="right_leg_pitch_6_joint"/>
         <joint name="right_leg_roll_6_joint"/>
         <joint name="right_claw_joint"/>
+        <joint name="right_arm_pitch_2_joint"/>
         <joint name="right_leg_pitch_2_joint"/>
         <joint name="right_leg_roll_2_joint"/>
         <joint name="right_leg_yaw_2_joint"/>

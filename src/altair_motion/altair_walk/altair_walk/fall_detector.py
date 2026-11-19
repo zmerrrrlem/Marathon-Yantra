@@ -39,7 +39,7 @@ class FallDetector(Node):
         self.falling = False
 
         self.imu_sub = self.create_subscription(
-            Imu, '/imu/data', self.imu_callback, 10
+            Imu, '/imu', self.imu_callback, 10
         )
         self.fall_pub = self.create_publisher(Bool, '/is_falling', 10)
 

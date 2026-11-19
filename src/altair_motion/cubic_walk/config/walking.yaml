@@ -56,15 +56,15 @@
           active: false
           joint_min_effort: 2.0
         foot_pressure:
-          active: false
+          active: true
           ground_min_pressure: 1.5
         imu:
-          active: false
+          active: true
           y_acceleration_threshold: 2.0
         min_phase: 0.9
       stability_stop:
         imu:
-          active: false
+          active: true
           pitch:
             threshold: 0.3
             vel_threshold: 2.0
