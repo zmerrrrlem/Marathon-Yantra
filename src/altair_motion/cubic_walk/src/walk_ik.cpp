@@ -42,7 +42,6 @@ namespace cubic_walk {
       tf2::toMsg(trunk_to_flying_foot_goal, left_foot_goal_msg);
     }
     // call IK two times, since we have two legs
-    bool success;
 
     // Save previous joint positions so we can restore them if IK fails
     std::vector<std::string> joint_names = legs_joints_group_->getActiveJointModelNames();
@@ -52,14 +51,45 @@ namespace cubic_walk {
     // we have to do this otherwise there is an error
     goal_state_->updateLinkTransforms();
 
-    success = goal_state_->setFromIK(left_leg_joints_group_, left_foot_goal_msg, config_.timeout, moveit::core::GroupStateValidityCallbackFn());
+    // Solve IK for each leg independently, so one failure doesn't freeze both legs
+    bool left_success = goal_state_->setFromIK(left_leg_joints_group_, left_foot_goal_msg, config_.timeout, moveit::core::GroupStateValidityCallbackFn());
     goal_state_->updateLinkTransforms();
 
-    success &= goal_state_->setFromIK(right_leg_joints_group_, right_foot_goal_msg, config_.timeout, moveit::core::GroupStateValidityCallbackFn());
+    bool right_success = goal_state_->setFromIK(right_leg_joints_group_, right_foot_goal_msg, config_.timeout, moveit::core::GroupStateValidityCallbackFn());
+    goal_state_->updateLinkTransforms();
 
-    if (!success) {
-      RCLCPP_ERROR(node_->get_logger(), "IK failed with no solution found, holding last joint goals");
-      goal_state_->setJointGroupPositions(legs_joints_group_, prev_joint_goals);
+    if (!left_success || !right_success) {
+      RCLCPP_ERROR(node_->get_logger(), "IK failed: left=%d right=%d, holding last joint goals", left_success, right_success);
+      // Restore only the joints that failed
+      if (!left_success) {
+        // Restore left leg joints from previous positions
+        auto left_joint_names = left_leg_joints_group_->getActiveJointModelNames();
+        std::vector<double> left_positions;
+        for (const auto& name : left_joint_names) {
+          // Find the index in the full legs group
+          for (size_t i = 0; i < joint_names.size(); i++) {
+            if (joint_names[i] == name) {
+              left_positions.push_back(prev_joint_goals[i]);
+              break;
+            }
+          }
+        }
+        goal_state_->setJointGroupPositions(left_leg_joints_group_, left_positions);
+      }
+      if (!right_success) {
+        // Restore right leg joints from previous positions
+        auto right_joint_names = right_leg_joints_group_->getActiveJointModelNames();
+        std::vector<double> right_positions;
+        for (const auto& name : right_joint_names) {
+          for (size_t i = 0; i < joint_names.size(); i++) {
+            if (joint_names[i] == name) {
+              right_positions.push_back(prev_joint_goals[i]);
+              break;
+            }
+          }
+        }
+        goal_state_->setJointGroupPositions(right_leg_joints_group_, right_positions);
+      }
     }
 
     std::vector<double> joint_goals;

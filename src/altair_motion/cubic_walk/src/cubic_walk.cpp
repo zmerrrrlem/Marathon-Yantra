@@ -648,14 +648,40 @@ namespace cubic_walk
     // Clear current request so the engine doesn't continue walking
     current_request_ = WalkRequest{.stop_walk = true};
 
-    // Build and publish a default standing pose (all joints at 0.0)
+    // Build default standing pose - use proper standing values for leg pitch joints
+    // (matching WalkIK::reset() initial values so IK has a good starting guess)
+    std::unordered_map<std::string, double> standing_pose = {
+      {"left_leg_roll_5_joint", 0.0},
+      {"left_leg_pitch_5_joint", -0.4},
+      {"left_leg_pitch_3_joint", 1.0},
+      {"left_leg_pitch_1_joint", 0.7},
+      {"left_leg_roll_1_joint", 0.0},
+      {"left_leg_yaw_1_joint", 0.0},
+      {"right_leg_roll_6_joint", 0.0},
+      {"right_leg_pitch_6_joint", 0.4},
+      {"right_leg_pitch_4_joint", -1.0},
+      {"right_leg_pitch_2_joint", -0.7},
+      {"right_leg_roll_2_joint", 0.0},
+      {"right_leg_yaw_2_joint", 0.0},
+      {"left_arm_pitch_3_joint", 0.0},
+      {"left_arm_pitch_1_joint", 0.0},
+      {"left_arm_roll_1_joint", 0.0},
+      {"left_claw_joint", 0.0},
+      {"right_arm_pitch_4_joint", 0.0},
+      {"right_arm_pitch_2_joint", 0.0},
+      {"right_arm_roll_2_joint", 0.0},
+      {"right_claw_joint", 0.0},
+    };
+
     altair_msgs::msg::JointCommand command;
     command.header.stamp = node_->get_clock()->now();
     command.header.frame_id = "base_link";
 
     for (const auto& joint_name : joint_names_) {
+      auto pose_it = standing_pose.find(joint_name);
+      double pos = (pose_it != standing_pose.end()) ? pose_it->second : 0.0;
       command.joint_names.push_back(joint_name);
-      command.positions.push_back(0.0);
+      command.positions.push_back(pos);
       command.velocities.push_back(-1.0);
       command.accelerations.push_back(-1.0);
       command.max_currents.push_back(-1.0);
@@ -667,7 +693,9 @@ namespace cubic_walk
     for (uint8_t i = 0; i < joint_names_.size(); ++i) {
       auto joint_it = joint_map_.find(joint_names_[i]);
       if (joint_it != joint_map_.end() && i < command_interfaces_.size()) {
-        (void)command_interfaces_[joint_it->second].set_value(0.0);
+        auto pose_it = standing_pose.find(joint_names_[i]);
+        double pos = (pose_it != standing_pose.end()) ? pose_it->second : 0.0;
+        (void)command_interfaces_[joint_it->second].set_value(pos);
       }
     }
 
