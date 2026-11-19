@@ -58,6 +58,8 @@ def generate_launch_description():
         arguments=['/gazebo/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image'])
     lidar_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge', name='lidar_bridge',
         arguments=['/lidar@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'])
+    imu_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge', name='imu_bridge',
+        arguments=['/imu@sensor_msgs/msg/Imu[gz.msgs.IMU'])
 
     spawn_robot = Node(package='ros_gz_sim', executable='create', name='spawn_robot',
         arguments=['-topic', [namespace, '/robot_description'], '-name', 'yantra', '-z', '1.5', '-R', '0', '-P', '0', '-Y', '0', '-allow_renaming', 'true'],
@@ -123,6 +125,7 @@ def generate_launch_description():
         clock_bridge,
         camera_bridge,
         lidar_bridge,
+        imu_bridge,
         robot_state_publisher,
         spawn_robot,
         RegisterEventHandler(OnProcessExit(target_action=spawn_robot, on_exit=[joint_state_broadcaster])),

@@ -143,7 +143,8 @@ namespace cubic_walk
         node_->create_subscription<geometry_msgs::msg::Twist>("cmd_vel", 1, std::bind(&CubicWalk::cmdVelCb, this, _1));
       robot_state_sub_ = node_->create_subscription<altair_msgs::msg::RobotControlState>(
         "robot_state", 1, std::bind(&CubicWalk::robotStateCb, this, _1));
-      imu_sub_ = node_->create_subscription<sensor_msgs::msg::Imu>("imu_sensor_broadcaster/imu", 1, std::bind(&CubicWalk::imuCb, this, _1));
+      imu_sub_ = node_->create_subscription<sensor_msgs::msg::Imu>(
+        "/imu", 1, std::bind(&CubicWalk::imuCb, this, _1));
       joint_state_sub_ = node_->create_subscription<sensor_msgs::msg::JointState>(
         "joint_states", 1, std::bind(&CubicWalk::jointStateCb, this, _1));
       kick_sub_ = node_->create_subscription<std_msgs::msg::Bool>("kick", 1, std::bind(&CubicWalk::kickCb, this, _1));
