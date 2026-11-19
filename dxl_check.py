@@ -21,7 +21,7 @@ else:
 
 PROTOCOL_VERSION = 2.0
 BAUDRATE         = 1000000
-DEVICENAME       = '/dev/ttyUSB0'
+DEVICENAME       = '/dev/u2d2'
 
 
 def scan():

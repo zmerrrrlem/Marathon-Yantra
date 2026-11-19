@@ -74,9 +74,9 @@
         pause_duration: 3.0
       tf:
         base_link_frame: body_link
-        l_sole_frame: left_leg_roll_5
+        l_sole_frame: left_leg_pitch_5
         odom_frame: odom
-        r_sole_frame: right_leg_roll_6
+        r_sole_frame: right_leg_pitch_6
       trunk_pid:
         pitch:
           antiwindup: false

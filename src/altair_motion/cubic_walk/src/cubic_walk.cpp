@@ -189,7 +189,8 @@ namespace cubic_walk
       // Initialize Joints
       joint_names_ = { "left_leg_roll_5_joint", "left_leg_pitch_5_joint", "left_leg_pitch_3_joint", "left_leg_pitch_1_joint", "left_leg_roll_1_joint", "left_leg_yaw_1_joint",
                         "right_leg_roll_6_joint", "right_leg_pitch_6_joint", "right_leg_pitch_4_joint", "right_leg_pitch_2_joint", "right_leg_roll_2_joint", "right_leg_yaw_2_joint",
-                        "left_arm_pitch_3_joint", "left_arm_roll_1_joint", "left_claw_joint", "right_arm_pitch_4_joint", "right_arm_roll_2_joint", "right_claw_joint" };
+                        "left_arm_pitch_3_joint", "left_arm_pitch_1_joint", "left_arm_roll_1_joint", "left_claw_joint",
+                        "right_arm_pitch_4_joint", "right_arm_pitch_2_joint", "right_arm_roll_2_joint", "right_claw_joint" };
       // "l_sho_pitch", "l_sho_roll", "l_el", "r_sho_pitch", "r_sho_roll", "r_el" 
       joint_size_ = joint_names_.size();
       // Map joint names to indices in unordered_map for easier access

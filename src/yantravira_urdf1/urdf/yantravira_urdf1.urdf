@@ -9,7 +9,7 @@
     <visual>
       <origin xyz="-0.76456 1.4659 -1.0525" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/base_link.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/base_link.STL" />
       </geometry>
       <material name="">
         <color rgba="1 1 1 1" />
@@ -18,9 +18,15 @@
     <collision>
       <origin xyz="-0.76456 1.4659 -1.0525" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/base_link.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/base_link.STL" />
       </geometry>
     </collision>
+    <sensor name="imu_sensor" type="imu">
+      <update_rate>100</update_rate>
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <topic>/imu</topic>
+    </sensor>
   </link>
   <link name="left_leg_yaw_1">
     <inertial>
@@ -31,7 +37,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_yaw_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_yaw_1.STL" />
       </geometry>
       <material name="">
         <color rgba="0.956862745098039 0.956862745098039 0.956862745098039 1" />
@@ -40,7 +46,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_yaw_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_yaw_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -60,7 +66,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_roll_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_roll_1.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -69,7 +75,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_roll_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_roll_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -95,7 +101,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_pitch_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_pitch_1.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -104,7 +110,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_pitch_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_pitch_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -130,7 +136,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_pitch_3.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_pitch_3.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -139,7 +145,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_pitch_3.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_pitch_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -165,7 +171,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_pitch_5.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_pitch_5.STL" />
       </geometry>
       <material name="">
         <color rgba="0.211764705882353 0.211764705882353 0.211764705882353 1" />
@@ -174,7 +180,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_pitch_5.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_pitch_5.STL" />
       </geometry>
     </collision>
   </link>
@@ -200,7 +206,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_roll_5.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_roll_5.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -209,7 +215,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_leg_roll_5.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_leg_roll_5.STL" />
       </geometry>
     </collision>
   </link>
@@ -235,7 +241,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_yaw_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_yaw_2.STL" />
       </geometry>
       <material name="">
         <color rgba="0.956862745098039 0.956862745098039 0.956862745098039 1" />
@@ -244,7 +250,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_yaw_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_yaw_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -269,7 +275,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_roll_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_roll_2.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -278,7 +284,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_roll_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_roll_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -304,7 +310,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_pitch_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_pitch_2.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -313,7 +319,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_pitch_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_pitch_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -339,7 +345,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_pitch_4.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_pitch_4.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -348,7 +354,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_pitch_4.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_pitch_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -374,7 +380,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_pitch_6.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_pitch_6.STL" />
       </geometry>
       <material name="">
         <color rgba="0.211764705882353 0.211764705882353 0.211764705882353 1" />
@@ -383,7 +389,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_pitch_6.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_pitch_6.STL" />
       </geometry>
     </collision>
   </link>
@@ -409,7 +415,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_roll_6.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_roll_6.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -418,7 +424,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_leg_roll_6.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_leg_roll_6.STL" />
       </geometry>
     </collision>
   </link>
@@ -444,7 +450,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_arm_pitch_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_arm_pitch_1.STL" />
       </geometry>
       <material name="">
         <color rgba="0.956862745098039 0.956862745098039 0.956862745098039 1" />
@@ -453,7 +459,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_arm_pitch_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_arm_pitch_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -479,7 +485,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_arm_roll_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_arm_roll_1.STL" />
       </geometry>
       <material name="">
         <color rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
@@ -488,7 +494,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_arm_roll_1.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_arm_roll_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -514,7 +520,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_arm_pitch_3.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_arm_pitch_3.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -523,7 +529,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_arm_pitch_3.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_arm_pitch_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -549,7 +555,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_claw.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_claw.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -558,7 +564,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/left_claw.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/left_claw.STL" />
       </geometry>
     </collision>
   </link>
@@ -584,7 +590,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_arm_pitch_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_arm_pitch_2.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -593,7 +599,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_arm_pitch_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_arm_pitch_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -619,7 +625,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_arm_roll_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_arm_roll_2.STL" />
       </geometry>
       <material name="">
         <color rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
@@ -628,7 +634,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_arm_roll_2.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_arm_roll_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -654,7 +660,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_arm_pitch_4.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_arm_pitch_4.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -663,7 +669,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_arm_pitch_4.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_arm_pitch_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -689,7 +695,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_claw.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_claw.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -698,7 +704,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/right_claw.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/right_claw.STL" />
       </geometry>
     </collision>
   </link>
@@ -724,7 +730,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/head_yaw.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/head_yaw.STL" />
       </geometry>
       <material name="">
         <color rgba="0.996078431372549 0.996078431372549 1 1" />
@@ -733,7 +739,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/head_yaw.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/head_yaw.STL" />
       </geometry>
     </collision>
   </link>
@@ -759,7 +765,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/head_pitch.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/head_pitch.STL" />
       </geometry>
       <material name="">
         <color rgba="0.313725490196078 0.313725490196078 0.313725490196078 1" />
@@ -768,7 +774,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://Yantravira-urdf1/meshes/head_pitch.STL" />
+        <mesh filename="package://yantravira_urdf1/meshes/head_pitch.STL" />
       </geometry>
     </collision>
   </link>
@@ -1011,9 +1017,36 @@
       </command_interface>
     </joint>
   </ros2_control>
+  <link name="imu_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.01" />
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.02 0.01" />
+      </geometry>
+      <material name="">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.02 0.02 0.01" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="0 0 0.1" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="imu_link" />
+  </joint>
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>/home/zmerrr/Downloads/altair_lab/src/yantravira_urdf1/config/gazebo_sim/controller.yaml</parameters>
+      <parameters>/home/zmerrr/Downloads/altair_lab/install/cubic_walk/share/cubic_walk/config/controller.yaml</parameters>
     </plugin>
   </gazebo>
 </robot>

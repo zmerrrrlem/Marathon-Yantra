@@ -86,6 +86,7 @@ namespace cubic_walk {
     double left_pitch = amp_pitch * std::sin(two_pi_phase + M_PI);  // opposite phase
     double left_roll = amp_roll * std::sin(two_pi_phase + M_PI);
     goals.push_back({"left_arm_pitch_3_joint", left_pitch});
+    goals.push_back({"left_arm_pitch_1_joint", left_pitch});
     goals.push_back({"left_arm_roll_1_joint", left_roll});
     goals.push_back({"left_claw_joint", elbow_bend});
 
@@ -93,6 +94,7 @@ namespace cubic_walk {
     double right_pitch = amp_pitch * std::sin(two_pi_phase + M_PI);
     double right_roll = amp_roll * std::sin(two_pi_phase + M_PI);
     goals.push_back({"right_arm_pitch_4_joint", right_pitch});
+    goals.push_back({"right_arm_pitch_2_joint", right_pitch});
     goals.push_back({"right_arm_roll_2_joint", right_roll});
     goals.push_back({"right_claw_joint", -elbow_bend});  // mirror: +1.2 rad
 

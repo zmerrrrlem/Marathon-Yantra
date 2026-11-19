@@ -146,8 +146,8 @@ std::pair<altair_msgs::msg::WalkDebug, visualization_msgs::msg::MarkerArray> Wal
     goal_state->setJointPositions(names[i], &goals[i]);
   }
   goal_state->updateLinkTransforms();
-  tf2::convert(goal_state->getFrameTransform("left_leg_roll_5"), msg.left_foot_ik_result);
-  tf2::convert(goal_state->getFrameTransform("right_leg_roll_6"), msg.right_foot_ik_result);
+  tf2::convert(goal_state->getFrameTransform("left_leg_pitch_5"), msg.left_foot_ik_result);
+  tf2::convert(goal_state->getFrameTransform("right_leg_pitch_6"), msg.right_foot_ik_result);
   if (response.is_left_support_foot) {
     msg.support_foot_ik_result = msg.left_foot_ik_result;
     msg.fly_foot_ik_result = msg.right_foot_ik_result;
@@ -166,8 +166,8 @@ std::pair<altair_msgs::msg::WalkDebug, visualization_msgs::msg::MarkerArray> Wal
   tf2::Vector3 fly_off;
   tf2::Vector3 tf_vec_left;
   tf2::Vector3 tf_vec_right;
-  Eigen::Vector3d l_transform = goal_state->getGlobalLinkTransform("left_leg_roll_5").translation();
-  Eigen::Vector3d r_transform = goal_state->getGlobalLinkTransform("right_leg_roll_6").translation();
+  Eigen::Vector3d l_transform = goal_state->getGlobalLinkTransform("left_leg_pitch_5").translation();
+  Eigen::Vector3d r_transform = goal_state->getGlobalLinkTransform("right_leg_pitch_6").translation();
   tf2::convert(l_transform, tf_vec_left);
   tf2::convert(r_transform, tf_vec_right);
   geometry_msgs::msg::Vector3 vect_msg;
@@ -204,8 +204,8 @@ std::pair<altair_msgs::msg::WalkDebug, visualization_msgs::msg::MarkerArray> Wal
   msg.fly_foot_ik_offset = vect_msg;
 
   // Actual foot positions determined by the IK solver (not strictly equal to the goals)
-  tf2::convert(current_state->getGlobalLinkTransform("left_leg_roll_5"), msg.left_foot_position);
-  tf2::convert(current_state->getGlobalLinkTransform("right_leg_roll_6"), msg.right_foot_position);
+  tf2::convert(current_state->getGlobalLinkTransform("left_leg_pitch_5"), msg.left_foot_position);
+  tf2::convert(current_state->getGlobalLinkTransform("right_leg_pitch_6"), msg.right_foot_position);
   if (response.is_left_support_foot) {
     msg.support_foot_position = msg.left_foot_position;
     msg.fly_foot_position = msg.right_foot_position;
@@ -215,8 +215,8 @@ std::pair<altair_msgs::msg::WalkDebug, visualization_msgs::msg::MarkerArray> Wal
   }
 
   // Calculate offsets between the actual foot positions and the goals (meaning the IK solver error)
-  l_transform = current_state->getGlobalLinkTransform("left_leg_roll_5").translation();
-  r_transform = current_state->getGlobalLinkTransform("right_leg_roll_6").translation();
+  l_transform = current_state->getGlobalLinkTransform("left_leg_pitch_5").translation();
+  r_transform = current_state->getGlobalLinkTransform("right_leg_pitch_6").translation();
   tf2::convert(l_transform, tf_vec_left);
   tf2::convert(r_transform, tf_vec_right);
   if (response.is_left_support_foot) {

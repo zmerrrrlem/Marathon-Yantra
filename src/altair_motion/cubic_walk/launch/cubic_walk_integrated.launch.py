@@ -6,6 +6,9 @@ from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
+from launch.actions import AppendEnvironmentVariable
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 
 
 def generate_launch_description():
@@ -32,9 +35,8 @@ def generate_launch_description():
         robot_description = f.read()
 
     env_vars = [
-        SetEnvironmentVariable(name='GZ_SIM_SYSTEM_PLUGIN_PATH', value=[FindPackageShare('ros_gz_sim'), '/lib']),
-        # Make yantravira_urdf1 meshes (package://yantravira_urdf1/meshes/...) resolvable in Gazebo
-        SetEnvironmentVariable(name='GZ_SIM_RESOURCE_PATH', value=[altair_lab_root, ':', _os.path.join(altair_lab_root, 'src')]),
+    AppendEnvironmentVariable('GZ_SIM_RESOURCE_PATH',
+        altair_lab_root + ':' + _os.path.join(altair_lab_root, 'src')),
     ]
 
     robot_namespace_arg = DeclareLaunchArgument("robot", default_value="", description='Namespace for the robot')
@@ -51,11 +53,11 @@ def generate_launch_description():
     )
 
     clock_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge', name='clock_bridge',
-        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'], output='screen')
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'])
     camera_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge', name='camera_bridge',
-        arguments=['/gazebo/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image'], output='screen')
+        arguments=['/gazebo/camera/image_raw@sensor_msgs/msg/Image[gz.msgs.Image'])
     lidar_bridge = Node(package='ros_gz_bridge', executable='parameter_bridge', name='lidar_bridge',
-        arguments=['/lidar@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'], output='screen')
+        arguments=['/lidar@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'])
 
     spawn_robot = Node(package='ros_gz_sim', executable='create', name='spawn_robot',
         arguments=['-topic', [namespace, '/robot_description'], '-name', 'yantra', '-z', '1.5', '-R', '0', '-P', '0', '-Y', '0', '-allow_renaming', 'true'],
@@ -70,13 +72,11 @@ def generate_launch_description():
 
     joint_state_broadcaster = Node(namespace=namespace, package='controller_manager', executable='spawner',
         arguments=['joint_state_broadcaster', '--param-file', controller_params, '--controller-manager-timeout', '60'], output='screen')
-    imu_broadcaster = Node(namespace=namespace, package='controller_manager', executable='spawner',
-        arguments=['imu_sensor_broadcaster', '--param-file', controller_params, '--controller-manager-timeout', '60'], output='screen')
     cubic_walk_controller = Node(namespace=namespace, package='controller_manager', executable='spawner',
         arguments=['cubic_walk', '--param-file', controller_params, '--param-file', cubic_walk_params, '--controller-manager-timeout', '60'], output='screen')
 
     # Compatibility utilities from altair_walk (DEPRECATED - to be replaced by cubic_walk-native equivalents)
-    # TODO: Replace these with cubic_walk-native nodes once available
+    # TODO: Replace these with cubic_walk-native equivalents
     # heading_hold removed - was publishing noise-level angular.z causing spurious walking
     fall_detector = TimerAction(period=5.0, actions=[Node(
         package='altair_walk', executable='fall_detector', name='fall_detector', output='screen',
@@ -125,7 +125,8 @@ def generate_launch_description():
         lidar_bridge,
         robot_state_publisher,
         spawn_robot,
-        TimerAction(period=10.0, actions=[imu_broadcaster, joint_state_broadcaster, cubic_walk_controller]),
+        RegisterEventHandler(OnProcessExit(target_action=spawn_robot, on_exit=[joint_state_broadcaster])),
+        RegisterEventHandler(OnProcessExit(target_action=joint_state_broadcaster, on_exit=[cubic_walk_controller])),
         TimerAction(period=12.0, actions=[odometry_fuser_launch]),
         fall_detector,
         joint_command_bridge,
