@@ -9,23 +9,23 @@
       first_step_trunk_phase: -0.5
       foot_apex_phase: 0.5
       foot_apex_pitch: 0.0
-      foot_distance: 0.13
+      foot_distance: 0.10
       foot_overshoot_phase: 1.0
       foot_overshoot_ratio: 0.0
       foot_put_down_phase: 1.0
       foot_put_down_z_offset: 0.0
-      foot_rise: 0.025
+      foot_rise: 0.012
       foot_z_pause: 0.0
-      freq: 1.3
+      freq: 0.9
       kick_length: 0.12
       kick_phase: 0.28
       kick_put_down_phase: 0.8
       kick_rise_factor: 1.5
       kick_vel: 0.2
-      trunk_height: 0.28
+      trunk_height: 0.25
       trunk_pause: 0.0
       trunk_phase: -0.1
-      trunk_pitch: 0.1
+      trunk_pitch: 0.05
       trunk_pitch_p_coef_forward: 0.0
       trunk_pitch_p_coef_turn: 0.0
       trunk_swing: 0.2
@@ -46,11 +46,11 @@
         reset: true
         timeout: 0.15
       imu_y_acc_tau: 0.2
-      max_step_angular: 0.5
-      max_step_x: 0.2
-      max_step_xy: 0.2
-      max_step_y: 0.15
-      max_step_z: 0.1
+      max_step_angular: 0.3
+      max_step_x: 0.08
+      max_step_xy: 0.08
+      max_step_y: 0.05
+      max_step_z: 0.03
       phase_reset:
         effort:
           active: false
@@ -95,11 +95,11 @@
           p: 0.3
           save_i_term: false
       x_bias: 0.0
-      x_speed_multiplier: 1.0
+      x_speed_multiplier: 0.6
       y_bias: 0.0
       y_speed_multiplier: 1.0
       yaw_bias: 0.0
-      yaw_speed_multiplier: 1.0
+      yaw_speed_multiplier: 0.5
     qos_overrides:
       /tf:
         publisher:

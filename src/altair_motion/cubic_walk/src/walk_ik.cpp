@@ -2,6 +2,25 @@
 #include <cmath>
 namespace cubic_walk {
 
+  // Yantra leg max reach to sole frame (~0.323 m). Poses beyond this are clamped
+  // to avoid IK failures when the walk engine commands unreachable foot positions.
+  static constexpr double MAX_LEG_REACH = 0.30;  // conservative margin below 0.323 m
+
+  static geometry_msgs::msg::Pose clampPoseToReach(const geometry_msgs::msg::Pose& pose) {
+    double dist = std::sqrt(pose.position.x * pose.position.x +
+                            pose.position.y * pose.position.y +
+                            pose.position.z * pose.position.z);
+    if (dist > MAX_LEG_REACH && dist > 0.0) {
+      double scale = MAX_LEG_REACH / dist;
+      geometry_msgs::msg::Pose clamped = pose;
+      clamped.position.x *= scale;
+      clamped.position.y *= scale;
+      clamped.position.z *= scale;
+      return clamped;
+    }
+    return pose;
+  }
+
   WalkIK::WalkIK(rclcpp_lifecycle::LifecycleNode::SharedPtr node, walking::Params::Node::Ik config) : node_(node), config_(config) {}
 
   void WalkIK::init(moveit::core::RobotModelPtr kinematic_model) {
@@ -41,6 +60,9 @@ namespace cubic_walk {
       tf2::toMsg(trunk_to_support_foot_goal, right_foot_goal_msg);
       tf2::toMsg(trunk_to_flying_foot_goal, left_foot_goal_msg);
     }
+    // Clamp foot poses to Yantra's reachable workspace to prevent IK failures
+    left_foot_goal_msg = clampPoseToReach(left_foot_goal_msg);
+    right_foot_goal_msg = clampPoseToReach(right_foot_goal_msg);
     // call IK two times, since we have two legs
 
     // Save previous joint positions so we can restore them if IK fails
