@@ -37,6 +37,8 @@ class WalkIK : public cubic_splines::AbstractIK<WalkResponse> {
   const moveit::core::JointModelGroup* left_leg_joints_group_;
   const moveit::core::JointModelGroup* right_leg_joints_group_;
   walking::Params::Node::Ik config_;
+
+  void resetLegToStanding(const moveit::core::JointModelGroup* leg_group);
 };
 }  // namespace cubic_walk
 #endif  // CUBIC_WALK_INCLUDE_CUBIC_WALK_WALK_IK_H_

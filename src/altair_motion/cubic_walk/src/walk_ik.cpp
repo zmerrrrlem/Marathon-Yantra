@@ -6,19 +6,53 @@ namespace cubic_walk {
   // to avoid IK failures when the walk engine commands unreachable foot positions.
   static constexpr double MAX_LEG_REACH = 0.30;  // conservative margin below 0.323 m
 
+  static constexpr double MAX_FOOT_X = 0.25;   // max forward/backward foot offset
+  static constexpr double MAX_FOOT_Y = 0.10;   // max sideways foot offset
+  static constexpr double MAX_FOOT_Z = 0.35;   // max foot height above ground
+  static constexpr double MIN_FOOT_Z = 0.05;   // min foot height
+  static constexpr double MAX_FOOT_ROLL = 0.2;   // max foot roll angle (rad)
+  static constexpr double MAX_FOOT_PITCH = 0.2;  // max foot pitch angle (rad)
+
   static geometry_msgs::msg::Pose clampPoseToReach(const geometry_msgs::msg::Pose& pose) {
-    double dist = std::sqrt(pose.position.x * pose.position.x +
-                            pose.position.y * pose.position.y +
-                            pose.position.z * pose.position.z);
-    if (dist > MAX_LEG_REACH && dist > 0.0) {
-      double scale = MAX_LEG_REACH / dist;
-      geometry_msgs::msg::Pose clamped = pose;
-      clamped.position.x *= scale;
-      clamped.position.y *= scale;
-      clamped.position.z *= scale;
-      return clamped;
+    geometry_msgs::msg::Pose clamped = pose;
+
+    // Clamp position per-axis (preserves orientation better than uniform scaling)
+    clamped.position.x = std::clamp(pose.position.x, -MAX_FOOT_X, MAX_FOOT_X);
+    clamped.position.y = std::clamp(pose.position.y, -MAX_FOOT_Y, MAX_FOOT_Y);
+    clamped.position.z = std::clamp(pose.position.z, MIN_FOOT_Z, MAX_FOOT_Z);
+
+    // Normalize quaternion
+    double norm = std::sqrt(
+      clamped.orientation.x * clamped.orientation.x +
+      clamped.orientation.y * clamped.orientation.y +
+      clamped.orientation.z * clamped.orientation.z +
+      clamped.orientation.w * clamped.orientation.w);
+    if (norm > 0.0) {
+      clamped.orientation.x /= norm;
+      clamped.orientation.y /= norm;
+      clamped.orientation.z /= norm;
+      clamped.orientation.w /= norm;
+    } else {
+      clamped.orientation.x = 0.0;
+      clamped.orientation.y = 0.0;
+      clamped.orientation.z = 0.0;
+      clamped.orientation.w = 1.0;
     }
-    return pose;
+
+    // Clamp roll and pitch of foot orientation to prevent extreme angles
+    tf2::Quaternion quat;
+    tf2::fromMsg(clamped.orientation, quat);
+    double roll, pitch, yaw;
+    tf2::Matrix3x3(quat).getRPY(roll, pitch, yaw);
+    roll = std::clamp(roll, -MAX_FOOT_ROLL, MAX_FOOT_ROLL);
+    pitch = std::clamp(pitch, -MAX_FOOT_PITCH, MAX_FOOT_PITCH);
+    quat.setRPY(roll, pitch, yaw);
+    clamped.orientation.x = quat.x();
+    clamped.orientation.y = quat.y();
+    clamped.orientation.z = quat.z();
+    clamped.orientation.w = quat.w();
+
+    return clamped;
   }
 
   WalkIK::WalkIK(rclcpp_lifecycle::LifecycleNode::SharedPtr node, walking::Params::Node::Ik config) : node_(node), config_(config) {}
@@ -43,9 +77,26 @@ namespace cubic_walk {
       RCLCPP_ERROR_STREAM(node_->get_logger(), "Cannot calculate IK: Legs joint model group is null");
       return {{}, {}};
     }
+
+    // Get current trunk pose in root (dummy_root) frame
+    // This is needed because setFromIK() expects poses in root frame,
+    // but the walk engine computes poses relative to trunk.
+    tf2::Transform root_to_trunk;
+    try {
+      tf2::fromMsg(goal_state_->getFrameTransform("base_link"), root_to_trunk);
+    } catch (...) {
+      RCLCPP_WARN(node_->get_logger(), "Could not get trunk transform from robot state, using identity");
+      root_to_trunk.setIdentity();
+    }
+
     // change goals from support foot based coordinate system to trunk based coordinate system
     tf2::Transform trunk_to_support_foot_goal = ik_goals.support_foot_to_trunk.inverse();
     tf2::Transform trunk_to_flying_foot_goal = trunk_to_support_foot_goal * ik_goals.support_foot_to_flying_foot;
+
+    // Convert foot poses from trunk frame to root frame
+    // IK expects poses in root frame (dummy_root), but walk engine gives trunk-relative poses
+    tf2::Transform root_to_support_foot = root_to_trunk * trunk_to_support_foot_goal;
+    tf2::Transform root_to_flying_foot = root_to_trunk * trunk_to_flying_foot_goal;
 
     // make pose msg for calling IK
     geometry_msgs::msg::Pose left_foot_goal_msg;
@@ -53,16 +104,28 @@ namespace cubic_walk {
 
     // decide which foot is which
     if (ik_goals.is_left_support_foot) {
-      tf2::toMsg(trunk_to_support_foot_goal, left_foot_goal_msg);
-      tf2::toMsg(trunk_to_flying_foot_goal, right_foot_goal_msg);
+      tf2::toMsg(root_to_support_foot, left_foot_goal_msg);
+      tf2::toMsg(root_to_flying_foot, right_foot_goal_msg);
     }
     else {
-      tf2::toMsg(trunk_to_support_foot_goal, right_foot_goal_msg);
-      tf2::toMsg(trunk_to_flying_foot_goal, left_foot_goal_msg);
+      tf2::toMsg(root_to_support_foot, right_foot_goal_msg);
+      tf2::toMsg(root_to_flying_foot, left_foot_goal_msg);
     }
+
     // Clamp foot poses to Yantra's reachable workspace to prevent IK failures
     left_foot_goal_msg = clampPoseToReach(left_foot_goal_msg);
     right_foot_goal_msg = clampPoseToReach(right_foot_goal_msg);
+
+    // Debug logging for IK failures (first occurrence only to avoid log spam)
+    static bool ik_debug_logged = false;
+    if (!ik_debug_logged) {
+      RCLCPP_INFO(node_->get_logger(),
+        "IK debug: support foot pose = (%.3f, %.3f, %.3f), flying foot pose = (%.3f, %.3f, %.3f)",
+        left_foot_goal_msg.position.x, left_foot_goal_msg.position.y, left_foot_goal_msg.position.z,
+        right_foot_goal_msg.position.x, right_foot_goal_msg.position.y, right_foot_goal_msg.position.z);
+      ik_debug_logged = true;
+    }
+
     // call IK two times, since we have two legs
 
     // Save previous joint positions so we can restore them if IK fails
@@ -81,36 +144,14 @@ namespace cubic_walk {
     goal_state_->updateLinkTransforms();
 
     if (!left_success || !right_success) {
-      RCLCPP_ERROR(node_->get_logger(), "IK failed: left=%d right=%d, holding last joint goals", left_success, right_success);
-      // Restore only the joints that failed
+      RCLCPP_ERROR(node_->get_logger(), "IK failed: left=%d right=%d, restoring standing pose", left_success, right_success);
+
+      // Restore to default standing pose instead of holding last (possibly bad) goals
       if (!left_success) {
-        // Restore left leg joints from previous positions
-        auto left_joint_names = left_leg_joints_group_->getActiveJointModelNames();
-        std::vector<double> left_positions;
-        for (const auto& name : left_joint_names) {
-          // Find the index in the full legs group
-          for (size_t i = 0; i < joint_names.size(); i++) {
-            if (joint_names[i] == name) {
-              left_positions.push_back(prev_joint_goals[i]);
-              break;
-            }
-          }
-        }
-        goal_state_->setJointGroupPositions(left_leg_joints_group_, left_positions);
+        resetLegToStanding(left_leg_joints_group_);
       }
       if (!right_success) {
-        // Restore right leg joints from previous positions
-        auto right_joint_names = right_leg_joints_group_->getActiveJointModelNames();
-        std::vector<double> right_positions;
-        for (const auto& name : right_joint_names) {
-          for (size_t i = 0; i < joint_names.size(); i++) {
-            if (joint_names[i] == name) {
-              right_positions.push_back(prev_joint_goals[i]);
-              break;
-            }
-          }
-        }
-        goal_state_->setJointGroupPositions(right_leg_joints_group_, right_positions);
+        resetLegToStanding(right_leg_joints_group_);
       }
     }
 
@@ -123,6 +164,28 @@ namespace cubic_walk {
     result.second = joint_goals;
 
     return result;
+  }
+
+  void WalkIK::resetLegToStanding(const moveit::core::JointModelGroup* leg_group) {
+    if (!leg_group) return;
+
+    auto joint_names = leg_group->getActiveJointModelNames();
+    std::vector<double> standing_positions;
+
+    for (const auto& name : joint_names) {
+      // Default standing positions for Yantra leg joints
+      // These match the reset() values for pitch joints, zeros for others
+      double pos = 0.0;
+      if (name.find("pitch_1") != std::string::npos) pos = 0.7;
+      else if (name.find("pitch_3") != std::string::npos) pos = 1.0;
+      else if (name.find("pitch_5") != std::string::npos) pos = -0.4;
+      else if (name.find("pitch_2") != std::string::npos) pos = -0.7;
+      else if (name.find("pitch_4") != std::string::npos) pos = -1.0;
+      else if (name.find("pitch_6") != std::string::npos) pos = 0.4;
+      standing_positions.push_back(pos);
+    }
+
+    goal_state_->setJointGroupPositions(leg_group, standing_positions);
   }
 
   std::vector<std::pair<std::string, double>> WalkIK::getArmSwingGoals(double phase, double amp_pitch, double amp_roll, double elbow_bend) {
