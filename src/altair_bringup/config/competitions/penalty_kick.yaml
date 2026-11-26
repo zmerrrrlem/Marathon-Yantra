@@ -1,0 +1,20 @@
+# Configuration for Penalty Kick Competition
+competition:
+  name: "penalty_kick"
+  description: "Dribble and kick the ball towards the goal"
+
+vision:
+  camera_device: "/dev/video2"
+  image_width: 640
+  image_height: 480
+  framerate: 30.0
+  conf_threshold: 0.35
+  ball_conf: 0.50
+  goal_conf: 0.45
+  cal_const: 10000.0
+
+strategy:
+  behavior_tree: "simple_kick.xml"
+  approach_distance_threshold: 0.25 # meters to ball before kicking
+  kick_foot_corridor: 0.08          # left/right foot selection corridor
+  search_scan_speed: 0.3            # head scan rate

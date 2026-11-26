@@ -1,0 +1,26 @@
+# Configuration for Robot Unit 2 (Goalie)
+robot:
+  id: 2
+  name: "altair_2"
+  default_role: "goalie"
+  ip: "192.168.1.102"
+  domain_id: 42
+  master_clock: 0.03333333333333333
+
+hardware:
+  u2d2_port: "/dev/ttyUSB0"
+  dynamixel_baudrate: 1000000
+  camera_device: "/dev/video2"
+
+# Physical joint zero offsets for Robot 2 (degrees)
+joint_offsets:
+  r_hip_pitch: 0.0
+  l_hip_pitch: 0.0
+  r_knee: 0.0
+  l_knee: 0.0
+  r_ank_pitch: 0.0
+  l_ank_pitch: 0.0
+  r_ank_roll: 0.0
+  l_ank_roll: 0.0
+  head_pan: 0.0
+  head_tilt: 0.0

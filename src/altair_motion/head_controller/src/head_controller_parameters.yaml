@@ -1,0 +1,79 @@
+head_controller:
+  override_control: {
+    type: bool,
+    default_value: false,
+    description: "Enable manual control of the head",
+  }
+  speed_factor: {
+    type: int,
+    default_value: 10,
+    description: "Speed factor for head movement smoothing (lower is faster)",
+  }
+  limit:
+    roll_max:
+      type: double
+      description: "Maximum roll angle for the head in radians"
+      default_value: 80.0
+    roll_min:
+      type: double
+      description: "Minimum roll angle for the head in radians"
+      default_value: -80.0
+    pitch_max:
+      type: double
+      description: "Maximum pitch angle for the head in radians"
+      default_value: 60.0
+    pitch_min:
+      type: double
+      description: "Minimum pitch angle for the head in radians"
+      default_value: -60.0
+  head_pid:
+    pitch:
+      p:
+        type: double
+        description: "Proportional gain for the trunk pitch PID controller"
+        default_value: 0.0
+      i:
+        type: double
+        description: "Integral gain for the trunk pitch PID controller"
+        default_value: 0.0
+      d:
+        type: double
+        description: "Derivative gain for the trunk pitch PID controller"
+        default_value: 0.0
+      i_clamp_max:
+        type: double
+        description: "Integral clamp maximum for the trunk pitch PID controller"
+        default_value: 0.0
+      i_clamp_min:
+        type: double
+        description: "Integral clamp minimum for the trunk pitch PID controller"
+        default_value: 0.0
+      antiwindup:
+        type: bool
+        description: "Activate antiwindup for the trunk pitch PID controller"
+        default_value: false
+    roll:
+      p:
+        type: double
+        description: "Proportional gain for the trunk roll PID controller"
+        default_value: 0.0
+      i:
+        type: double
+        description: "Integral gain for the trunk roll PID controller"
+        default_value: 0.0
+      d:
+        type: double
+        description: "Derivative gain for the trunk roll PID controller"
+        default_value: 0.0
+      i_clamp_max:
+        type: double
+        description: "Integral clamp maximum for the trunk roll PID controller"
+        default_value: 0.0
+      i_clamp_min:
+        type: double
+        description: "Integral clamp minimum for the trunk roll PID controller"
+        default_value: 0.0
+      antiwindup:
+        type: bool
+        description: "Activate antiwindup for the trunk roll PID controller"
+        default_value: false

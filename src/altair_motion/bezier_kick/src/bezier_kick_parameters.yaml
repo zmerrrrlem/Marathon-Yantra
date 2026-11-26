@@ -1,0 +1,205 @@
+kicking:
+  # Torso position in X axis (in meters)
+  Torso_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Torso position in Y axis (in meters)
+  Torso_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Torso position in Z axis (in meters)
+  Torso_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left shift position in X axis (in meters)
+  L_Shift_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left shift position in Y axis (in meters)
+  L_Shift_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left shift position in Z axis (in meters)
+  L_Shift_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right shift position in X axis (in meters)
+  R_Shift_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right shift position in Y axis (in meters)
+  R_Shift_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right shift position in Z axis (in meters)
+  R_Shift_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left lift position in X axis (in meters)
+  L_Lift_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left lift position in Y axis (in meters)
+  L_Lift_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left lift position in Z axis (in meters)
+  L_Lift_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right lift position in X axis (in meters)
+  R_Lift_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right lift position in Y axis (in meters)
+  R_Lift_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right lift position in Z axis (in meters)
+  R_Lift_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left swing position in X axis (in meters)
+  L_Swing_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left swing position in Y axis (in meters)
+  L_Swing_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left swing position in Z axis (in meters)
+  L_Swing_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right swing position in X axis (in meters)
+  R_Swing_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right swing position in Y axis (in meters)
+  R_Swing_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right swing position in Z axis (in meters)
+  R_Swing_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left retract position in X axis (in meters)
+  L_Retract_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left retract position in Y axis (in meters)
+  L_Retract_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Left retract position in Z axis (in meters)
+  L_Retract_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right retract position in X axis (in meters)
+  R_Retract_X:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right retract position in Y axis (in meters)
+  R_Retract_Y:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Right retract position in Z axis (in meters)
+  R_Retract_Z:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Torso pitch angle (in radians)
+  Torso_Pitch:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Shift roll angle (in radians)
+  Shift_Roll:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Lift roll angle (in radians)
+  Lift_Roll:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Lift pitch angle (in radians)
+  Lift_Pitch:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Swing roll angle (in radians)
+  Swing_Roll:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Swing pitch angle (in radians)
+  Swing_Pitch:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Retract roll angle (in radians)
+  Retract_Roll:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Retract pitch angle (in radians)
+  Retract_Pitch:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Time for shift phase (in seconds)
+  SHIFT_TIME:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Time for lift phase (in seconds)
+  LIFT_TIME:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Time for swing phase (in seconds)
+  SWING_TIME:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Time for retract phase (in seconds)
+  RETRACT_TIME:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Time for landing phase (in seconds)
+  LANDING_TIME:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)
+
+  # Time for finished phase (in seconds)
+  FINISHED_TIME:
+    type: double
+    value: 0.0  # bounds: [min, max] (define bounds if needed)

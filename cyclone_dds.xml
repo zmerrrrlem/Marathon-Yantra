@@ -1,0 +1,9 @@
+<CycloneDDS>
+  <Discovery>
+    <ParticipantIndex>auto</ParticipantIndex>
+    <Peers>
+      <Peer Address="localhost"/>
+    </Peers>
+    <MaxAutoParticipantIndex>100</MaxAutoParticipantIndex>
+  </Discovery>
+</CycloneDDS>

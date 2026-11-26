@@ -1,0 +1,10 @@
+<library path="head_controller">
+    <class name="head_controller/HeadController"
+        type="head_controller::HeadController"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            ROS 2 controller for controlling the head of a robot.
+            This controller allows for the manipulation of the head's position and orientation
+        </description>
+    </class>
+</library>

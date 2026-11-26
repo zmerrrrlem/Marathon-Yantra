@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="quintic_walk" exec="quintic_walk" output="screen">
+      <param from="$(find-pkg-share quintic_walk)/config/walking.yaml" />
+    </node>
+</launch>

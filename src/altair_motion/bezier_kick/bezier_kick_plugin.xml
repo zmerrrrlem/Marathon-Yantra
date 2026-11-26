@@ -1,0 +1,9 @@
+<library path="bezier_kick">
+    <class name="bezier_kick/BezierKick"
+        type="bezier_kick::BezierKick"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            The Kicking progam use bezier curve to generate the trajectory.
+        </description>
+    </class>
+</library>

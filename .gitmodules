@@ -1,0 +1,18 @@
+[submodule "src/altair_msgs/dynamixel_msgs"]
+	path = src/altair_msgs/dynamixel_msgs
+	url = https://github.com/Altair-Humanoid-GMRT/dynamixel_msgs.git
+[submodule "src/altair_misc/ipm"]
+	path = src/altair_misc/ipm/ipm
+	url = https://github.com/ros-sports/ipm.git
+[submodule "src/vision_opencv"]
+	path = src/vision_opencv
+	url = https://github.com/ros-perception/vision_opencv.git
+[submodule "src/altair_misc/DynamixelSDK"]
+	path = src/altair_misc/DynamixelSDK
+	url = https://github.com/Altair-Humanoid-GMRT/DynamixelSDK.git
+[submodule "src/altair_misc/robot_localization"]
+	path = src/altair_misc/robot_localization
+	url = https://github.com/Altair-Humanoid-GMRT/robot_localization.git
+[submodule "src/altair_hardware/dynamixel-workbench"]
+	path = src/altair_hardware/dynamixel-workbench
+	url = https://github.com/Altair-Humanoid-GMRT/dynamixel-workbench.git

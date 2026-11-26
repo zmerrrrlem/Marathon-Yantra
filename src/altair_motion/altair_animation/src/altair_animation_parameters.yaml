@@ -1,0 +1,6 @@
+altair_animation:
+  play: {
+    type: string_array,
+    default_value: [],
+    description: "Name of the animation to play",
+  }

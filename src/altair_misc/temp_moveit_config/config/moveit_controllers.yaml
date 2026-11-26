@@ -1,0 +1,127 @@
+# MoveIt uses this configuration for controller management
+trajectory_execution:
+  allowed_execution_duration_scaling: 1.2
+  allowed_goal_duration_margin: 0.5
+  allowed_start_tolerance: 0.01
+
+controller_manager_name: "/controller_manager"
+moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
+
+moveit_simple_controller_manager:
+  controller_names:
+    - fake_LeftLeg_controller
+    - fake_RightLeg_controller
+    - fake_Legs_controller
+    - fake_RightArm_controller
+    - fake_LeftArm_controller
+    - fake_Arms_controller
+    - fake_Head_controller
+    - fake_All_controller
+    - quintic_walk
+    - joint_state_broadcaster
+
+  fake_LeftLeg_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+
+  fake_RightLeg_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+
+  fake_Legs_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: false
+    joints:
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+
+  fake_RightArm_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+
+  fake_LeftArm_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+
+  fake_Arms_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: false
+    joints:
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+
+  fake_Head_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - head_pan
+      - head_tilt
+
+  fake_All_controller:
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: false
+    joints:
+      - head_pan
+      - head_tilt
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el

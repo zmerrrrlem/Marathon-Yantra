@@ -1,0 +1,450 @@
+#include "ball_detect/ball_detect.hpp"
+#include <numeric>
+
+// constructor
+BallDetector::BallDetector():Node("ball_detector")
+{  
+  // parameter declaration with additional optimization parameters
+  this->declare_parameter("focal_length", 710.1);
+  this->declare_parameter("actual_diameter", 0.13);
+  this->declare_parameter("moving_average_window", 10);
+  this->declare_parameter("orange_lower_bound", std::vector<int>{1, 80, 20});
+  this->declare_parameter("orange_upper_bound", std::vector<int>{25,255,255});
+  this->declare_parameter("green_lower_bound", std::vector<int>{30,30,45});
+  this->declare_parameter("green_upper_bound", std::vector<int>{85,255,255});
+  // Optimization parameters
+  this->declare_parameter("processing_scale", 0.5);
+  this->declare_parameter("skip_frames", 1);
+  this->declare_parameter("enable_debug_output", false);
+  this->declare_parameter("status_interval", 5);
+
+  // get params
+  auto orange_lower_bound = this->get_parameter("orange_lower_bound").as_integer_array();
+  auto orange_upper_bound = this->get_parameter("orange_upper_bound").as_integer_array();
+  auto green_lower_bound = this->get_parameter("green_lower_bound").as_integer_array();
+  auto green_upper_bound = this->get_parameter("green_upper_bound").as_integer_array();
+
+  focal_length_ = this->get_parameter("focal_length").as_double();
+  actual_diameter_ = this->get_parameter("actual_diameter").as_double();
+  moving_average_window_ = this->get_parameter("moving_average_window").as_int();
+  processing_scale_ = this->get_parameter("processing_scale").as_double();
+  skip_frames_ = this->get_parameter("skip_frames").as_int();
+  enable_debug_ = this->get_parameter("enable_debug_output").as_bool();
+  
+  lower_orange_ = cv::Scalar(orange_lower_bound[0], orange_lower_bound[1], orange_lower_bound[2]);
+  upper_orange_ = cv::Scalar(orange_upper_bound[0], orange_upper_bound[1], orange_upper_bound[2]);
+  lower_green_ = cv::Scalar(green_lower_bound[0], green_lower_bound[1], green_lower_bound[2]);
+  upper_green_ = cv::Scalar(green_upper_bound[0], green_upper_bound[1], green_upper_bound[2]);
+
+  // Pre-allocate matrices and kernels
+  kernel_ball_ = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(7, 7));  // Smaller kernel
+  kernel_field_ = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
+
+  // Try to enable hardware acceleration
+  if (cv::ocl::haveOpenCL()) {
+    cv::ocl::setUseOpenCL(true);
+    RCLCPP_INFO(this->get_logger(), "OpenCL acceleration enabled");
+  }
+
+  // Initialize camera subscriber
+  image_sub_ = image_transport::create_camera_subscription(
+    this, "image_raw", 
+    std::bind(&BallDetector::image_callback, this, std::placeholders::_1, std::placeholders::_2),
+    "raw", rmw_qos_profile_sensor_data);
+
+  // Initialize publishers
+  ball_distance_pub_ = create_publisher<std_msgs::msg::Float64MultiArray>("ball_distances", 10);
+  ball_image_pub_ = create_publisher<sensor_msgs::msg::Image>("ball_image", 10);
+  ball_info_pub_ = create_publisher<ball_detect::msg::BallInfo>("ball_info", 10);
+  
+  RCLCPP_INFO(this->get_logger(), "Ball Detector Node Initialized");
+  
+  // Reduced status message frequency
+  int status_interval = this->get_parameter("status_interval").as_int();
+  status_timer_ = this->create_wall_timer(
+      std::chrono::seconds(status_interval),
+      [this]() {
+          RCLCPP_INFO(this->get_logger(), "Ball Detector Node is running...");
+      }
+  );
+}
+
+cv::Mat BallDetector::ball(const cv::Mat &frame) {
+  // Reuse matrices to avoid allocation
+  cv::cvtColor(frame, hsv_, cv::COLOR_BGR2HSV);
+  cv::inRange(hsv_, lower_orange_, upper_orange_, mask_ball_);
+  
+  // Use more efficient morphological operations with fewer iterations
+  cv::morphologyEx(mask_ball_, mask_ball_, cv::MORPH_CLOSE, kernel_ball_, cv::Point(-1,-1), 1);
+  
+  return mask_ball_;
+}
+
+std::pair<cv::Mat, cv::Mat> BallDetector::field(const cv::Mat &frame) {
+  cv::cvtColor(frame, hsv_, cv::COLOR_BGR2HSV);
+  
+  // Create mask for green field - reuse mask
+  cv::inRange(hsv_, lower_green_, upper_green_, mask_field_);
+  
+  // Simplified morphological operations
+  cv::erode(mask_field_, mask_temp_, kernel_field_, cv::Point(-1,-1), 1);
+  cv::dilate(mask_temp_, mask_field_, kernel_field_, cv::Point(-1,-1), 3); // Reduced iterations
+  
+  // Find contours in the mask
+  contours_.clear();
+  hierarchy_.clear();
+  cv::findContours(mask_field_, contours_, hierarchy_, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+  
+  if (contours_.empty()) {
+      // Return original frame and empty mask
+      mask_field_ = cv::Mat::zeros(mask_field_.size(), mask_field_.type());
+      return std::make_pair(frame, mask_field_);
+  }
+  
+  // Find largest contour efficiently
+  size_t max_index = 0;
+  double max_area = 0;
+  for (size_t i = 0; i < contours_.size(); i++) {
+      double area = cv::contourArea(contours_[i]);
+      if (area > max_area) {
+          max_area = area;
+          max_index = i;
+      }
+  }
+  
+  // Compute convex hull
+  hull_.clear();
+  cv::convexHull(contours_[max_index], hull_);
+  
+  // Draw the convex hull on the mask
+  mask_field_ = cv::Mat::zeros(mask_field_.size(), mask_field_.type());
+  hulls_.clear();
+  hulls_.push_back(hull_);
+  cv::drawContours(mask_field_, hulls_, -1, cv::Scalar(255), cv::FILLED);
+  
+  // Create ROI by masking the original frame
+  cv::bitwise_and(frame, frame, roi_frame_, mask_field_);
+  
+  return std::make_pair(roi_frame_, mask_field_);
+}
+
+std::pair<int, int> BallDetector::find_first_last_orange(const cv::Mat &line_data, int line_start) {
+  int first_orange = -1;
+  int last_orange = -1;
+  
+  // Find first orange pixel more efficiently
+  const uchar* row_ptr = line_data.ptr<uchar>(0);
+  for (int idx = 0; idx < line_data.cols; idx++) {
+      if (row_ptr[idx] == 255) {
+          first_orange = line_start + idx;
+          break;
+      }
+  }
+  
+  // Find last orange pixel
+  for (int idx = line_data.cols - 1; idx >= 0; idx--) {
+      if (row_ptr[idx] == 255) {
+          last_orange = line_start + idx;
+          break;
+      }
+  }
+  
+  return std::make_pair(first_orange, last_orange);
+}
+
+std::pair<int, int> BallDetector::find_top_bottom_orange(const cv::Mat &column_data, int col_start) {
+  int top_orange = -1;
+  int bot_orange = -1;
+  
+  // Find top orange pixel
+  for (int idy = 0; idy < column_data.rows; idy++) {
+      if (column_data.at<uchar>(idy, 0) == 255) {
+          top_orange = col_start + idy;
+          break;
+      }
+  }
+  
+  // Find bottom orange pixel
+  for (int idy = column_data.rows - 1; idy >= 0; idy--) {
+      if (column_data.at<uchar>(idy, 0) == 255) {
+          bot_orange = col_start + idy;
+          break;
+      }
+  }
+  
+  return std::make_pair(top_orange, bot_orange);
+}
+
+double BallDetector::getSmoothedDistance(std::vector<double>& history, double new_distance) {
+  // Add new value
+  history.push_back(new_distance);
+  
+  // Keep history at window size
+  if (history.size() > static_cast<size_t>(moving_average_window_)) {
+    history.erase(history.begin());
+  }
+  
+  // Efficiently calculate average
+  return std::accumulate(history.begin(), history.end(), 0.0) / history.size();
+}
+
+cv::Mat BallDetector::detect(const cv::Mat &mask_ball, const cv::Mat &mask_field, cv::Mat frame, 
+                           std::vector<double>& distanceHistory, double scale_factor) {
+  // Use contours instead of HoughCircles for better performance
+  contours_.clear();
+  hierarchy_.clear();
+  cv::findContours(mask_ball, contours_, hierarchy_, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+  
+  if (contours_.empty()) {
+    if (enable_debug_) {
+      RCLCPP_WARN(this->get_logger(), "No contours detected in this frame");
+    }
+    return frame;
+  }
+  
+  // Process only valid contours with reasonable circularity
+  bool found_valid_ball = false;
+  int x_new = 0, y_new = 0, r_new = 0;
+  
+  for (const auto& contour : contours_) {
+    double area = cv::contourArea(contour);
+    if (area < 30) continue; // Skip tiny contours
+    
+    // Calculate circularity
+    double perimeter = cv::arcLength(contour, true);
+    double circularity = 4 * M_PI * area / (perimeter * perimeter);
+    
+    if (circularity < 0.6) continue; // Not circular enough
+    
+    // Get center and radius from contour
+    cv::Rect boundRect = cv::boundingRect(contour);
+    int x = boundRect.x + boundRect.width/2;
+    int y = boundRect.y + boundRect.height/2;
+    int r = (boundRect.width + boundRect.height)/4;
+    int stroke = static_cast<int>(1.1 * r);
+      
+    // Horizontal refinement
+    int line_y = y;
+    int line_x_start = std::max(0, x - stroke);
+    int line_x_end = std::min(mask_ball.cols - 1, x + stroke);
+    
+    cv::Rect hRect(line_x_start, line_y, line_x_end - line_x_start, 1);
+    if (hRect.width <= 0) continue;
+    
+    cv::Mat orange_hline = mask_ball(hRect);
+    
+    auto first_last = find_first_last_orange(orange_hline, line_x_start);
+    int first_orange = first_last.first;
+    int last_orange = first_last.second;
+    
+    if (first_orange == -1 || last_orange == -1) continue;
+    
+    int total_x_pixel = last_orange - first_orange;
+    r_new = total_x_pixel / 2;
+    x_new = first_orange + r_new;
+    
+    // Vertical refinement
+    int line_x = x_new;
+    int line_y_start = std::max(0, y - stroke);
+    int line_y_end = std::min(mask_ball.rows - 1, y + stroke);
+    
+    if (line_y_end - line_y_start <= 0) continue;
+    
+    cv::Rect vRect(line_x, line_y_start, 1, line_y_end - line_y_start);
+    cv::Mat orange_vline = mask_ball(vRect);
+    
+    auto top_bot = find_top_bottom_orange(orange_vline, line_y_start);
+    int top_orange = top_bot.first;
+    int bot_orange = top_bot.second;
+    
+    if (top_orange == -1 || bot_orange == -1) continue;
+    
+    int total_y_pixel = abs(top_orange - bot_orange);
+    y_new = bot_orange - (total_y_pixel / 2);
+    
+    // Skip second horizontal pass for performance
+
+    // Validate with field and ball ratios
+    int R = static_cast<int>(r_new * 1.5);
+    
+    int x1 = std::max(x_new - R, 0);
+    int y1 = std::max(y_new - R, 0);
+    int x2 = std::min(x_new + R, frame.cols);
+    int y2 = std::min(y_new + R, frame.rows);
+    
+    cv::Rect surroundingRect(x1, y1, x2 - x1, y2 - y1);
+    
+    double field_ratio = 0.0, ball_ratio = 0.0;
+    
+    // Only calculate these ratios if the rect has area
+    if (surroundingRect.width > 0 && surroundingRect.height > 0) {
+      cv::Mat surrounding_field = mask_field(surroundingRect);
+      double field_pixels = cv::countNonZero(surrounding_field);
+      field_ratio = field_pixels / (surrounding_field.size().area());
+  
+      cv::Mat surrounding_ball = mask_ball(surroundingRect);
+      double ball_pixels = cv::countNonZero(surrounding_ball);
+      ball_ratio = ball_pixels / (surrounding_ball.size().area());
+    }
+  
+    if (!((field_ratio > 0.16) && (ball_ratio < 0.47))) {
+      if (enable_debug_) {
+        RCLCPP_WARN(this->get_logger(), "Circle failed ratio test: field_ratio=%.2f, ball_ratio=%.2f", 
+            field_ratio, ball_ratio);
+      }
+      continue;
+    }
+
+    // Scale coordinates back if needed
+    if (scale_factor != 1.0) {
+      x_new = static_cast<int>(x_new * scale_factor);
+      y_new = static_cast<int>(y_new * scale_factor);
+      r_new = static_cast<int>(r_new * scale_factor);
+    }
+    
+    // Calculate ball distance
+    int detected_diameter = 2 * r_new;
+    double distance = 0;
+    
+    if (detected_diameter != 0) {
+      distance = (actual_diameter_ * focal_length_) / detected_diameter;
+      if (enable_debug_) {
+        RCLCPP_INFO(this->get_logger(), "Ball detected! Position: (%d, %d), Radius: %d, Distance: %.2f m", 
+              x_new, y_new, r_new, distance);
+      }
+    }
+  
+    // Add to distance history and calculate smoothed distance
+    double predictedDistance = distance;
+    
+    // Use optimized moving average
+    if (!distanceHistory.empty()) {
+      predictedDistance = getSmoothedDistance(distanceHistory, distance);
+    } else {
+      distanceHistory.push_back(distance);
+    }
+    
+    // Create and publish ball_info message
+    ball_detect::msg::BallInfo ball_info_msg;
+    ball_info_msg.header.stamp = this->now();
+    ball_info_msg.header.frame_id = "camera_frame";
+    ball_info_msg.x_pixel = x_new;
+    ball_info_msg.y_pixel = y_new;
+    ball_info_msg.radius_pixel = r_new;
+    ball_info_msg.distance = predictedDistance;
+    ball_info_msg.confidence = 1.0 - ball_ratio;
+  
+    // Publish ball info
+    ball_info_pub_->publish(ball_info_msg);
+    
+    // Publish distance data
+    std_msgs::msg::Float64MultiArray distance_msg;
+    distance_msg.data.push_back(predictedDistance);
+    ball_distance_pub_->publish(distance_msg);
+    
+    // Draw visualization on the frame
+    cv::line(frame, cv::Point(x_new, y_new + r_new), cv::Point(x_new, y_new - r_new), cv::Scalar(0, 255, 0), 2);
+    cv::line(frame, cv::Point(x_new - r_new, y_new), cv::Point(x_new + r_new, y_new), cv::Scalar(0, 255, 0), 2);
+    cv::circle(frame, cv::Point(x_new, y_new), r_new, cv::Scalar(0, 255, 0), 2);
+    
+    cv::putText(frame, cv::format("%.2f m", predictedDistance), 
+                cv::Point(x_new - r_new, y_new - r_new - 10), 
+                cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0), 2);
+    
+    // Save ROI for next frame
+    prev_roi_ = cv::Rect(x_new - 2*r_new, y_new - 2*r_new, 4*r_new, 4*r_new);
+    has_prev_detection_ = true;
+    lost_frames_ = 0;
+    
+    // Found a valid ball
+    found_valid_ball = true;
+    break;
+  }
+  
+  // Update ROI tracking state if no ball found
+  if (!found_valid_ball && has_prev_detection_) {
+    lost_frames_++;
+    if (lost_frames_ > 5) {
+      has_prev_detection_ = false;
+    }
+  }
+  
+  return frame;
+}
+
+void BallDetector::image_callback(const sensor_msgs::msg::Image::ConstSharedPtr& img_msg, 
+  const sensor_msgs::msg::CameraInfo::ConstSharedPtr& cinfo_msg) {
+  
+  // Skip frames if needed
+  static int frame_count = 0;
+  frame_count++;
+  if ((frame_count % (skip_frames_ + 1)) != 0) {
+    return;
+  }
+  
+  try {
+    // Use camera calibration if available
+    double fx = cinfo_msg->k[0];
+    if (fx > 0) {
+      focal_length_ = fx;
+    }
+    
+    // Process at reduced resolution for better performance
+    cv::Mat full_frame = cv_bridge::toCvShare(img_msg, "bgr8")->image;
+    cv::Mat frame;
+    
+    if (processing_scale_ != 1.0) {
+      cv::resize(full_frame, frame, cv::Size(), processing_scale_, processing_scale_);
+    } else {
+      frame = full_frame;
+    }
+    
+    // Processing pipeline
+    cv::Mat mask_field;
+    cv::Mat roi_frame;
+    
+    if (has_prev_detection_ && processing_scale_ == 1.0) {
+      // Only process ROI if we have previous detection and no scaling
+      int pad = prev_roi_.width / 2;
+      cv::Rect expanded_roi(
+        std::max(0, prev_roi_.x - pad),
+        std::max(0, prev_roi_.y - pad),
+        std::min(frame.cols - prev_roi_.x + pad, prev_roi_.width + 2*pad),
+        std::min(frame.rows - prev_roi_.y + pad, prev_roi_.height + 2*pad)
+      );
+      
+      cv::Mat roi = frame(expanded_roi);
+      auto [seg_roi, mask_roi] = field(roi);
+      cv::Mat mask_ball_roi = ball(seg_roi);
+      
+      // Process ROI only
+      cv::Mat roi_result = detect(mask_ball_roi, mask_roi, roi, distanceHistory, 1.0);
+      
+      // Copy result back to full frame
+      roi_result.copyTo(full_frame(expanded_roi));
+    } else {
+      // Process full frame
+      auto [seg_field, mask_field] = field(frame);
+      cv::Mat mask_ball = ball(seg_field);
+      
+      // Process at reduced resolution if scaling is active
+      if (processing_scale_ != 1.0) {
+        cv::Mat result = detect(mask_ball, mask_field, frame, distanceHistory, 1.0/processing_scale_);
+        // Resize result to original size
+        cv::resize(result, full_frame, full_frame.size());
+      } else {
+        detect(mask_ball, mask_field, full_frame, distanceHistory, 1.0);
+      }
+    }
+    
+    // Publish detection results
+    if (!full_frame.empty()) {
+      sensor_msgs::msg::Image::SharedPtr ball_img_msg = 
+          cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", full_frame).toImageMsg();
+      ball_image_pub_->publish(*ball_img_msg);
+    }
+    
+  } catch (cv_bridge::Exception &e) {
+    RCLCPP_ERROR(this->get_logger(), "cv_bridge exception: %s", e.what());
+  }
+}

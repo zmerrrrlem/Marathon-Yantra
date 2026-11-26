@@ -1,0 +1,9 @@
+<library path="microcontroller_broadcaster">
+    <class name="microcontroller_broadcaster/MicrocontrollerBroadcaster"
+        type="microcontroller_broadcaseter::MicrocontrollerBroadcaster"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            experimental testing
+        </description>
+    </class>
+</library>

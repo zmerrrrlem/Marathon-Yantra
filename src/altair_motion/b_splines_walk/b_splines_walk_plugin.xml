@@ -1,0 +1,9 @@
+<library path="b_splines_walk">
+    <class name="b_splines_walk/BSplinesWalk"
+        type="b_splines_walk::BSplinesWalk"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            Declaration of zmp walk controller, used for walking.
+        </description>
+    </class>
+</library>

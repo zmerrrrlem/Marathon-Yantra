@@ -1,0 +1,9 @@
+<library path="quintic_walk">
+    <class name="quintic_walk/QuinticWalk"
+        type="quintic_walk::QuinticWalk"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            Declaration of zmp walk controller, used for walking.
+        </description>
+    </class>
+</library>

@@ -1,0 +1,9 @@
+<library path="cubic_walk">
+    <class name="cubic_walk/CubicWalk"
+        type="cubic_walk::CubicWalk"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            Declaration of zmp walk controller, used for walking.
+        </description>
+    </class>
+</library>

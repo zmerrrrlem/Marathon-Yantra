@@ -1,0 +1,24 @@
+/**/head_controller:
+  ros__parameters:
+    override_control: false
+    speed_factor: 50
+    limit:
+      roll_max: 60.0
+      roll_min: -60.0
+      pitch_max: 20.0
+      pitch_min: -60.0
+    head_pid:
+      pitch:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp_max: 0.0
+        i_clamp_min: 0.0
+        antiwindup: false
+      roll:
+        p: 0.0
+        i: 0.0
+        d: 0.0
+        i_clamp_max: 0.0
+        i_clamp_min: 0.0
+        antiwindup: false

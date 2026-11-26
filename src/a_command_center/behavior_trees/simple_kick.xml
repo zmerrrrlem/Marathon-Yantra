@@ -1,0 +1,20 @@
+<!-- Find the ball, then approach the ball, then if close enough, kick -->
+
+ <root  BTCPP_format="4">
+     <BehaviorTree ID="MainTree">
+        <Sequence name="root_sequence">
+            <Fallback name="find_ball_fallback">
+                <BallFound name="ball_found"/>
+                <FindBall name="find_ball"/>
+            </Fallback>
+            <Fallback name="approach_ball_fallback">
+                <BallClose name="ball_close"/>
+                <ApproachBall name="approach_ball"/>
+            </Fallback>
+            <Fallback name="kick_ball_fallback">
+                <BallKicked name="ball_kicked"/>
+                <KickBall name="kick_ball"/>
+            </Fallback>
+        </Sequence>
+     </BehaviorTree>
+ </root>

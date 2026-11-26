@@ -1,0 +1,35 @@
+/**/controller_manager:
+  ros__parameters:
+    update_rate: 75  # Hz
+    # namespace: altair01
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    
+    imu_sensor_broadcaster:
+      type: imu_sensor_broadcaster/IMUSensorBroadcaster
+      sensor_name: imu_sensor
+      frame_id: imu_link
+    
+    quintic_walk:
+      type: quintic_walk/QuinticWalk
+
+    head_controller:
+      type: head_controller/HeadController
+
+
+/**/quintic_walk:
+  ros__parameters:
+    is_async: true
+    # update_rate: 100
+
+/**/head_controller:
+  ros__parameters:
+    is_async: true
+
+/**/imu_sensor_broadcaster:
+  ros__parameters:
+    type: imu_sensor_broadcaster/IMUSensorBroadcaster
+    sensor_name: imu_sensor
+    frame_id: imu_link

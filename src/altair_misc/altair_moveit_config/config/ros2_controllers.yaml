@@ -1,0 +1,213 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    fake_LeftLeg_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_LeftLeg_controller
+
+
+    fake_RightLeg_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_RightLeg_controller
+
+
+    fake_Legs_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_Legs_controller
+
+
+    fake_RightArm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_RightArm_controller
+
+
+    fake_LeftArm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_LeftArm_controller
+
+
+    fake_Arms_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_Arms_controller
+
+
+    fake_Head_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_Head_controller
+
+
+    fake_All_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+      action_ns: fake_All_controller
+
+
+    quintic_walk:
+      type: quintic_walk/QuinticWalk
+
+
+    zmp_walk:
+      type: zmp_walk/ZMPWalk
+
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+fake_LeftLeg_controller:
+  ros__parameters:
+    joints:
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+fake_RightLeg_controller:
+  ros__parameters:
+    joints:
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+fake_Legs_controller:
+  ros__parameters:
+    joints:
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+fake_RightArm_controller:
+  ros__parameters:
+    joints:
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+fake_LeftArm_controller:
+  ros__parameters:
+    joints:
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+fake_Arms_controller:
+  ros__parameters:
+    joints:
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+fake_Head_controller:
+  ros__parameters:
+    joints:
+      - head_pan
+      - head_tilt
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+fake_All_controller:
+  ros__parameters:
+    joints:
+      - head_pan
+      - head_tilt
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    allow_nonzero_velocity_at_trajectory_end: true
+quintic_walk:
+  ros__parameters:
+    joints:
+      []
+zmp_walk:
+  ros__parameters:
+    joints:
+      - head_pan
+      - head_tilt
+      - l_el
+      - l_sho_roll
+      - l_sho_pitch
+      - r_el
+      - r_sho_roll
+      - r_sho_pitch
+      - l_ank_roll
+      - l_ank_pitch
+      - l_knee
+      - l_hip_pitch
+      - l_hip_roll
+      - l_hip_yaw
+      - r_ank_roll
+      - r_ank_pitch
+      - r_knee
+      - r_hip_pitch
+      - r_hip_roll
+      - r_hip_yaw

@@ -1,0 +1,1313 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Yantravira-urdf1">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.000464 0.019130 0.085212"
+        rpy="0 0 0" />
+      <mass
+        value="2.800000" />
+      <inertia
+        ixx="0.000522594890095078"
+        ixy="1.05456519238751E-07"
+        ixz="-1.21895181612785E-09"
+        iyy="0.000539021357029131"
+        iyz="-2.0516495638139E-06"
+        izz="0.000729569284579742" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="-0.76456 1.4659 -1.0525"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="-0.76456 1.4659 -1.0525"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="left_leg_yaw_1">
+    <inertial>
+      <origin
+        xyz="-0.000293395046954581 -0.0103442573019752 0.00110305978292957"
+        rpy="0 0 0" />
+      <mass
+        value="0.023040" />
+      <inertia
+        ixx="2.80443432469677E-06"
+        ixy="4.93963214193512E-09"
+        ixz="-7.80001706914718E-11"
+        iyy="2.97839046173374E-06"
+        iyz="2.21309788192549E-12"
+        izz="1.96384053722524E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_yaw_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.956862745098039 0.956862745098039 0.956862745098039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_yaw_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_yaw_1"
+    type="continuous">
+    <origin
+      xyz="0.04493 0 0"
+      rpy="1.5708 -0.028365 -0.017449" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_leg_yaw_1" />
+    <axis
+      xyz="-0.028362 -0.9996 0" />
+  </joint>
+  <link
+    name="left_leg_roll_1">
+    <inertial>
+      <origin
+        xyz="-0.000467916562324255 -0.0149344120162265 -0.0519390314555188"
+        rpy="0 0 0" />
+      <mass
+        value="0.239185" />
+      <inertia
+        ixx="5.56789379229654E-05"
+        ixy="2.8636107367598E-07"
+        ixz="-2.51710829188692E-08"
+        iyy="3.4683688822021E-05"
+        iyz="-8.8861175226588E-07"
+        izz="5.60943290845426E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_roll_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_roll_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_roll_1"
+    type="revolute">
+    <origin
+      xyz="-0.000947761976992201 -0.0334865906410433 0.0253299998926722"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_yaw_1" />
+    <child
+      link="left_leg_roll_1" />
+    <axis
+      xyz="-9.28072232236758E-05 0 -0.999999995689943" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_leg_pitch_1">
+    <inertial>
+      <origin
+        xyz="-0.00271631978219411 -0.0929432733751923 -0.000170740705172312"
+        rpy="0 0 0" />
+      <mass
+        value="0.141555" />
+      <inertia
+        ixx="3.55178809542636E-05"
+        ixy="-1.337935304719E-06"
+        ixz="6.22133945029244E-10"
+        iyy="1.94833454038939E-05"
+        iyz="1.31314875363089E-08"
+        izz="3.81142701997861E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_pitch_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_pitch_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_pitch_1"
+    type="revolute">
+    <origin
+      xyz="0 0 -0.029799999872812"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_roll_1" />
+    <child
+      link="left_leg_pitch_1" />
+    <axis
+      xyz="-0.999597725293947 0.0283615755389709 9.28445736456906E-05" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_leg_pitch_3">
+    <inertial>
+      <origin
+        xyz="-0.00177582193068071 -0.0449621109925636 0.000955843388643851"
+        rpy="0 0 0" />
+      <mass
+        value="0.024386" />
+      <inertia
+        ixx="1.76874811322172E-05"
+        ixy="-4.70088446053495E-07"
+        ixz="9.25717578029612E-09"
+        iyy="1.13157053134888E-06"
+        iyz="3.29850258180099E-07"
+        izz="1.66062881941686E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_pitch_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_pitch_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_pitch_3"
+    type="revolute">
+    <origin
+      xyz="-0.00333089372654283 -0.117395998588874 -0.000197214507791976"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_pitch_1" />
+    <child
+      link="left_leg_pitch_3" />
+    <axis
+      xyz="-0.999597725293947 0.0283615755389733 9.28445736456982E-05" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_leg_pitch_5">
+    <inertial>
+      <origin
+        xyz="-0.000574247924827742 -0.0185153769575804 -0.0218499298470214"
+        rpy="0 0 0" />
+      <mass
+        value="0.239185" />
+      <inertia
+        ixx="5.5678965998439E-05"
+        ixy="2.87392099846594E-07"
+        ixz="2.08785674173741E-08"
+        iyy="3.47169631597952E-05"
+        iyz="1.22498316692921E-06"
+        izz="5.6061024278309E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_pitch_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.211764705882353 0.211764705882353 0.211764705882353 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_pitch_5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_pitch_5"
+    type="revolute">
+    <origin
+      xyz="-0.00255612421753004 -0.0900962091651256 0.0018793623973361"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_pitch_3" />
+    <child
+      link="left_leg_pitch_5" />
+    <axis
+      xyz="-0.999597725293847 0.0283615755416773 9.28448147168626E-05" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_leg_roll_5">
+    <inertial>
+      <origin
+        xyz="0.00402522947953965 -0.029674284820427 -0.0256257606626666"
+        rpy="0 0 0" />
+      <mass
+        value="0.032646" />
+      <inertia
+        ixx="1.71042487272715E-05"
+        ixy="1.24299306362214E-07"
+        ixz="2.29308289044994E-09"
+        iyy="2.14428017580667E-05"
+        iyz="-1.94160809883109E-07"
+        izz="7.29847472272462E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_roll_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_leg_roll_5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_leg_roll_5"
+    type="revolute">
+    <origin
+      xyz="-0.00100475804919264 -0.0355118826030147 0.0303634097963719"
+      rpy="0 0 0" />
+    <parent
+      link="left_leg_pitch_5" />
+    <child
+      link="left_leg_roll_5" />
+    <axis
+      xyz="-0.000539575617018068 -0.0157440218400406 -0.999875909618016" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_leg_yaw_2">
+    <inertial>
+      <origin
+        xyz="-0.000255128519540904 -0.0103453430377463 0.00110239173510718"
+        rpy="0 0 0" />
+      <mass
+        value="0.023100" />
+      <inertia
+        ixx="2.80341744120375E-06"
+        ixy="4.96848412450462E-09"
+        ixz="-2.9216684034729E-08"
+        iyy="2.97838964311792E-06"
+        iyz="8.28964663529571E-10"
+        izz="1.96485823933407E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_yaw_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.956862745098039 0.956862745098039 0.956862745098039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_yaw_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_yaw_2"
+    type="continuous">
+    <origin
+      xyz="-0.04493 0 0"
+      rpy="1.5708 -0.028365 -0.017449" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_leg_yaw_2" />
+    <axis
+      xyz="0.028362 0.9996 0" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_leg_roll_2">
+    <inertial>
+      <origin
+        xyz="-0.00219111429916985 -0.0148855197696193 -0.0519089385784461"
+        rpy="0 0 0" />
+      <mass
+        value="0.239803" />
+      <inertia
+        ixx="5.55778879740091E-05"
+        ixy="-1.50349193694987E-06"
+        ixz="-8.73346630813875E-09"
+        iyy="3.47853974914027E-05"
+        iyz="-8.57779651403604E-07"
+        izz="5.60938410598672E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_roll_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_roll_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_roll_2"
+    type="revolute">
+    <origin
+      xyz="-6.90325588559304E-05 -0.0335115228213799 0.0253146592468938"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_yaw_2" />
+    <child
+      link="right_leg_roll_2" />
+    <axis
+      xyz="0.0347840590991871 -0.000986927798494549 0.999394364205695" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_leg_pitch_2">
+    <inertial>
+      <origin
+        xyz="-0.00256395704794443 -0.092947604230608 -0.000173408625386839"
+        rpy="0 0 0" />
+      <mass
+        value="0.141920" />
+      <inertia
+        ixx="3.56208933412931E-05"
+        ixy="4.21467161186181E-07"
+        ixz="8.75692219672913E-08"
+        iyy="1.93834541614419E-05"
+        iyz="-2.00998314726022E-08"
+        izz="3.81112358698054E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_pitch_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_pitch_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_pitch_2"
+    type="revolute">
+    <origin
+      xyz="-0.00103656496101834 2.94104474847234E-05 -0.0297819520545872"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_roll_2" />
+    <child
+      link="right_leg_pitch_2" />
+    <axis
+      xyz="-0.998992337445232 0.0283443985967446 0.0347980573294055" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_leg_pitch_4">
+    <inertial>
+      <origin
+        xyz="-0.000743369098725966 -0.0449914047657308 0.000937819076737956"
+        rpy="0 0 0" />
+      <mass
+        value="0.024449" />
+      <inertia
+        ixx="1.76868061703156E-05"
+        ixy="-4.58617262507619E-07"
+        ixz="-2.86960468673403E-08"
+        iyy="1.13092013117607E-06"
+        iyz="3.30727177704195E-07"
+        izz="1.66076135562415E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_pitch_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_pitch_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_pitch_4"
+    type="revolute">
+    <origin
+      xyz="-0.00333773531197856 -0.117395804472645 -0.000197095069536468"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_pitch_2" />
+    <child
+      link="right_leg_pitch_4" />
+    <axis
+      xyz="-0.998992337445232 0.0283443985967446 0.0347980573294055" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_leg_pitch_6">
+    <inertial>
+      <origin
+        xyz="-0.00108272813657617 -0.0186415544401511 -0.022009772401808"
+        rpy="0 0 0" />
+      <mass
+        value="0.237997" />
+      <inertia
+        ixx="5.54685671005531E-05"
+        ixy="-1.42740728004701E-06"
+        ixz="6.58527176287984E-08"
+        iyy="3.47567840552067E-05"
+        iyz="1.25372151587666E-06"
+        izz="5.60018688549444E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_pitch_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.211764705882353 0.211764705882353 0.211764705882353 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_pitch_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_pitch_6"
+    type="fixed">
+    <origin
+      xyz="-0.00249092675794416 -0.0900980590133957 0.00187822419299155"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_pitch_4" />
+    <child
+      link="right_leg_pitch_6" />
+    <axis
+      xyz="0 0 0" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_leg_roll_6">
+    <inertial>
+      <origin
+        xyz="-0.00659207938325002 -0.0293730400301412 -0.025440406252647"
+        rpy="0 0 0" />
+      <mass
+        value="0.032731" />
+      <inertia
+        ixx="1.70912733375062E-05"
+        ixy="1.15697411466106E-07"
+        ixz="-3.54936827456696E-07"
+        iyy="2.14433003265422E-05"
+        iyz="-1.83868532590615E-07"
+        izz="7.31095154401376E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_roll_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_leg_roll_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_leg_roll_6"
+    type="revolute">
+    <origin
+      xyz="4.85866525151701E-05 -0.0355417691449693 0.030345020761827"
+      rpy="0 0 0" />
+    <parent
+      link="right_leg_pitch_6" />
+    <child
+      link="right_leg_roll_6" />
+    <axis
+      xyz="0.0352265223018813 0.0147598494744137 0.999270353292845" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_arm_pitch_1">
+    <inertial>
+      <origin
+        xyz="0.0414253386450568 -0.00781319109023659 0.000177524277886532"
+        rpy="0 0 0" />
+      <mass
+        value="0.012584" />
+      <inertia
+        ixx="1.50320235000565E-06"
+        ixy="7.47241615164376E-07"
+        ixz="2.16180390028535E-08"
+        iyy="1.9207857715234E-06"
+        iyz="-1.34308705437552E-08"
+        izz="2.72091955749439E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_arm_pitch_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.956862745098039 0.956862745098039 0.956862745098039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_arm_pitch_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_pitch_1"
+    type="revolute">
+    <origin
+      xyz="0.05293 0.0045 0.1593"
+      rpy="1.5708 -0.028365 -0.017449" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_arm_pitch_1" />
+    <axis
+      xyz="-0.99945 0.028357 0.017448" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_arm_roll_1">
+    <inertial>
+      <origin
+        xyz="-0.00144403947899918 -0.0565391436372 0.000157338227321668"
+        rpy="0 0 0" />
+      <mass
+        value="0.139108" />
+      <inertia
+        ixx="2.4860214618432E-05"
+        ixy="1.51576953591949E-07"
+        ixz="3.99523405622122E-10"
+        iyy="1.73811989494707E-05"
+        iyz="-3.76434963973734E-07"
+        izz="2.5480042782068E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_arm_roll_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_arm_roll_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_roll_1"
+    type="revolute">
+    <origin
+      xyz="0.0626706690388793 -0.0297894223232185 -0.00110795300811328"
+      rpy="0 0 0" />
+    <parent
+      link="left_arm_pitch_1" />
+    <child
+      link="left_arm_roll_1" />
+    <axis
+      xyz="-0.0174410600223386 0.000494855008540293 -0.999847770685027" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_arm_pitch_3">
+    <inertial>
+      <origin
+        xyz="-0.00233176094542187 -0.061021457394777 -0.0103965312962131"
+        rpy="0 0 0" />
+      <mass
+        value="0.085363" />
+      <inertia
+        ixx="1.48618325320395E-05"
+        ixy="1.92931545704538E-07"
+        ixz="-2.85132528369908E-07"
+        iyy="1.65230215526615E-05"
+        iyz="-3.73955614469899E-07"
+        izz="1.50494765220999E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_arm_pitch_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_arm_pitch_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_arm_pitch_3"
+    type="revolute">
+    <origin
+      xyz="-0.00322928974506276 -0.113604111825822 0"
+      rpy="0 0 0" />
+    <parent
+      link="left_arm_roll_1" />
+    <child
+      link="left_arm_pitch_3" />
+    <axis
+      xyz="0.999445561525195 -0.028357258178575 -0.0174480788679265" />
+    <limit
+      lower="-2.45"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="left_claw">
+    <inertial>
+      <origin
+        xyz="-0.00231909496142901 -0.0356469204317831 0.000861007375327683"
+        rpy="0 0 0" />
+      <mass
+        value="0.012946" />
+      <inertia
+        ixx="4.34348684952357E-06"
+        ixy="1.73135318015564E-07"
+        ixz="-1.8116169494554E-08"
+        iyy="3.20568410875238E-06"
+        iyz="-1.13472496385696E-06"
+        izz="5.39828743099729E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_claw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/left_claw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_claw"
+    type="revolute">
+    <origin
+      xyz="-0.0022883367810731 -0.063460627494945 0.00501495663748952"
+      rpy="0 0 0" />
+    <parent
+      link="left_arm_pitch_3" />
+    <child
+      link="left_claw" />
+    <axis
+      xyz="0.999445561525194 -0.0283572581786145 -0.0174480788679233" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_arm_pitch_2">
+    <inertial>
+      <origin
+        xyz="-0.0417701770970731 -0.00545268561598222 0.00162993146844381"
+        rpy="0 0 0" />
+      <mass
+        value="0.012584" />
+      <inertia
+        ixx="1.41994347581574E-06"
+        ixy="-7.18797931094787E-07"
+        ixz="2.23447956464841E-08"
+        iyy="2.00404464571326E-06"
+        iyz="1.21835135087327E-08"
+        izz="2.72091955749433E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_arm_pitch_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_arm_pitch_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_arm_pitch_2"
+    type="revolute">
+    <origin
+      xyz="-0.05234 0.0045 0.1595"
+      rpy="1.5708 -0.028365 -0.017449" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_arm_pitch_2" />
+    <axis
+      xyz="-0.99945 0.028357 0.017448" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_arm_roll_2">
+    <inertial>
+      <origin
+        xyz="-0.00175848972278148 -0.0565301850384983 0.000162823049339789"
+        rpy="0 0 0" />
+      <mass
+        value="0.139108" />
+      <inertia
+        ixx="2.48182784485887E-05"
+        ixy="-5.86870056104485E-07"
+        ixz="7.65599646559806E-10"
+        iyy="1.74231360601831E-05"
+        iyz="-3.63533563328892E-07"
+        izz="2.54800401760356E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_arm_roll_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.894117647058823 0.894117647058823 0.894117647058823 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_arm_roll_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_arm_roll_2"
+    type="revolute">
+    <origin
+      xyz="-0.0642589172748204 -0.0261880505345395 0.00110795300811839"
+      rpy="0 0 0" />
+    <parent
+      link="right_arm_pitch_2" />
+    <child
+      link="right_arm_roll_2" />
+    <axis
+      xyz="0.0174410600223803 -0.000494855008540293 0.999847770685026" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_arm_pitch_4">
+    <inertial>
+      <origin
+        xyz="-0.00149479055229729 -0.061045204126234 -0.0104111354774441"
+        rpy="0 0 0" />
+      <mass
+        value="0.085363" />
+      <inertia
+        ixx="1.48639139678281E-05"
+        ixy="-1.11537444877538E-07"
+        ixz="2.69755098991709E-07"
+        iyy="1.65402646008028E-05"
+        iyz="-3.84379042152742E-07"
+        izz="1.50300820079365E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_arm_pitch_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_arm_pitch_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_arm_pitch_4"
+    type="revolute">
+    <origin
+      xyz="-0.00321729639832213 -0.113604452112909 0"
+      rpy="0 0 0" />
+    <parent
+      link="right_arm_roll_2" />
+    <child
+      link="right_arm_pitch_4" />
+    <axis
+      xyz="0.999445561525195 -0.02835725817857 -0.0174480788679234" />
+    <limit
+      lower="-2.45"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="right_claw">
+    <inertial>
+      <origin
+        xyz="0.000323326675001345 -0.0357219254270648 0.000814837606112784"
+        rpy="0 0 0" />
+      <mass
+        value="0.012946" />
+      <inertia
+        ixx="4.3183001167704E-06"
+        ixy="-2.75842879716747E-07"
+        ixz="-8.85014716135589E-09"
+        iyy="3.23116779201233E-06"
+        iyz="-1.12713489414621E-06"
+        izz="5.39795953542206E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_claw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/right_claw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_claw"
+    type="revolute">
+    <origin
+      xyz="-0.0011389743853174 -0.0634932383418437 0.00499489134687536"
+      rpy="0 0 0" />
+    <parent
+      link="right_arm_pitch_4" />
+    <child
+      link="right_claw" />
+    <axis
+      xyz="0.999445561525195 -0.02835725817857 -0.0174480788679234" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="head_yaw">
+    <inertial>
+      <origin
+        xyz="0.00103655554451776 0.0436257179545216 0.00717362740590599"
+        rpy="0 0 0" />
+      <mass
+        value="0.084534" />
+      <inertia
+        ixx="1.06510864977876E-05"
+        ixy="7.0785849498033E-08"
+        ixz="3.27549768087778E-07"
+        iyy="1.31443195484627E-05"
+        iyz="-9.94266821136905E-09"
+        izz="8.22011830042588E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/head_yaw.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.996078431372549 0.996078431372549 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/head_yaw.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="head_yaw"
+    type="continuous">
+    <origin
+      xyz="0.000432 0.003489 0.159267"
+      rpy="1.57079632679498 -0.0283653792612806 -0.0174489642915795" />
+    <parent
+      link="base_link" />
+    <child
+      link="head_yaw" />
+    <axis
+      xyz="0.0283615756417987 0.999597729602821 0" />
+  </joint>
+  <link
+    name="head_pitch">
+    <inertial>
+      <origin
+        xyz="0.00119958201413473 0.0401150404035437 0.00351837758924756"
+        rpy="0 0 0" />
+      <mass
+        value="0.215466" />
+      <inertia
+        ixx="5.79312815621668E-05"
+        ixy="-8.4742280740098E-07"
+        ixz="-5.2633703325723E-07"
+        iyy="3.05048832237816E-05"
+        iyz="-3.90791172306863E-06"
+        izz="3.41778363870633E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/head_pitch.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.313725490196078 0.313725490196078 0.313725490196078 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Yantravira-urdf1/meshes/head_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="head_pitch"
+    type="revolute">
+    <origin
+      xyz="0.00159862974723191 0.0446726308184489 0.0189677088384264"
+      rpy="0 0 0" />
+    <parent
+      link="head_yaw" />
+    <child
+      link="head_pitch" />
+    <axis
+      xyz="-0.999445561525195 0.02835725817857 0.0174480788679234" />
+    <limit
+      lower="-1.57"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

@@ -1,0 +1,16 @@
+zmp_walk:
+  joints: {
+    type: string_array,
+    default_value: [],
+    description: "Name of the joints to control",
+  }
+  sensors: {
+    type: string_array,
+    default_value: [],
+    description: "Name of the jsensors to read",
+  }
+  sensor_interface: {
+    type: string_array,
+    default_value: [],
+    description: "Name of the jsensors to read",
+  }

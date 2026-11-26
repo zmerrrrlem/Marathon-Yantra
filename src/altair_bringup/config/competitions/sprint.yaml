@@ -1,0 +1,16 @@
+# Configuration for Sprint (Lari Cepat) Competition
+competition:
+  name: "sprint"
+  description: "High speed straight-line sprint with line following / boundary tracking"
+
+vision:
+  camera_device: "/dev/video2"
+  image_width: 640
+  image_height: 480
+  framerate: 30.0
+  conf_threshold: 0.35
+
+motion:
+  walk_package: "quintic_walk"
+  step_length_max: 0.08
+  step_freq: 2.2

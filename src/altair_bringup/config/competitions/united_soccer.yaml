@@ -1,0 +1,22 @@
+# Configuration for United Soccer Competition
+competition:
+  name: "united_soccer"
+  description: "Autonomous team soccer match with GameController support"
+
+vision:
+  camera_device: "/dev/video2"
+  image_width: 640
+  image_height: 480
+  framerate: 30.0
+  conf_threshold: 0.30
+  ball_conf: 0.45
+  friend_conf: 0.35
+  goal_conf: 0.45
+  cal_const: 10000.0
+
+strategy:
+  behavior_tree: "barelang_2023.xml"
+  game_controller_enabled: true
+  team_id: 1
+  robot_id: 1
+  field_role: "striker" # striker, defender, goalkeeper

@@ -1,0 +1,303 @@
+# This config file is used by ros2_control
+controller_manager:
+  ros__parameters:
+    update_rate: 30  # Hz
+
+    fake_LeftLeg_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    fake_RightLeg_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    fake_Legs_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    fake_RightArm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    fake_LeftArm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    fake_Arms_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    fake_Head_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    fake_All_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    
+    quintic_walk:
+      type: quintic_walk/QuinticWalk
+
+    zmp_walk:
+      type: zmp_walk/ZMPWalk
+
+quintic_walk:
+  ros__parameters:
+    type: quintic_walk/QuinticWalk
+    engine:
+      foot_put_down_z_offset: 0.0
+      trunk_x_offset_p_coef_forward: 0.0
+      trunk_x_offset_p_coef_turn: 0.0
+      kick_length: 0.12
+      kick_vel: 0.2
+      kick_phase: 0.28
+      kick_put_down_phase: 0.8
+      kick_rise_factor: 1.5
+      double_support_ratio: 0.0264282002140171
+      first_step_swing_factor: 1.80591386587488
+      foot_distance: 0.179900277671633
+      foot_rise: 0.0819786291304007
+      freq: 1.2
+      trunk_height: 0.394780002666927
+      trunk_phase: -0.151653984431689
+      trunk_pitch: 0.105566178884548
+      trunk_pitch_p_coef_forward: -0.186068274875133
+      trunk_pitch_p_coef_turn: -0.457339940581988
+      trunk_swing: 0.154856652745882
+      trunk_x_offset: 0.00885762700992359
+      trunk_y_offset: 0.00369752824507733
+      trunk_z_movement: 0.0155005052923747
+      first_step_trunk_phase: -0.5
+      foot_apex_phase: 0.5
+      foot_apex_pitch: 0.1
+      foot_overshoot_phase: 1.0
+      foot_overshoot_ratio: 0.0
+      foot_put_down_phase: 1.0
+      foot_z_pause: 0.0
+      trunk_pause: 0.0
+    node:
+      # update frequency of the engine
+      engine_freq: 125.0
+      # parameters for bioIK
+      ik:
+        timeout: 0.01
+        reset: True
+      debug_active: False
+      max_step_x: 10000.0
+      max_step_y: 10000.0
+      max_step_xy: 10000.0
+      max_step_z: 100000.0
+      max_step_angular: 10000.0
+      x_speed_multiplier: 1.0
+      y_speed_multiplier: 1.0
+      yaw_speed_multiplier: 1.0
+      stability_stop:
+        imu:
+          active: False
+          pitch:
+            threshold: 0.19
+            vel_threshold: 1.3
+          roll:
+            threshold: 0.4
+            vel_threshold: 5.7
+        pause_duration: 3.0
+
+      imu_y_acc_tau: 0.1
+      phase_reset:
+        min_phase: 0.90
+        foot_pressure:
+          active: False
+          ground_min_pressure: 1.5
+        effort:
+          active: False
+          joint_min_effort: 30.0
+        imu:
+          active: True
+          y_acceleration_threshold: 1.4
+      trunk_pid:
+        pitch:
+          p: 0.0
+          i: 0.0
+          d: 0.0
+          i_clamp_min: 0.0
+          i_clamp_max: 0.0
+          antiwindup: False
+        roll:
+          p: 0.0
+          i: 0.0
+          d: 0.0
+          i_clamp_min: 0.0
+          i_clamp_max: 0.0
+          antiwindup: False
+
+zmp_walk:
+  ros__parameters:
+    type: zmp_walk/ZMPWalk
+    joints:
+      - head_pan
+      - head_tilt
+      - l_el
+      - l_sho_roll
+      - l_sho_pitch
+      - r_el
+      - r_sho_roll
+      - r_sho_pitch
+      - l_ank_roll
+      - l_ank_pitch
+      - l_knee
+      - l_hip_pitch
+      - l_hip_roll
+      - l_hip_yaw
+      - r_ank_roll
+      - r_ank_pitch
+      - r_knee
+      - r_hip_pitch
+      - r_hip_roll
+      - r_hip_yaw
+    sensors: 
+     - imu_sensor
+     - button
+    sensor_interface:
+    - orientation.x
+    - orientation.y
+    - orientation.z
+    - orientation.w
+    - angular_velocity.x
+    - angular_velocity.y
+    - angular_velocity.z
+    - linear_acceleration.x
+    - linear_acceleration.y
+    - linear_acceleration.z
+
+fake_LeftLeg_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+    allow_nonzero_velocity_at_trajectory_end: true
+
+fake_RightLeg_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+    allow_nonzero_velocity_at_trajectory_end: true
+
+fake_Legs_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+    allow_nonzero_velocity_at_trajectory_end: true
+
+fake_RightArm_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+    allow_nonzero_velocity_at_trajectory_end: true
+
+fake_LeftArm_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+    allow_nonzero_velocity_at_trajectory_end: true
+
+fake_Arms_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+    allow_nonzero_velocity_at_trajectory_end: true
+
+fake_Head_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - head_pan
+      - head_tilt
+    allow_nonzero_velocity_at_trajectory_end: true
+
+fake_All_controller:
+  ros__parameters:
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    joints:
+      - head_pan
+      - head_tilt
+      - l_hip_yaw
+      - l_hip_roll
+      - l_hip_pitch
+      - l_knee
+      - l_ank_pitch
+      - l_ank_roll
+      - l_sho_pitch
+      - l_sho_roll
+      - l_el
+      - r_hip_yaw
+      - r_hip_roll
+      - r_hip_pitch
+      - r_knee
+      - r_ank_pitch
+      - r_ank_roll
+      - r_sho_pitch
+      - r_sho_roll
+      - r_el
+    allow_nonzero_velocity_at_trajectory_end: true

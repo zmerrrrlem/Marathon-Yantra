@@ -1,0 +1,18 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 30  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    
+    bezier_kick:
+      type: bezier_kick/BezierKick
+  
+    # controller_experiment_1:
+    #   type: controller_experiment_1/ControllerExperiment1
+
+imu_sensor_broadcaster:
+  ros__parameters:
+    type: imu_sensor_broadcaster/IMUSensorBroadcaster
+    sensor_name: imu_sensor
+    frame_id: imu_link

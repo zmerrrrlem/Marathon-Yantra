@@ -1,0 +1,9 @@
+<library path="zmp_walk">
+    <class name="zmp_walk/ZMPWalk"
+        type="zmp_walk::ZMPWalk"
+        base_class_type="controller_interface::ControllerInterface">
+        <description>
+            Declaration of zmp walk controller, used for walking.
+        </description>
+    </class>
+</library>

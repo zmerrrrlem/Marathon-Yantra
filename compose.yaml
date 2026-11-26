@@ -1,0 +1,34 @@
+services:
+  altair_ws:
+    image: altair_ws
+    container_name: altair_ws
+    build:
+      context: .
+    volumes:
+      - ./src:/home/altair01/altair_ws/src
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /run/user/1000:/run/user/1000:rw
+      - $HOME/.Xauthority:/root/.Xauthority:rw
+      - ./configure.py:/home/altair01/altair_ws/configure.py
+      
+    privileged: true
+    ipc: host
+    network_mode: host
+    cap_add:
+      - SYS_NICE
+    ulimits:
+      rtprio: 99
+      memlock: -1
+    environment:
+      - ROS_DOMAIN_ID=96
+      - DISPLAY=${DISPLAY}
+      - XDG_RUNTIME_DIR=/run/user/1000
+      # Explicitly use X11 instead of Wayland
+      - DISABLE_WAYLAND=0
+      # Remove conflicting Wayland settings
+      # - WAYLAND_DISPLAY=${WAYLAND_DISPLAY}
+      # - QT_QPA_PLATFORM=wayland
+      - QT_QPA_PLATFORM=xcb
+      - QT_X11_NO_MITSHM=1
+      - XDG_SESSION_TYPE=x11 # Can be set to wayland
+    tty: true

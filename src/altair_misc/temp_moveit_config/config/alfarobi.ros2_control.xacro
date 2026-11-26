@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="alfarobi_ros2_control" params="name initial_positions_file">
+    <xacro:property name="initial_positions"
+      value="${xacro.load_yaml(initial_positions_file)['initial_positions']}" />
+
+    <ros2_control name="${name}" type="system">
+      <hardware>
+        <!-- By default, set up controllers for simulation. This won't work on real hardware -->
+        <plugin>mock_components/GenericSystem</plugin>
+      </hardware>
+      <joint name="l_hip_yaw">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_hip_yaw']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_hip_roll">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_hip_roll']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_hip_pitch">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_hip_pitch']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_knee">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_knee']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_ank_pitch">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_ank_pitch']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_ank_roll">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_ank_roll']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_hip_yaw">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_hip_yaw']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_hip_roll">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_hip_roll']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_hip_pitch">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_hip_pitch']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_knee">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_knee']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_ank_pitch">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_ank_pitch']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_ank_roll">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_ank_roll']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_sho_pitch">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_sho_pitch']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_sho_roll">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_sho_roll']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="r_el">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['r_el']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_sho_pitch">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_sho_pitch']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_sho_roll">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_sho_roll']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="l_el">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['l_el']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="head_pan">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['head_pan']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+      <joint name="head_tilt">
+        <command_interface name="position" />
+        <state_interface name="position">
+          <param name="initial_value">${initial_positions['head_tilt']}</param>
+        </state_interface>
+        <state_interface name="velocity" />
+      </joint>
+
+    </ros2_control>
+  </xacro:macro>
+</robot>

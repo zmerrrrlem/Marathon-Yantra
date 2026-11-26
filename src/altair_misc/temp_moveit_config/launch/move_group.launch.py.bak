@@ -1,0 +1,67 @@
+import os
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from launch.actions import ExecuteProcess
+from launch.actions import DeclareLaunchArgument, OpaqueFunction
+from ament_index_python.packages import get_package_share_directory
+from moveit_configs_utils import MoveItConfigsBuilder
+from moveit_configs_utils.launches import generate_move_group_launch
+import yaml
+
+    
+def load_yaml(package_name, file_path):
+    package_path = get_package_share_directory(package_name)
+    absolute_file_path = os.path.join(package_path, file_path)
+
+    try:
+        with open(absolute_file_path, "r") as file:
+            return yaml.safe_load(file)
+    # parent of IOError, OSError *and* WindowsError where available
+    except EnvironmentError:
+        return None
+
+def generate_launch_description():
+    moveit_config = (
+        MoveItConfigsBuilder("alfarobi", package_name="temp_moveit_config")
+        .robot_description_kinematics(file_path="config/kinematics.yaml")
+        .robot_description_semantic(file_path="config/alfarobi.srdf")
+        .to_moveit_configs()
+    )
+    moveit_config.move_group_capabilities = {"capabilities": "move_group/MoveGroupKinematicsService"}
+    move_group_launch = generate_move_group_launch(moveit_config)
+
+    ros2_controllers_config = load_yaml("temp_moveit_config", "config/ros2_controllers.yaml")
+    print(ros2_controllers_config)
+
+    control_node = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        parameters=[ros2_controllers_config],
+        output="both",
+    )
+
+    # Publish TF
+    robot_state_publisher = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        name="robot_state_publisher",
+        respawn=True,
+        output="both",  
+        parameters=[moveit_config.robot_description, {"use_sim_time": True, "publish_frequency": 30.0}],
+    )
+    joint_state_broadcaster = Node(
+        package='controller_manager',
+        executable='spawner',
+        arguments=['joint_state_broadcaster'],
+        output='screen',
+    )
+
+
+    return LaunchDescription(
+        [
+            move_group_launch,
+            control_node,
+            robot_state_publisher,
+            joint_state_broadcaster
+        ]
+    )
