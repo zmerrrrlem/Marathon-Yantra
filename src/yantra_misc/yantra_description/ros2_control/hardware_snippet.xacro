@@ -272,7 +272,10 @@
     <!-- Claw joints: IDs 21/22 -->
     <joint name="l_claw">
       <param name="id">21</param>
-      <state_interface name="position" />
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['l_claw']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
       <command_interface name="position">
         <param name="min">-2.8</param>
         <param name="max">2.8</param>
@@ -283,7 +286,10 @@
 
     <joint name="r_claw">
       <param name="id">22</param>
-      <state_interface name="position" />
+      <state_interface name="position">
+        <param name="initial_value">${initial_position['r_claw']}</param>
+      </state_interface>
+      <state_interface name="velocity"/>
       <command_interface name="position">
         <param name="min">-2.8</param>
         <param name="max">2.8</param>

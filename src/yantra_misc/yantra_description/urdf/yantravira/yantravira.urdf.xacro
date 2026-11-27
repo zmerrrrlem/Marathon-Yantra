@@ -21,7 +21,20 @@
     <color rgba="0 1 1 1" />
   </material>
 
+  <!-- Joint limits set to realistic servo values (were effort=1000 N·m, velocity=100 rad/s,
+       which let Gazebo apply huge forces to ~20 g links and pull joints apart).
+       Legs 12 N·m, arms/head 6 N·m, claws 2 N·m, all 7 rad/s. -->
+
   <!-- === Root Torso === -->
+  <!-- All limb/head STLs are exported in SolidWorks Y-up / Y-along-limb coordinates. -->
+  <!-- The five root limb joints in Yantravira-urdf1.urdf carried rpy="1.5708 -->
+  <!-- -0.028365 -0.017449" to rotate the whole subtree into the robot frame. -->
+  <!-- Here the joints are normalized to ROS Z-up/X-forward (rpy=0), so that -->
+  <!-- same rotation is baked into every mesh <visual>/<collision> origin. -->
+  <!-- FIX 2026-11-27: that baked rotation was missing a 90° yaw and each mesh had a different -->
+  <!-- offset, so parts sat 1-9 cm away from their joints. Every <visual> origin below was -->
+  <!-- re-fitted by matching each mesh to the old meshes/yantra parts (fit error ~1 mm); the -->
+  <!-- ankle-roll, elbow and claw meshes take the correction of the neighbour they already fit. -->
   <!-- body_link is defined in yantra_compose.urdf.xacro (visual/collision/inertial) -->
 
   <!-- === Left Leg === -->
@@ -32,28 +45,30 @@
     <child link="l_hip_yaw_link" />
     <origin xyz="0.024 0.043 0.039" rpy="0 0 0" />
     <axis xyz="0 0 -1" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_hip_yaw_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.00014 -0.00016 -0.04245" rpy="1.56380 -0.02977 1.56843" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_leg_yaw_1.STL" />
       </geometry>
       <material name="light_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 3676-triangle mesh collision) -->
+      <origin xyz="0.0000 -0.0001 -0.0660" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_leg_yaw_1.STL" />
+        <box size="0.0595 0.0282 0.0475" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0010 -0.0001 -0.0528" rpy="0 0 0" />
       <mass value="0.023" />
-      <inertia ixx="2.8e-06" ixy="0" ixz="0" iyy="2.98e-06" iyz="0" izz="1.96e-06" />
+      <inertia ixx="4.476e-06" ixy="2.064e-08" ixz="7.338e-07" iyy="1.321e-05" iyz="-2.36e-10" izz="1.202e-05" />
     </inertial>
   </link>
 
@@ -63,28 +78,30 @@
     <child link="l_hip_roll_link" />
     <origin xyz="-0.061 -0.001 -0.077" rpy="0 0 0" />
     <axis xyz="-1 0 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_hip_roll_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.08635 -0.00046 0.00102" rpy="1.55957 -0.03509 1.56542" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_leg_roll_1.STL" />
       </geometry>
       <material name="off_white" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 18190-triangle mesh collision) -->
+      <origin xyz="0.0367 -0.0015 -0.0159" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_leg_roll_1.STL" />
+        <box size="0.1015 0.0536 0.0646" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0346 -0.0001 -0.0145" rpy="0 0 0" />
       <mass value="0.239" />
-      <inertia ixx="5.57e-05" ixy="0" ixz="0" iyy="3.47e-05" iyz="0" izz="5.61e-05" />
+      <inertia ixx="9.21e-05" ixy="1.061e-06" ixz="-8.447e-06" iyy="0.0002385" iyz="9.899e-07" izz="0.000206" />
     </inertial>
   </link>
 
@@ -94,28 +111,30 @@
     <child link="l_hip_pitch_link" />
     <origin xyz="0.057 -0.029 0.001" rpy="0 0 0" />
     <axis xyz="0 1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_hip_pitch_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00008 0.02935 0.00013" rpy="1.56160 -0.02879 1.57110" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_leg_pitch_1.STL" />
       </geometry>
       <material name="light_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 8586-triangle mesh collision) -->
+      <origin xyz="0.0008 0.0281 -0.0586" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_leg_pitch_1.STL" />
+        <box size="0.0406 0.0535 0.1455" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0008 0.0293 -0.0928" rpy="0 0 0" />
       <mass value="0.142" />
-      <inertia ixx="3.55e-05" ixy="0" ixz="0" iyy="1.95e-05" iyz="0" izz="3.81e-05" />
+      <inertia ixx="0.0001372" ixy="9.648e-09" ixz="6.579e-07" iyy="0.0001178" iyz="-8.2e-07" izz="4.555e-05" />
     </inertial>
   </link>
 
@@ -125,28 +144,30 @@
     <child link="l_knee_link" />
     <origin xyz="0.001 -0.006 -0.117" rpy="0 0 0" />
     <axis xyz="0 1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_knee_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00062 0.03406 -0.10313" rpy="-1.54793 0.02863 -1.57259" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_leg_pitch_3.STL" />
       </geometry>
       <material name="light_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 5084-triangle mesh collision) -->
+      <origin xyz="0.0006 0.0345 -0.0581" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_leg_pitch_3.STL" />
+        <box size="0.0283 0.0521 0.1177" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0005 0.0345 -0.0581" rpy="0 0 0" />
       <mass value="0.024" />
-      <inertia ixx="1.77e-05" ixy="0" ixz="0" iyy="1.13e-06" iyz="0" izz="1.66e-05" />
+      <inertia ixx="3.958e-05" ixy="-3.236e-08" ixz="3.79e-08" iyy="2.682e-05" iyz="2.847e-09" izz="1.609e-05" />
     </inertial>
   </link>
 
@@ -156,28 +177,30 @@
     <child link="l_ank_pitch_link" />
     <origin xyz="0.001 0.047 -0.117" rpy="0 0 0" />
     <axis xyz="0 -1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_ank_pitch_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00027 -0.01244 -0.00010" rpy="1.57992 -0.03063 1.56656" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_leg_pitch_5.STL" />
       </geometry>
       <material name="dark_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 18190-triangle mesh collision) -->
+      <origin xyz="-0.0194 -0.0142 -0.0187" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_leg_pitch_5.STL" />
+        <box size="0.1015 0.0525 0.0653" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="-0.0218 -0.0124 -0.0184" rpy="0 0 0" />
       <mass value="0.239" />
-      <inertia ixx="5.57e-05" ixy="0" ixz="0" iyy="3.47e-05" iyz="0" izz="5.61e-05" />
+      <inertia ixx="9.417e-05" ixy="8.157e-07" ixz="-8.773e-06" iyy="0.0002407" iyz="8.967e-07" izz="0.000206" />
     </inertial>
   </link>
 
@@ -187,28 +210,24 @@
     <child link="l_ank_roll_link" />
     <origin xyz="0.007 -0.012 -0.036" rpy="0 0 0" />
     <axis xyz="1 0 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_ank_roll_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00484 0.00681 -0.00019" rpy="1.57992 -0.03063 1.56656" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_leg_roll_5.STL" />
       </geometry>
       <material name="off_white" />
     </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_leg_roll_5.STL" />
-      </geometry>
-    </collision>
+    <!-- collision removed: the l_sole/r_sole box is the foot contact -->
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="-0.0211 0.0118 -0.0295" rpy="0 0 0" />
       <mass value="0.033" />
-      <inertia ixx="1.71e-05" ixy="0" ixz="0" iyy="2.14e-05" iyz="0" izz="7.30e-06" />
+      <inertia ixx="1.306e-05" ixy="2.1e-09" ixz="2.587e-08" iyy="2.797e-05" iyz="7.258e-07" izz="3.374e-05" />
     </inertial>
   </link>
 
@@ -241,28 +260,30 @@
     <child link="r_hip_yaw_link" />
     <origin xyz="0.024 -0.046 0.039" rpy="0 0 0" />
     <axis xyz="0 0 -1" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_hip_yaw_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00007 0.00024 -0.04250" rpy="1.56403 -0.02889 1.53240" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_leg_yaw_2.STL" />
       </geometry>
       <material name="light_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 3672-triangle mesh collision) -->
+      <origin xyz="0.0002 0.0002 -0.0660" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_leg_yaw_2.STL" />
+        <box size="0.0595 0.0282 0.0475" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0012 0.0002 -0.0528" rpy="0 0 0" />
       <mass value="0.023" />
-      <inertia ixx="2.8e-06" ixy="0" ixz="0" iyy="2.98e-06" iyz="0" izz="1.96e-06" />
+      <inertia ixx="4.476e-06" ixy="3.284e-08" ixz="7.352e-07" iyy="1.321e-05" iyz="-2.438e-09" izz="1.202e-05" />
     </inertial>
   </link>
 
@@ -272,28 +293,30 @@
     <child link="r_hip_roll_link" />
     <origin xyz="-0.061 0.001 -0.077" rpy="0 0 0" />
     <axis xyz="-1 0 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_hip_roll_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.08617 -0.00024 0.00101" rpy="1.56091 -0.02470 1.53353" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_leg_roll_2.STL" />
       </geometry>
       <material name="off_white" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 17494-triangle mesh collision) -->
+      <origin xyz="0.0365 0.0011 -0.0159" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_leg_roll_2.STL" />
+        <box size="0.1015 0.0535 0.0644" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <mass value="0.240" />
-      <inertia ixx="5.56e-05" ixy="0" ixz="0" iyy="3.48e-05" iyz="0" izz="5.61e-05" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0344 -0.0001 -0.0144" rpy="0 0 0" />
+      <mass value="0.24" />
+      <inertia ixx="9.245e-05" ixy="1.846e-07" ixz="-8.324e-06" iyy="0.0002395" iyz="-8.345e-07" izz="0.0002069" />
     </inertial>
   </link>
 
@@ -303,28 +326,30 @@
     <child link="r_hip_pitch_link" />
     <origin xyz="0.057 0.031 0.001" rpy="0 0 0" />
     <axis xyz="0 -1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_hip_pitch_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.00026 -0.03151 0.00004" rpy="1.56180 -0.02925 1.53338" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_leg_pitch_2.STL" />
       </geometry>
       <material name="light_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 8562-triangle mesh collision) -->
+      <origin xyz="0.0004 -0.0302 -0.0587" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_leg_pitch_2.STL" />
+        <box size="0.0407 0.0536 0.1454" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0004 -0.0314 -0.0929" rpy="0 0 0" />
       <mass value="0.142" />
-      <inertia ixx="3.56e-05" ixy="0" ixz="0" iyy="1.94e-05" iyz="0" izz="3.81e-05" />
+      <inertia ixx="0.0001372" ixy="-6.339e-08" ixz="6.444e-07" iyy="0.0001178" iyz="8.904e-07" izz="4.555e-05" />
     </inertial>
   </link>
 
@@ -334,28 +359,30 @@
     <child link="r_knee_link" />
     <origin xyz="0.001 0.005 -0.117" rpy="0 0 0" />
     <axis xyz="0 -1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_knee_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00010 -0.03620 -0.01306" rpy="1.59835 -0.02620 -1.61035" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_leg_pitch_4.STL" />
       </geometry>
       <material name="light_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 5084-triangle mesh collision) -->
+      <origin xyz="0.0004 -0.0366 -0.0581" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_leg_pitch_4.STL" />
+        <box size="0.0288 0.0522 0.1178" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0004 -0.0366 -0.0581" rpy="0 0 0" />
       <mass value="0.024" />
-      <inertia ixx="1.77e-05" ixy="0" ixz="0" iyy="1.13e-06" iyz="0" izz="1.66e-05" />
+      <inertia ixx="3.958e-05" ixy="-5.096e-08" ixz="1.494e-07" iyy="2.682e-05" iyz="1.223e-08" izz="1.609e-05" />
     </inertial>
   </link>
 
@@ -365,28 +392,30 @@
     <child link="r_ank_pitch_link" />
     <origin xyz="0.001 -0.051 -0.117" rpy="0 0 0" />
     <axis xyz="0 1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_ank_pitch_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.00000 0.01439 -0.00012" rpy="1.58033 -0.03041 1.53346" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_leg_pitch_6.STL" />
       </geometry>
       <material name="dark_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 16482-triangle mesh collision) -->
+      <origin xyz="-0.0197 0.0174 -0.0187" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_leg_pitch_6.STL" />
+        <box size="0.1015 0.0500 0.0653" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="-0.0222 0.0147 -0.0186" rpy="0 0 0" />
       <mass value="0.238" />
-      <inertia ixx="5.55e-05" ixy="0" ixz="0" iyy="3.48e-05" iyz="0" izz="5.60e-05" />
+      <inertia ixx="9.29e-05" ixy="-7.511e-07" ixz="-8.039e-06" iyy="0.0002399" iyz="-1.412e-06" izz="0.0002048" />
     </inertial>
   </link>
 
@@ -396,28 +425,24 @@
     <child link="r_ank_roll_link" />
     <origin xyz="0.006 0.014 -0.036" rpy="0 0 0" />
     <axis xyz="1 0 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="12.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_ank_roll_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.02022 0.00675 0.00003" rpy="1.58033 -0.03041 1.53346" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_leg_roll_6.STL" />
       </geometry>
       <material name="off_white" />
     </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_leg_roll_6.STL" />
-      </geometry>
-    </collision>
+    <!-- collision removed: the l_sole/r_sole box is the foot contact -->
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="-0.0462 0.0020 -0.0293" rpy="0 0 0" />
       <mass value="0.033" />
-      <inertia ixx="1.71e-05" ixy="0" ixz="0" iyy="2.14e-05" iyz="0" izz="7.30e-06" />
+      <inertia ixx="1.306e-05" ixy="8.929e-08" ixz="2.84e-08" iyy="2.797e-05" iyz="-7.529e-07" izz="3.373e-05" />
     </inertial>
   </link>
 
@@ -450,28 +475,30 @@
     <child link="l_sho_pitch_link" />
     <origin xyz="-0.007 0.065 0.185" rpy="0 0 0" />
     <axis xyz="0 1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_sho_pitch_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00011 -0.01410 0.00014" rpy="1.56168 -0.02839 1.55137" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_arm_pitch_1.STL" />
       </geometry>
       <material name="light_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 3168-triangle mesh collision) -->
+      <origin xyz="0.0003 0.0334 -0.0136" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_arm_pitch_1.STL" />
+        <box size="0.0476 0.0541 0.0500" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0012 0.0275 -0.0065" rpy="0 0 0" />
       <mass value="0.013" />
-      <inertia ixx="1.5e-06" ixy="0" ixz="0" iyy="1.92e-06" iyz="0" izz="2.72e-06" />
+      <inertia ixx="6.64e-06" ixy="-2.726e-07" ixz="3.017e-07" iyy="6.771e-06" iyz="1.896e-06" izz="9.486e-06" />
     </inertial>
   </link>
 
@@ -481,28 +508,30 @@
     <child link="l_sho_roll_link" />
     <origin xyz="-0.004 0.050 -0.028" rpy="0 0 0" />
     <axis xyz="-1 0 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_sho_roll_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00454 -0.00033 0.00110" rpy="1.56036 -0.02424 -1.58730" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_arm_roll_1.STL" />
       </geometry>
       <material name="medium_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 9096-triangle mesh collision) -->
+      <origin xyz="0.0012 -0.0031 -0.0557" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_arm_roll_1.STL" />
+        <box size="0.0452 0.0451 0.1381" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0038 -0.0002 -0.0555" rpy="0 0 0" />
       <mass value="0.139" />
-      <inertia ixx="2.49e-05" ixy="0" ixz="0" iyy="1.74e-05" iyz="0" izz="2.55e-05" />
+      <inertia ixx="0.0003058" ixy="-5.763e-09" ixz="-1.375e-06" iyy="0.0003048" iyz="-3.215e-07" izz="2.552e-05" />
     </inertial>
   </link>
 
@@ -512,28 +541,30 @@
     <child link="l_el_link" />
     <origin xyz="-0.016 0.014 -0.093" rpy="0 0 0" />
     <axis xyz="0 1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_el_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.03357 0.00208 0.00103" rpy="1.56036 -0.02424 -1.58730" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_arm_pitch_3.STL" />
       </geometry>
       <material name="light_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 6572-triangle mesh collision) -->
+      <origin xyz="0.0435 0.0015 -0.0568" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_arm_pitch_3.STL" />
+        <box size="0.0556 0.0489 0.1378" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0433 0.0028 -0.0601" rpy="0 0 0" />
       <mass value="0.085" />
-      <inertia ixx="1.49e-05" ixy="0" ixz="0" iyy="1.65e-05" iyz="0" izz="1.50e-05" />
+      <inertia ixx="4.037e-05" ixy="-5.572e-07" ixz="4.047e-06" iyy="4.694e-05" iyz="-4.892e-07" izz="3.101e-05" />
     </inertial>
   </link>
 
@@ -543,28 +574,30 @@
     <child link="l_claw_link" />
     <origin xyz="-0.002 -0.036 0.005" rpy="0 0 0" />
     <axis xyz="1 0 0" />
-    <limit effort="500" velocity="50" lower="-3.14159" upper="3.14159" />
+    <limit effort="2.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="l_claw_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.00038 0.04003 0.00142" rpy="1.56036 -0.02424 -1.58730" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/left_claw.STL" />
       </geometry>
       <material name="cyan" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 2150-triangle mesh collision) -->
+      <origin xyz="0.0061 0.0409 -0.0297" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/left_claw.STL" />
+        <box size="0.0498 0.0503 0.0843" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="-0.0016 0.0415 -0.0342" rpy="0 0 0" />
       <mass value="0.013" />
-      <inertia ixx="4.34e-06" ixy="0" ixz="0" iyy="3.21e-06" iyz="0" izz="5.40e-06" />
+      <inertia ixx="9.113e-06" ixy="-1.16e-08" ixz="1.673e-06" iyy="6.546e-06" iyz="-3.392e-07" izz="5.686e-06" />
     </inertial>
   </link>
 
@@ -574,28 +607,30 @@
     <child link="r_sho_pitch_link" />
     <origin xyz="-0.007 -0.074 0.185" rpy="0 0 0" />
     <axis xyz="0 -1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_sho_pitch_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.00018 0.01982 0.00012" rpy="1.56311 -0.02823 1.55094" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_arm_pitch_2.STL" />
       </geometry>
       <material name="light_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 3168-triangle mesh collision) -->
+      <origin xyz="-0.0002 -0.0277 -0.0137" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_arm_pitch_2.STL" />
+        <box size="0.0474 0.0541 0.0499" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0007 -0.0218 -0.0065" rpy="0 0 0" />
       <mass value="0.013" />
-      <inertia ixx="1.42e-06" ixy="0" ixz="0" iyy="2.00e-06" iyz="0" izz="2.72e-06" />
+      <inertia ixx="6.643e-06" ixy="2.707e-07" ixz="2.964e-07" iyy="6.767e-06" iyz="-1.896e-06" izz="9.487e-06" />
     </inertial>
   </link>
 
@@ -605,28 +640,30 @@
     <child link="r_sho_roll_link" />
     <origin xyz="-0.004 -0.044 -0.028" rpy="0 0 0" />
     <axis xyz="1 0 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_sho_roll_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00463 0.00013 0.00108" rpy="1.55829 -0.03033 -1.58955" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_arm_roll_2.STL" />
       </geometry>
       <material name="medium_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 9096-triangle mesh collision) -->
+      <origin xyz="0.0013 0.0032 -0.0557" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_arm_roll_2.STL" />
+        <box size="0.0452 0.0451 0.1381" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0038 0.0002 -0.0555" rpy="0 0 0" />
       <mass value="0.139" />
-      <inertia ixx="2.48e-05" ixy="0" ixz="0" iyy="1.74e-05" iyz="0" izz="2.55e-05" />
+      <inertia ixx="0.0003058" ixy="1.083e-08" ixz="-1.982e-06" iyy="0.0003048" iyz="1.038e-06" izz="2.553e-05" />
     </inertial>
   </link>
 
@@ -636,28 +673,30 @@
     <child link="r_el_link" />
     <origin xyz="-0.016 -0.013 -0.093" rpy="0 0 0" />
     <axis xyz="0 -1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_el_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00649 0.02899 0.00122" rpy="1.55829 -0.03033 -1.58955" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_arm_pitch_4.STL" />
       </geometry>
       <material name="light_blue" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 6584-triangle mesh collision) -->
+      <origin xyz="0.0163 0.0296 -0.0566" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_arm_pitch_4.STL" />
+        <box size="0.0556 0.0490 0.1378" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0161 0.0284 -0.0600" rpy="0 0 0" />
       <mass value="0.085" />
-      <inertia ixx="1.49e-05" ixy="0" ixz="0" iyy="1.65e-05" iyz="0" izz="1.50e-05" />
+      <inertia ixx="4.039e-05" ixy="5.54e-07" ixz="4.029e-06" iyy="4.693e-05" iyz="5.252e-07" izz="3.099e-05" />
     </inertial>
   </link>
 
@@ -667,28 +706,30 @@
     <child link="r_claw_link" />
     <origin xyz="0.0003 -0.036 0.005" rpy="0 0 0" />
     <axis xyz="1 0 0" />
-    <limit effort="500" velocity="50" lower="-3.14159" upper="3.14159" />
+    <limit effort="2.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="r_claw_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.02974 0.06476 0.00167" rpy="1.55829 -0.03033 -1.58955" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/right_claw.STL" />
       </geometry>
       <material name="cyan" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 2152-triangle mesh collision) -->
+      <origin xyz="-0.0234 0.0640 -0.0295" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/right_claw.STL" />
+        <box size="0.0497 0.0503 0.0843" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="-0.0310 0.0634 -0.0340" rpy="0 0 0" />
       <mass value="0.013" />
-      <inertia ixx="4.32e-06" ixy="0" ixz="0" iyy="3.23e-06" iyz="0" izz="5.40e-06" />
+      <inertia ixx="9.12e-06" ixy="4.763e-09" ixz="1.665e-06" iyy="6.543e-06" iyz="3.398e-07" izz="5.681e-06" />
     </inertial>
   </link>
 
@@ -700,28 +741,30 @@
     <child link="head_pan_link" />
     <origin xyz="0.019 -0.001 0.185" rpy="0 0 0" />
     <axis xyz="0 0 1" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="head_pan_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0.00009 0.00000 -0.00228" rpy="1.56536 -0.02799 1.55227" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/head_yaw.STL" />
       </geometry>
       <material name="light_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 5230-triangle mesh collision) -->
+      <origin xyz="0.0055 -0.0033 0.0392" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/head_yaw.STL" />
+        <box size="0.0508 0.0451 0.0422" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0070 -0.0003 0.0414" rpy="0 0 0" />
       <mass value="0.085" />
-      <inertia ixx="1.07e-05" ixy="0" ixz="0" iyy="1.31e-05" iyz="0" izz="8.22e-06" />
+      <inertia ixx="1.685e-05" ixy="6.911e-07" ixz="-8.846e-07" iyy="2.163e-05" iyz="3.515e-08" izz="2.443e-05" />
     </inertial>
   </link>
 
@@ -731,28 +774,30 @@
     <child link="head_tilt_link" />
     <origin xyz="0.019 0.000 0.043" rpy="0 0 0" />
     <axis xyz="0 -1 0" />
-    <limit effort="1000" velocity="100" lower="-3.14159" upper="3.14159" />
+    <limit effort="6.0" velocity="7.0" lower="-3.14159" upper="3.14159" />
     <dynamics damping="0.1" friction="0.0" />
   </joint>
 
   <link name="head_tilt_link">
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.00005 0.00002 -0.00004" rpy="1.56461 -0.02838 1.54922" />
       <geometry>
         <mesh filename="package://yantra_description/meshes/yantravira/head_pitch.STL" />
       </geometry>
       <material name="light_gray" />
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- simple box fitted to the mesh (replaces 18528-triangle mesh collision) -->
+      <origin xyz="0.0039 0.0000 0.0262" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://yantra_description/meshes/yantravira/head_pitch.STL" />
+        <box size="0.0662 0.0563 0.0784" />
       </geometry>
     </collision>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- centre of mass and inertia computed from the (corrected) mesh, scaled to the original mass -->
+      <origin xyz="0.0032 0.0000 0.0401" rpy="0 0 0" />
       <mass value="0.215" />
-      <inertia ixx="5.79e-05" ixy="0" ixz="0" iyy="3.05e-05" iyz="0" izz="3.42e-05" />
+      <inertia ixx="0.0001433" ixy="-9.873e-08" ixz="-1.101e-05" iyy="0.0001203" iyz="4.922e-08" izz="0.0001306" />
     </inertial>
   </link>
 

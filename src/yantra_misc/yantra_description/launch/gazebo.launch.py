@@ -1,6 +1,7 @@
 import os
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, SetEnvironmentVariable
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, SetEnvironmentVariable, RegisterEventHandler
+from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
@@ -84,16 +85,9 @@ def generate_launch_description():
         }],
     )
 
-    controller_manager = Node(
-        package='controller_manager',
-        executable='ros2_control_node',
-        name='controller_manager',
-        parameters=[
-            {'use_sim_time': True},
-            controller_params
-        ],
-        output='screen'
-    )
+    # NOTE: no separate ros2_control_node here. The gz_ros2_control plugin (gazebo/yantra.gazebo.xacro)
+    # already runs /controller_manager inside Gazebo. A second /controller_manager with the same name
+    # made spawner service calls time out ("Failed to acquire lock", configure_controller timeouts).
 
     joint_state_broadcaster = Node(
         package='controller_manager',
@@ -132,11 +126,14 @@ def generate_launch_description():
         # Robot
         spawn_robot,
         robot_state_publisher,
-        controller_manager,
-        
-        # Control stack
-        imu_broadcaster,
+
+        # Control stack, started one after another instead of all at once:
+        # joint_state_broadcaster -> imu_sensor_broadcaster + controller_experiment_1 -> quintic_walk
         joint_state_broadcaster,
-        controller_experiment_1,
-        quintic_walk_controller,
+        RegisterEventHandler(OnProcessExit(
+            target_action=joint_state_broadcaster,
+            on_exit=[imu_broadcaster, controller_experiment_1])),
+        RegisterEventHandler(OnProcessExit(
+            target_action=imu_broadcaster,
+            on_exit=[quintic_walk_controller])),
     ])
