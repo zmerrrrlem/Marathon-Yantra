@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Main Launcher for Altair Humanoid Robot Competitions.
+"""Main Launcher for Yantra Humanoid Robot Competitions.
 
 Unified entrypoint to run different competition branches without touching core modules.
 """
@@ -35,7 +35,7 @@ def print_header():
     domain_id = os.environ.get("ROS_DOMAIN_ID", "0")
     print(f"{CYAN}{BOLD}")
     print("╔══════════════════════════════════════════════════════════════════════╗")
-    print("║                 ALTAIR ROBOT COMPETITION LAUNCHER                    ║")
+    print("║                 YANTRA ROBOT COMPETITION LAUNCHER                    ║")
     print("║            Multi-Branch Humanoid Competition Framework               ║")
     print(f"║   Unit: ROBOT-{robot_id:<2} ({robot_role:<10}) | ROS_DOMAIN_ID: {domain_id:<6}             ║")
     print("╚══════════════════════════════════════════════════════════════════════╝")
@@ -72,22 +72,22 @@ def main():
         if choice == "1":
             cam = get_camera_device()
             print(f"\n{GREEN}Menjalankan mode: United Soccer dengan kamera {cam}...{RESET}")
-            run_cmd(f"ros2 launch altair_bringup competition.launch.py mode:=united_soccer video_device:={cam}")
+            run_cmd(f"ros2 launch yantra_bringup competition.launch.py mode:=united_soccer video_device:={cam}")
 
         elif choice == "2":
             cam = get_camera_device()
             print(f"\n{GREEN}Menjalankan mode: Penalty Kick dengan kamera {cam}...{RESET}")
-            run_cmd(f"ros2 launch altair_bringup competition.launch.py mode:=penalty_kick video_device:={cam}")
+            run_cmd(f"ros2 launch yantra_bringup competition.launch.py mode:=penalty_kick video_device:={cam}")
 
         elif choice == "3":
             cam = get_camera_device()
             print(f"\n{GREEN}Menjalankan mode: Sprint dengan kamera {cam}...{RESET}")
-            run_cmd(f"ros2 launch altair_bringup competition.launch.py mode:=sprint video_device:={cam}")
+            run_cmd(f"ros2 launch yantra_bringup competition.launch.py mode:=sprint video_device:={cam}")
 
         elif choice == "4":
             cam = get_camera_device()
             print(f"\n{CYAN}Membuka GUI Live Tester pada {cam}...{RESET}")
-            run_cmd(f"python3 {WS_DIR}/test_altair_vision.py --device {cam}")
+            run_cmd(f"python3 {WS_DIR}/test_yantra_vision.py --device {cam}")
 
         elif choice == "5":
             print(f"\n{CYAN}Membuka RQT Image View...{RESET}")
@@ -108,7 +108,7 @@ def main():
             input("\nTekan Enter untuk kembali ke menu...")
 
         elif choice == "q":
-            print(f"\n{YELLOW}Keluar dari Altair Competition Launcher.{RESET}")
+            print(f"\n{YELLOW}Keluar dari Yantra Competition Launcher.{RESET}")
             break
         else:
             print(f"\n{RED}Pilihan tidak valid!{RESET}")

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="yantra_head"  params="parent">
+    <!-- head pan joint -->
+    <joint name="head_pan" type="revolute">
+      <parent link="${parent}" />
+      <child link="head_pan_link" />
+      <origin rpy="0.00000 0.00000 0.00000" xyz="0.01902 -0.00134 0.18511"/>
+      <axis xyz="0 0 1" />
+      <limit effort="1000" velocity="100" lower="${-pi*0.9}" upper="${pi*0.9}" />
+      <dynamics damping="0.1" friction="0.0" />
+    </joint>
+
+    <!-- head pan link -->
+    <link name="head_pan_link">
+      <visual>
+        <xacro:insert_mesh_head_pan_link />
+      </visual>
+      <collision>
+        <xacro:insert_mesh_head_pan_link />
+      </collision>
+      <inertial>
+        <xacro:insert_inertia_head_pan_link />
+      </inertial>
+    </link>
+
+    <!-- head tilt joint -->
+    <joint name="head_tilt" type="revolute">
+      <parent link="head_pan_link" />
+      <child link="head_tilt_link" />
+      <origin rpy="0.00000 0.00000 0.00000" xyz="0.01877 -0.00004 0.04264"/>
+      <axis xyz="0 -1 0" />
+      <limit effort="1000" velocity="100" lower="${-pi*0.9}" upper="${pi*0.9}" />
+      <dynamics damping="0.1" friction="0.0" />
+    </joint>
+
+    <!-- head tilt link -->
+    <link name="head_tilt_link">
+      <visual>
+        <xacro:insert_mesh_head_tilt_link />
+      </visual>
+      <collision>
+        <xacro:insert_mesh_head_tilt_link />
+      </collision>
+      <inertial>
+        <xacro:insert_inertia_head_tilt_link />
+      </inertial>
+    </link>
+
+    <!-- camera joint -->
+    <joint name="camera_joint" type="fixed">
+      <parent link="head_tilt_link" />
+      <child link="cam_link" />
+      <origin rpy="-0.00000 1.57080 0.00000" xyz="0.00326 0.00000 0.04677"/>
+    </joint>
+
+    <!-- camera link -->
+    <link name="cam_link">
+    </link>
+  </xacro:macro>
+
+</robot>

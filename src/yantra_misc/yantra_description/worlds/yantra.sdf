@@ -1,0 +1,1507 @@
+<sdf version='1.10'>
+  <world name='empty'>
+    <physics name='1ms' type='ignored'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    <plugin name='gz::sim::systems::Physics' filename='gz-sim-physics-system'/>
+    <plugin name='gz::sim::systems::UserCommands' filename='gz-sim-user-commands-system'/>
+    <plugin name='gz::sim::systems::SceneBroadcaster' filename='gz-sim-scene-broadcaster-system'/>
+    <plugin name='gz::sim::systems::Contact' filename='gz-sim-contact-system'/>
+    <gravity>0 0 -9.8000000000000007</gravity>
+    <magnetic_field>5.5644999999999998e-06 2.2875799999999999e-05 -4.2388400000000002e-05</magnetic_field>
+    <atmosphere type='adiabatic'/>
+    <scene>
+      <ambient>0.400000006 0.400000006 0.400000006 1</ambient>
+      <background>0.699999988 0.699999988 0.699999988 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <model name='ground_plane'>
+      <static>true</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>100 100</size>
+            </plane>
+          </geometry>
+          <material>
+            <ambient>0.800000012 0.800000012 0.800000012 1</ambient>
+            <diffuse>0.800000012 0.800000012 0.800000012 1</diffuse>
+            <specular>0.800000012 0.800000012 0.800000012 1</specular>
+          </material>
+        </visual>
+        <pose>0 0 0 0 0 0</pose>
+        <inertial>
+          <pose>0 0 0 0 0 0</pose>
+          <mass>1</mass>
+          <inertia>
+            <ixx>1</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1</iyy>
+            <iyz>0</iyz>
+            <izz>1</izz>
+          </inertia>
+        </inertial>
+        <enable_wind>false</enable_wind>
+      </link>
+      <pose>0 0 0 0 0 0</pose>
+      <self_collide>false</self_collide>
+    </model>
+    <model name='yantra'>
+      <link name='odom'>
+        <inertial>
+          <pose>0.00091 -0.0012099999999999999 0.09354999999999998 0 0 0</pose>
+          <mass>1.34928</mass>
+          <inertia>
+            <ixx>0.0080497000000000016</ixx>
+            <ixy>0</ixy>
+            <ixz>-1.3552527156068811e-20</ixz>
+            <iyy>0.0069227000000000021</iyy>
+            <iyz>0</iyz>
+            <izz>0.0043956000000000004</izz>
+          </inertia>
+        </inertial>
+        <collision name='odom_fixed_joint_lump__body_link_collision'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/body.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='odom_fixed_joint_lump__body_link_visual'>
+          <pose>0 0 0 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/body.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <gravity>true</gravity>
+        <sensor name='imu_sensor' type='imu'>
+          <pose>0 0 0 0 0 0</pose>
+          <topic>gazebo/imu</topic>
+          <update_rate>30</update_rate>
+          <enable_metrics>false</enable_metrics>
+          <imu>
+            <orientation_reference_frame>
+              <localization>CUSTOM</localization>
+              <custom_rpy>0 0 0</custom_rpy>
+              <grav_dir_x>1 0 0</grav_dir_x>
+            </orientation_reference_frame>
+            <angular_velocity>
+              <x>
+                <noise type='none'>
+                  <mean>0</mean>
+                  <stddev>0</stddev>
+                  <bias_mean>0</bias_mean>
+                  <bias_stddev>0</bias_stddev>
+                  <dynamic_bias_stddev>0</dynamic_bias_stddev>
+                  <dynamic_bias_correlation_time>0</dynamic_bias_correlation_time>
+                  <precision>0</precision>
+                </noise>
+              </x>
+              <y>
+                <noise type='none'>
+                  <mean>0</mean>
+                  <stddev>0</stddev>
+                  <bias_mean>0</bias_mean>
+                  <bias_stddev>0</bias_stddev>
+                  <dynamic_bias_stddev>0</dynamic_bias_stddev>
+                  <dynamic_bias_correlation_time>0</dynamic_bias_correlation_time>
+                  <precision>0</precision>
+                </noise>
+              </y>
+              <z>
+                <noise type='none'>
+                  <mean>0</mean>
+                  <stddev>0</stddev>
+                  <bias_mean>0</bias_mean>
+                  <bias_stddev>0</bias_stddev>
+                  <dynamic_bias_stddev>0</dynamic_bias_stddev>
+                  <dynamic_bias_correlation_time>0</dynamic_bias_correlation_time>
+                  <precision>0</precision>
+                </noise>
+              </z>
+            </angular_velocity>
+            <linear_acceleration>
+              <x>
+                <noise type='none'>
+                  <mean>0</mean>
+                  <stddev>0</stddev>
+                  <bias_mean>0</bias_mean>
+                  <bias_stddev>0</bias_stddev>
+                  <dynamic_bias_stddev>0</dynamic_bias_stddev>
+                  <dynamic_bias_correlation_time>0</dynamic_bias_correlation_time>
+                  <precision>0</precision>
+                </noise>
+              </x>
+              <y>
+                <noise type='none'>
+                  <mean>0</mean>
+                  <stddev>0</stddev>
+                  <bias_mean>0</bias_mean>
+                  <bias_stddev>0</bias_stddev>
+                  <dynamic_bias_stddev>0</dynamic_bias_stddev>
+                  <dynamic_bias_correlation_time>0</dynamic_bias_correlation_time>
+                  <precision>0</precision>
+                </noise>
+              </y>
+              <z>
+                <noise type='none'>
+                  <mean>0</mean>
+                  <stddev>0</stddev>
+                  <bias_mean>0</bias_mean>
+                  <bias_stddev>0</bias_stddev>
+                  <dynamic_bias_stddev>0</dynamic_bias_stddev>
+                  <dynamic_bias_correlation_time>0</dynamic_bias_correlation_time>
+                  <precision>0</precision>
+                </noise>
+              </z>
+            </linear_acceleration>
+            <enable_orientation>true</enable_orientation>
+          </imu>
+          <plugin name='gz::sim::systems::Imu' filename='gz-sim-imu-system'/>
+        </sensor>
+        <pose>0 0 0 0 0 0</pose>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='head_pan' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>odom</parent>
+        <child>head_pan_link</child>
+        <axis>
+          <xyz>0 0 1</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='head_pan_link'>
+        <pose>0.019020000000000009 -0.0013399999999999996 0.18510999999999994 -1.355252715966684e-20 -2.2336407711606156e-17 3.2216763978798468e-13</pose>
+        <inertial>
+          <pose>0.0070299999999999998 -0.00031 0.041419999999999998 0 0 0</pose>
+          <mass>0.017999999999999999</mass>
+          <inertia>
+            <ixx>5.6999999999999996e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>6.6000000000000003e-06</iyy>
+            <iyz>0</iyz>
+            <izz>6.9e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='head_pan_link_collision'>
+          <pose>0.0070299999999999998 -0.00031 0.041419999999999998 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/neck.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='head_pan_link_visual'>
+          <pose>0.0070299999999999998 -0.00031 0.041419999999999998 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/neck.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='head_tilt' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>head_pan_link</parent>
+        <child>head_tilt_link</child>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='head_tilt_link'>
+        <pose>0.037790000000000018 -0.0013799999999939529 0.22774999999999979 6.8077092561072542e-21 1.9521327007647955e-10 3.2216742294755019e-13</pose>
+        <inertial>
+          <pose>0.0037499999999999999 0 0.040439999999999997 0 0 0</pose>
+          <mass>0.249</mass>
+          <inertia>
+            <ixx>0.0001931</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0002185</iyy>
+            <iyz>0</iyz>
+            <izz>0.00015640000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='head_tilt_link_collision'>
+          <pose>0.0032599999999999999 0 0.040099999999999997 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/camera.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='head_tilt_link_visual'>
+          <pose>0.0032599999999999999 0 0.040099999999999997 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/camera.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_hip_yaw' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>odom</parent>
+        <child>l_hip_yaw_link</child>
+        <axis>
+          <xyz>0 0 -1</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_hip_yaw_link'>
+        <pose>0.024479999999999995 0.043400000000000001 0.03886999999999996 4.1612783992684184e-19 -8.0399302926397278e-18 0.021229216326430263</pose>
+        <inertial>
+          <pose>0.0058700000000000002 -0.00014999999999999999 -0.059069999999999998 0 0 0</pose>
+          <mass>0.021000000000000001</mass>
+          <inertia>
+            <ixx>5.3000000000000001e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.0200000000000001e-05</iyy>
+            <iyz>0</iyz>
+            <izz>7.6000000000000001e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_hip_yaw_link_collision'>
+          <pose>-0.02809 -6.0000000000000002e-05 -0.060179999999999997 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_hip_yaw.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_hip_yaw_link_visual'>
+          <pose>-0.02809 -6.0000000000000002e-05 -0.060179999999999997 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_hip_yaw.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_hip_roll' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>l_hip_yaw_link</parent>
+        <child>l_hip_roll_link</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_hip_roll_link'>
+        <pose>-0.036564967610460616 0.042043854934819491 -0.03783000000000003 0.20849928180354815 -9.540979117872439e-18 0.021229216326430267</pose>
+        <inertial>
+          <pose>0.033660000000000002 -0.00021000000000000001 -0.014800000000000001 0 0 0</pose>
+          <mass>0.317</mass>
+          <inertia>
+            <ixx>0.00017479999999999999</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00034680000000000003</iyy>
+            <iyz>0</iyz>
+            <izz>0.00030420000000000002</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_hip_roll_link_collision'>
+          <pose>0.032969999999999999 0 0.01652 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_hip_roll.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_hip_roll_link_visual'>
+          <pose>0.032969999999999999 0 0.01652 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_hip_roll.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_hip_pitch' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>l_hip_roll_link</parent>
+        <child>l_hip_pitch_link</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_hip_pitch_link'>
+        <pose>0.020556100046003209 0.014334839971032529 -0.043293562896344562 0.24908548407589834 -0.57413340880940034 -0.11605097920882911</pose>
+        <inertial>
+          <pose>0.00062 0.02954 -0.07102 0 0 0</pose>
+          <mass>0.17699999999999999</mass>
+          <inertia>
+            <ixx>0.00035439999999999999</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00033649999999999999</iyy>
+            <iyz>0</iyz>
+            <izz>6.6699999999999995e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_hip_pitch_link_collision'>
+          <pose>0.00072000000000000005 0.029340000000000001 -0.091420000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_hip_pitch.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_hip_pitch_link_visual'>
+          <pose>0.00072000000000000005 0.029340000000000001 -0.091420000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_hip_pitch.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_knee' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>l_hip_pitch_link</parent>
+        <child>l_knee_link</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_knee_link'>
+        <pose>0.086083159593964037 0.030312712076728702 -0.13942027702915996 0.25732537079417056 0.62091913256587006 0.17315133334965477</pose>
+        <inertial>
+          <pose>0.0013799999999999999 0.037060000000000003 -0.058610000000000002 0 0 0</pose>
+          <mass>0.055</mass>
+          <inertia>
+            <ixx>0.0001091</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0001005</iyy>
+            <iyz>0</iyz>
+            <izz>1.63e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_knee_link_collision'>
+          <pose>0.0011999999999999999 0.036580000000000001 -0.058590000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_knee.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_knee_link_visual'>
+          <pose>0.0011999999999999999 0.036580000000000001 -0.058590000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_knee.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_ank_pitch' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>l_knee_link</parent>
+        <child>l_ank_pitch_link</child>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_ank_pitch_link'>
+        <pose>0.015717909110808982 0.094737190342231617 -0.22186963254307882 0.20956163864461846 -0.099997244443073147 -2.2397183162298718e-09</pose>
+        <inertial>
+          <pose>-0.022720000000000001 -0.01248 -0.018249999999999999 0 0 0</pose>
+          <mass>0.317</mass>
+          <inertia>
+            <ixx>0.0001783</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00035</iyy>
+            <iyz>0</iyz>
+            <izz>0.00030390000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_ank_pitch_link_collision'>
+          <pose>-0.00066 -0.012749999999999999 -0.01491 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_ank_pitch.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_ank_pitch_link_visual'>
+          <pose>-0.00066 -0.012749999999999999 -0.01491 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_ank_pitch.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_ank_roll' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>l_ank_pitch_link</parent>
+        <child>l_ank_roll_link</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_ank_roll_link'>
+        <pose>0.025955970652053954 0.090000003465003225 -0.25870116463676041 -2.3351484448612753e-09 -0.099997244443073161 -2.2397183259115771e-09</pose>
+        <inertial>
+          <pose>0.0010744186046511631 0.0077944186046511633 -0.027716046511627911 0 0 0</pose>
+          <mass>0.085999999999999993</mass>
+          <inertia>
+            <ixx>6.9122886976744188e-05</ixx>
+            <ixy>4.7832279069767537e-08</ixy>
+            <ixz>-1.0852269767441821e-07</ixz>
+            <iyy>0.00015708735697674421</iyy>
+            <iyz>1.5607130232558211e-07</iyz>
+            <izz>0.0002233020494418605</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_ank_roll_link_collision'>
+          <pose>0.0012999999999999999 0.0074700000000000001 -0.026980000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_ank_roll.005.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <collision name='l_ank_roll_link_fixed_joint_lump__l_ank_roll_collision_collision_1'>
+          <pose>-0.0033 0.010410000000000001 -0.030179999999999998 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.14499999999999999 0.095000000000000001 0.012</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='l_ank_roll_link_visual'>
+          <pose>0.0012999999999999999 0.0074700000000000001 -0.026980000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_ank_roll.005.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <visual name='l_ank_roll_link_fixed_joint_lump__l_sole_visual_1'>
+          <pose>0.0012999999999999999 0.0074700000000000001 -0.026980000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_ank_roll.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_sho_pitch' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>odom</parent>
+        <child>l_sho_pitch_link</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_sho_pitch_link'>
+        <pose>-0.0067600000000000073 0.065390000000000018 0.18529999999999996 -6.7762635780344042e-21 -1.0738465038741494e-10 3.6383334763009898e-31</pose>
+        <inertial>
+          <pose>-0.00072000000000000005 0.02775 -0.0066899999999999998 0 0 0</pose>
+          <mass>0.014</mass>
+          <inertia>
+            <ixx>6.3999999999999997e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>5.5999999999999997e-06</iyy>
+            <iyz>0</iyz>
+            <izz>6.0000000000000002e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_sho_pitch_link_collision'>
+          <pose>-0.00064000000000000005 0.0275 -0.0064599999999999996 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_sho_pitch.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_sho_pitch_link_visual'>
+          <pose>-0.00064000000000000005 0.0275 -0.0064599999999999996 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_sho_pitch.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_sho_roll' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>l_sho_pitch_link</parent>
+        <child>l_sho_roll_link</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_sho_roll_link'>
+        <pose>-0.01053999999699967 0.11497000000000003 0.1573599999995941 -1.2816642028007278e-11 -1.0738465773715291e-10 2.175285898558595e-19</pose>
+        <inertial>
+          <pose>0 0 -0.052040000000000003 0 0 0</pose>
+          <mass>0.184</mass>
+          <inertia>
+            <ixx>0.0002631</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00027290000000000002</iyy>
+            <iyz>0</iyz>
+            <izz>7.2200000000000007e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_sho_roll_link_collision'>
+          <pose>0 0 -0.052040000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1.00013</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_sho_roll.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_sho_roll_link_visual'>
+          <pose>0 0 -0.052040000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1.00013</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_sho_roll.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='l_el' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>l_sho_roll_link</parent>
+        <child>l_el_link</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='l_el_link'>
+        <pose>-0.026529999987022556 0.12853999999880925 0.064449999997703067 -1.2816642048336067e-11 -4.0939316353502002e-12 4.3370710422237206e-19</pose>
+        <inertial>
+          <pose>0.015299999999999999 -0.00132 -0.066280000000000006 0 0 0</pose>
+          <mass>0.045999999999999999</mass>
+          <inertia>
+            <ixx>0.0001204</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00011909999999999999</iyy>
+            <iyz>0</iyz>
+            <izz>1.8e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='l_el_link_collision'>
+          <pose>0.015789999999999998 0 -0.074020000000000002 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_el.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='l_el_link_visual'>
+          <pose>0.015789999999999998 0 -0.074020000000000002 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/l_el.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_hip_yaw' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>odom</parent>
+        <child>r_hip_yaw_link</child>
+        <axis>
+          <xyz>0 0 -1</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_hip_yaw_link'>
+        <pose>0.02400999999999999 -0.045960000000000001 0.03886999999999996 -3.3818937403096762e-19 -4.1110792905741348e-18 -0.020091631750051991</pose>
+        <inertial>
+          <pose>0.0060899999999999999 0.00022000000000000001 -0.059110000000000003 0 0 0</pose>
+          <mass>0.021000000000000001</mass>
+          <inertia>
+            <ixx>5.3000000000000001e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>1.0200000000000001e-05</iyy>
+            <iyz>0</iyz>
+            <izz>7.6000000000000001e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_hip_yaw_link_collision'>
+          <pose>-0.023890000000000002 0.00050000000000000001 -0.087870000000000004 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_hip_yaw.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_hip_yaw_link_visual'>
+          <pose>-0.023890000000000002 0.00050000000000000001 -0.087870000000000004 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_hip_yaw.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_hip_roll' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>r_hip_yaw_link</parent>
+        <child>r_hip_roll_link</child>
+        <axis>
+          <xyz>-1 0 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_hip_roll_link'>
+        <pose>-0.036557725977641703 -0.04424283084778842 -0.037830000000000086 -0.19762464615108946 -4.3368086899420177e-19 -0.020091631750051995</pose>
+        <inertial>
+          <pose>0.033419999999999998 3.0000000000000001e-05 -0.014829999999999999 0 0 0</pose>
+          <mass>0.317</mass>
+          <inertia>
+            <ixx>0.00017479999999999999</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00034680000000000003</iyy>
+            <iyz>0</iyz>
+            <izz>0.00030420000000000002</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_hip_roll_link_collision'>
+          <pose>0.036700000000000003 0 -0.011169999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_hip_roll.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_hip_roll_link_visual'>
+          <pose>0.036700000000000003 0 -0.011169999999999999 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_hip_roll.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_hip_pitch' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>r_hip_roll_link</parent>
+        <child>r_hip_pitch_link</child>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_hip_pitch_link'>
+        <pose>0.020569189250869181 -0.014607340465115576 -0.04334006953250491 -0.23664515539212441 -0.57814273485089684 0.11094192219610417</pose>
+        <inertial>
+          <pose>0.00036999999999999999 -0.031629999999999998 -0.071050000000000002 0 0 0</pose>
+          <mass>0.17699999999999999</mass>
+          <inertia>
+            <ixx>0.00035439999999999999</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00033639999999999999</iyy>
+            <iyz>0</iyz>
+            <izz>6.6699999999999995e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_hip_pitch_link_collision'>
+          <pose>0.00046999999999999999 -0.03141 -0.091450000000000004 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_hip_pitch.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_hip_pitch_link_visual'>
+          <pose>0.00046999999999999999 -0.03141 -0.091450000000000004 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_hip_pitch.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_knee' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>r_hip_pitch_link</parent>
+        <child>r_knee_link</child>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_knee_link'>
+        <pose>0.086384181399069337 -0.029788647018348394 -0.13937872758159009 -0.24474486936262732 0.62614694827744599 -0.16542095640175106</pose>
+        <inertial>
+          <pose>0.0011199999999999999 -0.039050000000000001 -0.058709999999999998 0 0 0</pose>
+          <mass>0.055</mass>
+          <inertia>
+            <ixx>0.00010840000000000001</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.0001003</iyy>
+            <iyz>0</iyz>
+            <izz>1.5800000000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_knee_link_collision'>
+          <pose>0.00095 -0.038609999999999998 -0.058700000000000002 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_knee.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_knee_link_visual'>
+          <pose>0.00095 -0.038609999999999998 -0.058700000000000002 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_knee.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_ank_pitch' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>r_knee_link</parent>
+        <child>r_ank_pitch_link</child>
+        <axis>
+          <xyz>0 1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_ank_pitch_link'>
+        <pose>0.015686663337180391 -0.096972115391294897 -0.22155820748545768 -0.19863007179000011 -0.099997241083886856 2.1887023603271047e-09</pose>
+        <inertial>
+          <pose>-0.022960000000000001 0.014710000000000001 -0.018280000000000001 0 0 0</pose>
+          <mass>0.317</mass>
+          <inertia>
+            <ixx>0.0001783</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00035</iyy>
+            <iyz>0</iyz>
+            <izz>0.00030390000000000001</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_ank_pitch_link_collision'>
+          <pose>-0.022960000000000001 0.014710000000000001 -0.018280000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_ank_pitch.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_ank_pitch_link_visual'>
+          <pose>-0.022960000000000001 0.014710000000000001 -0.018280000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_ank_pitch.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_ank_roll' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>r_ank_pitch_link</parent>
+        <child>r_ank_roll_link</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_ank_roll_link'>
+        <pose>0.025955971028480941 -0.090000003544839099 -0.25870116880980426 6.6594315773645209e-10 -0.099997241083886912 2.1887023598179494e-09</pose>
+        <inertial>
+          <pose>-0.0001093023255813954 -0.0079939534883720926 -0.029726744186046521 0 0 0</pose>
+          <mass>0.085999999999999993</mass>
+          <inertia>
+            <ixx>2.979409074418603e-05</ixx>
+            <ixy>-1.885683720930233e-08</ixy>
+            <ixz>-3.405860465116266e-08</ixz>
+            <iyy>5.565636204651161e-05</iyy>
+            <iyz>-8.2247906976743086e-08</iyz>
+            <izz>5.6053345813953482e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_ank_roll_link_collision'>
+          <pose>0 -0.0077299999999999999 -0.029250000000000002 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_ank_roll.005.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <collision name='r_ank_roll_link_fixed_joint_lump__r_ank_roll_collision_collision_1'>
+          <pose>-0.0033 -0.010279999999999999 -0.030179999999999998 0 0 0</pose>
+          <geometry>
+            <box>
+              <size>0.14499999999999999 0.095000000000000001 0.012</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode/>
+            </friction>
+            <bounce/>
+            <contact/>
+          </surface>
+        </collision>
+        <visual name='r_ank_roll_link_visual'>
+          <pose>0 -0.0077299999999999999 -0.029250000000000002 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_ank_roll.005.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <visual name='r_ank_roll_link_fixed_joint_lump__r_sole_visual_1'>
+          <pose>0 -0.0077299999999999999 -0.029250000000000002 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_ank_roll.005.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_sho_pitch' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>odom</parent>
+        <child>r_sho_pitch_link</child>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_sho_pitch_link'>
+        <pose>-0.0067599999999999952 -0.073529999999999998 0.18530000000000002 -1.2179606019612315e-29 -1.1233703758120032e-10 2.1684043449710089e-19</pose>
+        <inertial>
+          <pose>-0.0011999999999999999 -0.022089999999999999 -0.0067799999999999996 0 0 0</pose>
+          <mass>0.014</mass>
+          <inertia>
+            <ixx>6.3999999999999997e-06</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>5.5999999999999997e-06</iyy>
+            <iyz>0</iyz>
+            <izz>6.0000000000000002e-06</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_sho_pitch_link_collision'>
+          <pose>-0.0012199999999999999 -0.022540000000000001 -0.01077 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_sho_pitch.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_sho_pitch_link_visual'>
+          <pose>-0.0012199999999999999 -0.022540000000000001 -0.01077 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_sho_pitch.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_sho_roll' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>r_sho_pitch_link</parent>
+        <child>r_sho_roll_link</child>
+        <axis>
+          <xyz>1 0 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_sho_roll_link'>
+        <pose>-0.01117999999689726 -0.11734 0.15767999999950333 1.2676825091224603e-11 -1.1233703692199031e-10 -2.1755247298126414e-19</pose>
+        <inertial>
+          <pose>0 0 -0.052440000000000001 0 0 0</pose>
+          <mass>0.184</mass>
+          <inertia>
+            <ixx>0.0002631</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00027290000000000002</iyy>
+            <iyz>0</iyz>
+            <izz>7.2200000000000007e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_sho_roll_link_collision'>
+          <pose>0 0 -0.052440000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_sho_roll.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_sho_roll_link_visual'>
+          <pose>0 0 -0.052440000000000001 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_sho_roll.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <joint name='r_el' type='revolute'>
+        <pose>0 0 0 0 0 0</pose>
+        <parent>r_sho_roll_link</parent>
+        <child>r_el_link</child>
+        <axis>
+          <xyz>0 -1 0</xyz>
+          <limit>
+            <lower>-2.8274333882308138</lower>
+            <upper>2.8274333882308138</upper>
+            <effort>1000</effort>
+            <velocity>100</velocity>
+            <stiffness>100000000</stiffness>
+            <dissipation>1</dissipation>
+          </limit>
+          <dynamics>
+            <spring_reference>0</spring_reference>
+            <spring_stiffness>0</spring_stiffness>
+            <damping>0.10000000000000001</damping>
+            <friction>0</friction>
+          </dynamics>
+        </axis>
+      </joint>
+      <link name='r_el_link'>
+        <pose>-0.0272299999864207 -0.13081999999881774 0.06441999999752962 1.2676825098000869e-11 -9.5424696371770696e-12 -2.1690091860639768e-19</pose>
+        <inertial>
+          <pose>0.01529 0.00132 -0.066350000000000006 0 0 0</pose>
+          <mass>0.045999999999999999</mass>
+          <inertia>
+            <ixx>0.0001204</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.00011909999999999999</iyy>
+            <iyz>0</iyz>
+            <izz>1.7900000000000001e-05</izz>
+          </inertia>
+        </inertial>
+        <collision name='r_el_link_collision'>
+          <pose>0.015769999999999999 0 -0.074090000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_el.stl</uri>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name='r_el_link_visual'>
+          <pose>0.015769999999999999 0 -0.074090000000000003 0 0 0</pose>
+          <geometry>
+            <mesh>
+              <scale>1 1 1</scale>
+              <uri>file:///home/lexciese/Dev/altair_ws/install/yantra_description/share/yantra_description/meshes/yantra/r_el.stl</uri>
+            </mesh>
+          </geometry>
+          <material>
+            <diffuse>1 1 1 1</diffuse>
+            <ambient>1 1 1 1</ambient>
+          </material>
+        </visual>
+        <enable_wind>false</enable_wind>
+      </link>
+      <plugin name='gz_ros2_control::GazeboSimROS2ControlPlugin' filename='gz_ros2_control-system'>
+        <parameters>/home/lexciese/Dev/altair_ws/install/quintic_walk/share/quintic_walk/config/controller.yaml</parameters>
+      </plugin>
+      <frame name='imu_fixed' attached_to='body_link'>
+        <pose>0 0 0 0 0 0</pose>
+      </frame>
+      <frame name='imu_link' attached_to='imu_fixed'>
+        <pose>0 0 0 0 0 0</pose>
+      </frame>
+      <frame name='base_fixed' attached_to='odom'>
+        <pose>0 0 0 0 0 0</pose>
+      </frame>
+      <frame name='body_link' attached_to='base_fixed'>
+        <pose>0 0 0 0 0 0</pose>
+      </frame>
+      <frame name='camera_joint' attached_to='head_tilt_link'>
+        <pose>0.0032599999999999999 0 0.046769999999999999 3.1415926535897931 1.5707926536359933 3.1415926535897931</pose>
+      </frame>
+      <frame name='cam_link' attached_to='camera_joint'>
+        <pose>0 0 0 0 0 0</pose>
+      </frame>
+      <frame name='l_sole_joint' attached_to='l_ank_roll_link'>
+        <pose>0 0.0074700000000000001 -0.033270000000000001 0 0 0</pose>
+      </frame>
+      <frame name='l_sole' attached_to='l_sole_joint'>
+        <pose>0 0 0 0 0 0</pose>
+      </frame>
+      <frame name='r_sole_joint' attached_to='r_ank_roll_link'>
+        <pose>0 -0.0077299999999999999 -0.033270000000000001 0 0 0</pose>
+      </frame>
+      <frame name='r_sole' attached_to='r_sole_joint'>
+        <pose>0 0 0 0 0 0</pose>
+      </frame>
+      <pose>0.050783334328270077 -2.7662358723651485e-05 0.29623459635045613 -2.3519768848263853e-06 0.10078932544107871 -0.001091159781163179</pose>
+      <static>false</static>
+      <self_collide>false</self_collide>
+    </model>
+    <light name='sun' type='directional'>
+      <pose>0 0 10 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <intensity>1</intensity>
+      <direction>-0.5 0.10000000000000001 -0.90000000000000002</direction>
+      <diffuse>0.800000012 0.800000012 0.800000012 1</diffuse>
+      <specular>0.200000003 0.200000003 0.200000003 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <linear>0.01</linear>
+        <constant>0.90000000000000002</constant>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <spot>
+        <inner_angle>0</inner_angle>
+        <outer_angle>0</outer_angle>
+        <falloff>0</falloff>
+      </spot>
+    </light>
+  </world>
+</sdf>

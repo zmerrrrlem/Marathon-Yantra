@@ -1,9 +1,0 @@
-<library path="altair_animation">
-    <class name="altair_animation/AltairAnimation"
-        type="altair_animation::AltairAnimation"
-        base_class_type="controller_interface::ControllerInterface">
-        <description>
-            Declaration of zmp walk controller, used for walking.
-        </description>
-    </class>
-</library>

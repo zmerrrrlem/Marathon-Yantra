@@ -1,0 +1,9 @@
+yantra_controllers_path: /yantra-os/src/yantra_controllers
+yantra_cpp_tests_path: /yantra-os/src/yantra_cpp_tests
+yantra_data_path: /yantra-os/src/yantra_data
+yantra_interfaces_path: /yantra-os/src/yantra_interfaces
+yantra_main_path: /yantra-os/src/yantra_main
+yantra_motion_path: /yantra-os/src/yantra_motion
+yantra_py_tests_path: /yantra-os/src/yantra_py_tests
+yantra_vision_path: /yantra-os/src/yantra_vision
+os_path: /yantra-os

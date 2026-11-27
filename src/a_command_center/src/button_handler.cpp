@@ -1,27 +1,27 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/int8.hpp>
-#include "altair_msgs/msg/robot_control_state.hpp"
+#include "yantra_msgs/msg/robot_control_state.hpp"
 #include <cstdint>
 
 class ButtonHandler : public rclcpp::Node
 {
 public:
   int8_t button_;
-  altair_msgs::msg::RobotControlState msg;
+  yantra_msgs::msg::RobotControlState msg;
 
   ButtonHandler() : Node("button_handler")
   {
     button_subs_ = this->create_subscription<std_msgs::msg::Int8>(
       "button_state", 1,
       std::bind(&ButtonHandler::button_callback, this, std::placeholders::_1));
-    robot_state_pubs_ = this->create_publisher<altair_msgs::msg::RobotControlState>("robot_state", 1);
+    robot_state_pubs_ = this->create_publisher<yantra_msgs::msg::RobotControlState>("robot_state", 1);
   }
 
   void button_command()
   {
     if (button_ == 1)
     {
-      msg.state = altair_msgs::msg::RobotControlState::WALKING_INIT;
+      msg.state = yantra_msgs::msg::RobotControlState::WALKING_INIT;
       robot_state_pubs_->publish(msg);
       RCLCPP_INFO(this->get_logger(), "Published WALKING_INIT state.");
     }
@@ -39,7 +39,7 @@ public:
 
 private:
   rclcpp::Subscription<std_msgs::msg::Int8>::SharedPtr button_subs_;
-  rclcpp::Publisher<altair_msgs::msg::RobotControlState>::SharedPtr robot_state_pubs_;
+  rclcpp::Publisher<yantra_msgs::msg::RobotControlState>::SharedPtr robot_state_pubs_;
 
 };
 

@@ -1,0 +1,23 @@
+initial_position:
+  head_tilt: 0.0
+  l_sho_pitch: 0.0
+  r_el: 0.0
+  r_sho_pitch: 0.0
+  l_knee: 1.245
+  head_pan: 0.0
+  r_sho_roll: 0.0
+  r_hip_yaw: 0.020
+  r_ank_roll: 0.199
+  r_hip_roll: 0.198
+  r_hip_pitch: 0.706
+  l_el: 0.0
+  l_ank_pitch: 0.644
+  l_ank_roll: -0.210
+  r_knee: -1.251
+  r_ank_pitch: -0.647
+  l_sho_roll: 0.0
+  l_hip_yaw: -0.021
+  l_hip_roll: -0.208
+  l_hip_pitch: -0.703
+  l_claw: 0.0
+  r_claw: 0.0

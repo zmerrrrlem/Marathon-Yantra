@@ -246,7 +246,7 @@ RUN chmod +x /rcl_entrypoint.sh
 # Start bash on altair_ws folder
 WORKDIR /home/$USERNAME/altair_ws
 
-# only dynamixel_workbench_toolbox altair_description altair_moveit_config biped_interfaces altair_msgs ros2_python_extension altair_hardware bio_ik rot_conv altair_splines quintic_walk
+# only dynamixel_workbench_toolbox yantra_description yantra_moveit_config biped_interfaces yantra_msgs ros2_python_extension yantra_hardware bio_ik rot_conv yantra_splines quintic_walk
 
 # ------------ ENTRYPOINT AND LOOP ------------
 ENTRYPOINT ["/rcl_entrypoint.sh"]

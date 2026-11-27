@@ -83,7 +83,7 @@ The `--rebase` flag avoids creating merge commits, which result in non-linear hi
 6. Build the project (only some packages, as the rest are still in development):
 
     ```bash
-    colcon build --packages-select dynamixel_sdk dynamixel_workbench_toolbox dynamixel_msgs altair_description altair_moveit_config biped_interfaces altair_msgs ros2_python_extension dynamixel_hardware bio_ik rot_conv quintic_splines param_manager offset_editor microcontroller_hardware command_center head_controller quintic_walk --executor sequential
+    colcon build --packages-select dynamixel_sdk dynamixel_workbench_toolbox dynamixel_msgs yantra_description yantra_moveit_config biped_interfaces yantra_msgs ros2_python_extension dynamixel_hardware bio_ik rot_conv quintic_splines param_manager offset_editor microcontroller_hardware command_center head_controller quintic_walk --executor sequential
     ```
 
 7. Ready to walk!
@@ -167,11 +167,11 @@ The `--rebase` flag avoids creating merge commits, which result in non-linear hi
 [Preview of how to launch the Gazebo Simulation: YouTube Video](https://youtu.be/w1ja08d_PO8)
 
    ```bash
-   ros2 launch altair_moveit_config move_group.launch.py
+   ros2 launch yantra_moveit_config move_group.launch.py
    ```
 
    ```bash
-   ros2 launch quintic_walk altair_gazebo.launch.py
+   ros2 launch quintic_walk yantra_gazebo.launch.py
    ```
 
    A gazebo sim window and new terminal window to manage the gazebo sim like reset, and pause the simulation will show up.

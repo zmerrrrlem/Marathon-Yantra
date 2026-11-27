@@ -1,0 +1,47 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 75  # Hz
+    # namespace: altair01
+    use_sim_time: true
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    
+    imu_sensor_broadcaster:
+      type: imu_sensor_broadcaster/IMUSensorBroadcaster
+      sensor_name: imu_sensor
+      frame_id: imu_link
+    
+    quintic_walk:
+      type: quintic_walk/QuinticWalk
+  
+    # controller_experiment_1:
+    #   type: controller_experiment_1/ControllerExperiment1
+
+# Top-level node namespace for the imu_sensor_broadcaster controller when it is
+# loaded standalone by controller_manager via --params-file. controller_manager
+# reads the controller type/params from its own ros__parameters namespace and
+# ignores this section, but the controller node's ParamListener (default prefix
+# "") resolves parameters from the params file under this node name so that
+# 'sensor_name' and 'frame_id' are available at initialization.
+imu_sensor_broadcaster:
+  ros__parameters:
+    sensor_name: imu_sensor
+    frame_id: imu_link
+
+# microcontroller_broadcaster:
+#   ros__parameters:
+#     type: microcontroller_broadcaster/MicrocontrollerBroadcaster
+#     sensor_name: imu_sensor
+#     frame_id: imu_link
+
+quintic_walk:
+  ros__parameters:
+    is_async: true
+    # update_rate: 100
+
+# imu_sensor_broadcaster:
+#   ros__parameters:
+#     type: imu_sensor_broadcaster/IMUSensorBroadcaster
+#     sensor_name: imu_sensor
+#     frame_id: imu_link

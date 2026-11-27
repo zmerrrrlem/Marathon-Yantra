@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: yantra_description
+    relative_path: urdf/alfarobi_compose.urdf.xacro
+  srdf:
+    relative_path: config/alfarobi.srdf
+  package_settings:
+    author_name: Falah Naufal Zaki
+    author_email: falahnzk@gmail.com
+    generated_timestamp: 1732626516
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity

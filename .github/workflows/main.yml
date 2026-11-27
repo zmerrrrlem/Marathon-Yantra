@@ -54,5 +54,5 @@ jobs:
         run: |
           source /opt/ros/jazzy/setup.bash
           export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-          colcon build --packages-select dynamixel_workbench_toolbox altair_description altair_moveit_config biped_interfaces altair_msgs dynamixel_msgs ros2_python_extension dynamixel_hardware bio_ik rot_conv altair_splines quintic_walk
+          colcon build --packages-select dynamixel_workbench_toolbox yantra_description yantra_moveit_config biped_interfaces yantra_msgs dynamixel_msgs ros2_python_extension dynamixel_hardware bio_ik rot_conv yantra_splines quintic_walk
 

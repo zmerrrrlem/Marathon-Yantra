@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" xmlns:gz="http://gazebosim.org/schema" name="yantra">
+
+  <!-- Change the value in the launch file -->
+  <xacro:arg name="prefix" default="" />
+  <xacro:arg name="real_mode" default="false" />
+  <xacro:arg name="sim_mode" default="false" />
+  <xacro:arg name="mock_mode" default="false"/>
+  <xacro:arg name="tuning_mode" default="false" />
+  <xacro:arg name="dxl_unavailable" default="false" />
+  <xacro:arg name="imu_unavailable" default="false" />
+  <xacro:arg name="dynamixel_port" default="/dev/ttyUSB0" />
+  <xacro:arg name="dynamixel_baudrate" default="1000000" />
+  <xacro:arg name="stm32_port" default="/dev/ttyACM0" />
+  <xacro:arg name="stm32_baudrate" default="115200" />
+  <xacro:arg name="offset_file" default="offset.yaml" />
+  <xacro:arg name="initial_position_file" default="initial_position.yaml" />
+
+  <!-- Include the new Yantra model with normalized legacy names -->
+  <xacro:include filename="$(find yantra_description)/urdf/yantravira/yantravira.urdf.xacro" />
+
+  <!-- TF: base_link is the root; body_link is the torso; add compatibility frames -->
+  <!-- base_footprint is fixed to base_link at z=-0.343 -->
+  <!-- body_link is the torso (from Yantra base_link mapped to body_link) -->
+  <!-- imu_link fixed to body_link -->
+  <!-- cam_link on head -->
+  <!-- l_sole / r_sole on legs -->
+
+  <!-- base_link: dummy root link (no inertia so KDL parses cleanly; torso mass is on body_link) -->
+  <link name="base_link"/>
+
+  <!-- base_footprint: fixed frame offset from base_link -->
+  <link name="base_footprint"/>
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="base_footprint"/>
+    <origin xyz="0.0 0.0 -0.343" rpy="0 0 0"/>
+  </joint>
+
+  <!-- body_link: torso, child of base_link -->
+  <joint name="base_to_body" type="fixed">
+    <parent link="base_link"/>
+    <child link="body_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="body_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://yantra_description/meshes/yantravira/base_link.STL" />
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://yantra_description/meshes/yantravira/base_link.STL" />
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0.085" rpy="0 0 0" />
+      <mass value="2.8" />
+      <inertia ixx="0.000523" ixy="0" ixz="0" iyy="0.000539" iyz="0" izz="0.000730" />
+    </inertial>
+  </link>
+
+  <!-- imu_link: fixed to body_link -->
+  <joint name="imu_fixed" type="fixed">
+    <parent link="body_link" />
+    <child link="imu_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <link name="imu_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.1" />
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+  </link>
+
+  <!-- camera on head: camera_joint is defined in yantravira.urdf.xacro; cam_link is child -->
+  <link name="cam_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0.1" />
+      <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://yantra_description/meshes/yantravira/head_pitch.STL" />
+      </geometry>
+      <material name="gray">
+        <color rgba="0.5 0.5 0.5 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://yantra_description/meshes/yantravira/head_pitch.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <!-- l_sole / r_sole are already defined in yantravira.urdf.xacro -->
+
+  <!-- leg links are now in yantravira (l_hip_yaw, l_hip_roll, l_hip_pitch, l_knee, l_ank_pitch, l_ank_roll, l_sole) -->
+  <!-- right leg links (r_hip_yaw, r_hip_roll, r_hip_pitch, r_knee, r_ank_pitch, r_ank_roll, r_sole) -->
+
+  <!-- arm links are now in yantravira (l_sho_pitch, l_sho_roll, l_el, l_claw, r_sho_pitch, r_sho_roll, r_el, r_claw) -->
+
+  <!-- head links are now in yantravira (head_pan, head_tilt, camera_joint, cam_link) -->
+
+  <!-- ros2_control -->
+  <xacro:include filename="$(find yantra_description)/ros2_control/yantra.ros2_control.xacro" />
+  <xacro:yantra_ros2_control
+    name="yantra" prefix="$(arg prefix)" real_mode="$(arg real_mode)" sim_mode="$(arg sim_mode)" mock_mode="$(arg mock_mode)" offset_file="$(arg offset_file)" initial_position_file="$(arg initial_position_file)" dynamixel_port="$(arg dynamixel_port)" dynamixel_baudrate="$(arg dynamixel_baudrate)" stm32_port="$(arg stm32_port)" stm32_baudrate="$(arg stm32_baudrate)"/>
+
+  <!-- Gazebo if sim_mode -->
+  <xacro:if value="$(arg sim_mode)">
+    <xacro:include filename="$(find yantra_description)/gazebo/yantra.gazebo.xacro" />
+    <xacro:yantra_gazebo prefix="$(arg prefix)" />  
+  </xacro:if>
+
+</robot>

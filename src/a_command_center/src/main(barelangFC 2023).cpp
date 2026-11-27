@@ -44,9 +44,9 @@
 #include <visualization_msgs/msg/marker.hpp>
 
 #include "biped_interfaces/msg/phase.hpp"
-#include "altair_msgs/msg/foot_pressure.hpp"
-#include "altair_msgs/msg/joint_command.hpp"
-#include "altair_msgs/msg/robot_control_state.hpp"
+#include "yantra_msgs/msg/foot_pressure.hpp"
+#include "yantra_msgs/msg/joint_command.hpp"
+#include "yantra_msgs/msg/robot_control_state.hpp"
 
 //head controll module hpp
 #include "std_msgs/msg/int8.hpp"

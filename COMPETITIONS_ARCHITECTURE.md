@@ -1,4 +1,4 @@
-# Panduan Arsitektur Multi-Lomba Robot Altair (KRSBI Humanoid)
+# Panduan Arsitektur Multi-Lomba Robot Yantra (KRSBI Humanoid)
 
 Dokumen ini menjelaskan struktur modular workspace `altair_ws_fix` yang dirancang agar dapat digunakan untuk berbagai cabang lomba tanpa saling tumpang tindih.
 
@@ -6,20 +6,20 @@ Dokumen ini menjelaskan struktur modular workspace `altair_ws_fix` yang dirancan
 
 ## 1. Filosofi Tiga Lapisan (Three-Layer Architecture)
 
-Struktur workspace Altair memisahkan antara **Modul Dasar (Core Modules)**, **Logika Lomba (Competitions / Behaviors)**, dan **Peluncur Utama (Main Launcher)**:
+Struktur workspace Yantra memisahkan antara **Modul Dasar (Core Modules)**, **Logika Lomba (Competitions / Behaviors)**, dan **Peluncur Utama (Main Launcher)**:
 
 ```text
 altair_ws_fix/
 │
 ├── 📁 core_modules (Modul Dasar Robot)
-│   ├── altair_hardware/         # Interface ke motor servo Dynamixel, STM32, dan sensor IMU
-│   ├── altair_motion/           # Quintic walk, ZMP walk, Inverse Kinematics, Bezier Kick, Head
-│   ├── altair_vision_deeplearning/ # Pipeline kamera USB & model AI OpenVINO (FL3 INT8)
-│   ├── altair_msgs/             # Definisi pesan ROS 2 kustom (RobotControlState, JointCommand, dll.)
-│   └── altair_misc/             # URDF robot description, MoveIt 2 config, bio_ik
+│   ├── yantra_hardware/         # Interface ke motor servo Dynamixel, STM32, dan sensor IMU
+│   ├── yantra_motion/           # Quintic walk, ZMP walk, Inverse Kinematics, Bezier Kick, Head
+│   ├── yantra_vision_deeplearning/ # Pipeline kamera USB & model AI OpenVINO (FL3 INT8)
+│   ├── yantra_msgs/             # Definisi pesan ROS 2 kustom (RobotControlState, JointCommand, dll.)
+│   └── yantra_misc/             # URDF robot description, MoveIt 2 config, bio_ik
 │
 ├── 📁 competitions (Konfigurasi & Logika Cabang Lomba)
-│   ├── altair_bringup/config/competitions/
+│   ├── yantra_bringup/config/competitions/
 │   │   ├── penalty_kick.yaml    # Parameter khusus Penalty Kick (threshold bola & gawang)
 │   │   ├── united_soccer.yaml   # Parameter khusus United Soccer (bola, kawan, gawang, GameController)
 │   │   └── sprint.yaml          # Parameter khusus Sprint (langkah cepat garis lurus)
@@ -30,7 +30,7 @@ altair_ws_fix/
 └── 🚀 main_launcher (Peluncur Terpadu Satu Pintu)
     ├── ./start_lomba.sh         # Menu interaktif CLI saat robot dinyalakan
     ├── start_lomba.py           # Dashboard pemilihan mode cabang lomba
-    └── ros2 launch altair_bringup competition.launch.py mode:=<nama_lomba>
+    └── ros2 launch yantra_bringup competition.launch.py mode:=<nama_lomba>
 ```
 
 ---
@@ -57,13 +57,13 @@ source /opt/ros/jazzy/setup.bash
 source install/setup.bash
 
 # Untuk Penalty Kick:
-ros2 launch altair_bringup competition.launch.py mode:=penalty_kick video_device:=/dev/video2
+ros2 launch yantra_bringup competition.launch.py mode:=penalty_kick video_device:=/dev/video2
 
 # Untuk United Soccer:
-ros2 launch altair_bringup competition.launch.py mode:=united_soccer video_device:=/dev/video2
+ros2 launch yantra_bringup competition.launch.py mode:=united_soccer video_device:=/dev/video2
 
 # Untuk menyertakan motor & motion sekalian:
-ros2 launch altair_bringup competition.launch.py mode:=penalty_kick with_motion:=true
+ros2 launch yantra_bringup competition.launch.py mode:=penalty_kick with_motion:=true
 ```
 
 ---

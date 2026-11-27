@@ -11,7 +11,7 @@ set(THIS_PACKAGE_INCLUDE_DEPENDS
   rclcpp
   std_msgs
   sensor_msgs
-  altair_msgs
+  yantra_msgs
 )
 
 # Find libserial

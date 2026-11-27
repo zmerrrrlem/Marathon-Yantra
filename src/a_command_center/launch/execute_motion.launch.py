@@ -45,7 +45,7 @@ def generate_launch_description():
     move_group_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
-                FindPackageShare('altair_moveit_config'),
+                FindPackageShare('yantra_moveit_config'),
                 'launch',
                 'move_group.launch.py'
             ])
@@ -80,7 +80,7 @@ def generate_launch_description():
             PathJoinSubstitution([
                 FindPackageShare('head_controller'),
                 'launch',
-                'altair.launch.py'
+                'yantra.launch.py'
             ])
         )
     )

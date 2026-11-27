@@ -1,0 +1,9 @@
+<library path="microcontroller_hardware">
+  <class name="yantra_hardware/MicrocontrollerHardware"
+    type="yantra_hardware::MicrocontrollerHardware"
+    base_class_type="hardware_interface::SensorInterface">
+    <description>
+      The ros2_control microcontroller hardware interface for Serial Communication in Yantra Humanoid Robot
+    </description>
+  </class>
+</library>

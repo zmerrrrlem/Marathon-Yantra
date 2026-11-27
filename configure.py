@@ -5,9 +5,9 @@ import re
 from pathlib import Path
 
 # === Paths ===
-MOVEGROUP_FILE = Path("src/altair_misc/altair_moveit_config/launch/move_group.launch.py")
+MOVEGROUP_FILE = Path("src/yantra_misc/yantra_moveit_config/launch/move_group.launch.py")
 CONTROLLER_FILE = Path("src/a_command_center/config/controller.yaml")
-GAZEBO_XACRO_FILE = Path("src/altair_misc/altair_description/gazebo/altair.gazebo.xacro")
+GAZEBO_XACRO_FILE = Path("src/yantra_misc/yantra_description/gazebo/yantra.gazebo.xacro")
 EXECUTE_MOTION_LAUNCH_FILE = Path("src/a_command_center/launch/execute_motion.launch.py")
 
 

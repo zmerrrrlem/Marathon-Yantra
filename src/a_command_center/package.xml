@@ -6,7 +6,7 @@
   <version>0.0.0</version>
   <description>Using BehavioralTree to execute task</description>
 
-  <maintainer email="altairgmrt@gmail.com">Altair</maintainer>
+  <maintainer email="altairgmrt@gmail.com">Yantra</maintainer>
   <license>TODO</license>
   <author email="falahnzk.dev@gmail.com">Falah Naufal Zaki</author>
 
@@ -17,7 +17,7 @@
   <depend>std_msgs</depend>
   <depend>behaviortree_cpp</depend>
   <depend>std_srvs</depend>
-  <depend>altair_msgs</depend>
+  <depend>yantra_msgs</depend>
 
   <export>
     <build_type>ament_cmake</build_type>
