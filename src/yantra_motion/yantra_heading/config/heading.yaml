@@ -1,0 +1,38 @@
+# yantra_heading / heading_controller
+# Doubles must be written with a decimal point (30.0, not 30), or ROS rejects the type.
+heading_controller:
+  ros__parameters:
+    input_topic: /cmd_vel_raw            # point teleop / mission here
+    output_topic: /cmd_vel               # quintic_walk listens here
+    imu_topic: /imu_sensor_broadcaster/imu
+    walk_status_topic: /walk_status
+    rate_hz: 50.0
+
+    # --- straight-line heading hold (marathon) ---
+    hold_enabled: true
+    hold_kp: 0.6                 # rad/s per rad of heading error
+    hold_ki: 0.3                 # removes steady offset from constant drift
+    hold_kd: 0.0
+    hold_max_rate: 0.15          # rad/s, max yaw correction while holding
+    hold_deadband_deg: 0.5
+    hold_start_delay: 1.0        # s of WALKING before correcting
+    relatch_delay: 0.5           # s after operator stops steering before latching the new heading
+
+    # --- relative turns: ros2 topic pub --once /heading/turn_deg std_msgs/Float64 "{data: 90.0}" ---
+    turn_kp: 1.2
+    turn_kd: 0.0
+    turn_max_rate: 0.5           # rad/s
+    turn_min_rate: 0.05
+    turn_in_place: true
+    capture_band_deg: 8.0
+    settle_tolerance_deg: 2.0
+    settle_time: 0.5
+    turn_timeout: 30.0
+    walk_start_grace: 3.0
+    done_hold_off: 0.5
+
+    yaw_sign: 1.0                # set -1.0 if a positive angular.z turns the robot clockwise
+    imu_timeout: 0.3
+    yaw_filter_tau: 0.05
+    gyro_filter_tau: 0.05
+    rate_limit: 2.0              # rad/s^2 on the yaw correction
