@@ -3,22 +3,22 @@
 
   <!-- === Top-level Materials === -->
   <material name="light_gray">
-    <color rgba="0.957 0.957 0.957 1" />
+    <color rgba="0.894 0.894 0.894 1" />
   </material>
   <material name="medium_gray">
     <color rgba="0.894 0.894 0.894 1" />
   </material>
   <material name="off_white">
-    <color rgba="0.996 0.996 1 1" />
+    <color rgba="0.894 0.894 0.894 1" />
   </material>
   <material name="light_blue">
-    <color rgba="0.996 0.996 1 1" />
+    <color rgba="0.894 0.894 0.894 1" />
   </material>
   <material name="dark_blue">
-    <color rgba="0.212 0.212 0.212 1" />
+    <color rgba="0.894 0.894 0.894 1" />
   </material>
   <material name="cyan">
-    <color rgba="0 1 1 1" />
+    <color rgba="0.894 0.894 0.894 1" />
   </material>
 
   <!-- Joint limits set to realistic servo values (were effort=1000 N·m, velocity=100 rad/s,

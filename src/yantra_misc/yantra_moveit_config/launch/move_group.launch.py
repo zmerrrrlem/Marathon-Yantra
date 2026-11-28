@@ -54,11 +54,11 @@ def generate_launch_description():
         .robot_description_kinematics(file_path="config/kinematics.yaml")
         .joint_limits(file_path="config/joint_limits.yaml")
         .robot_description(file_path=xacro_path, mappings={
-            "real_mode": "false",
+            "real_mode": "true",
             "dxl_unavailable": "false",
             "imu_unavailable": "false",
             "mock_mode": "false",
-            "sim_mode": "true",
+            "sim_mode": "false",
             "tuning_mode": "false",
 
             "dynamixel_port": "/dev/u2d2",

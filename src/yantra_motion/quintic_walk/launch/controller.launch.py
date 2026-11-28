@@ -46,12 +46,6 @@ def generate_launch_description():
         arguments=["quintic_walk", "--param-file", quintic_walk_params],
     )
 
-    microcontroller_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["microcontroller_broadcaster"],
-    )
-
     imu_sensor_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
