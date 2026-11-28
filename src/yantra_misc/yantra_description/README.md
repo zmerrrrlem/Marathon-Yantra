@@ -13,20 +13,20 @@ description and fix it.
 
 | What | Path |
 |---|---|
-| Workspace root | `~/Downloads/altair_lab` |
-| Description package | `~/Downloads/altair_lab/src/yantra_misc/yantra_description` |
+| Workspace root | `~/Documents/Yantravira` |
+| Description package | `~/Documents/Yantravira/src/yantra_misc/yantra_description` |
 | Robot model (URDF/xacro) | `yantra_description/urdf/` |
 | Meshes | `yantra_description/meshes/` |
 | Gazebo extras / plugins | `yantra_description/gazebo/`, `yantra_description/ros2_control/` |
 | Controller config | `yantra_description/config/` |
 | Worlds | `yantra_description/worlds/` |
 | Launch files | `yantra_description/launch/` |
-| Diagnostic script | `check_robot.py` (usually `~/Downloads/check_robot.py`) |
+| Diagnostic script | `check_robot.py` (at `~/Documents/Yantravira/AI/check_robot.py`) |
 
 ## Step 1: Find the main robot file
 
 ```bash
-cd ~/Downloads/altair_lab/src/yantra_misc/yantra_description
+cd ~/Documents/Yantravira/src/yantra_misc/yantra_description
 ls urdf
 grep -rl "<robot" urdf          # files that define a robot
 grep -rn "xacro:include" urdf   # included pieces, not the main file
@@ -43,10 +43,10 @@ grep -rn "urdf\|xacro\|sdf" launch
 
 ```bash
 source /opt/ros/$ROS_DISTRO/setup.bash 2>/dev/null || source /opt/ros/*/setup.bash
-cd ~/Downloads/altair_lab/src/yantra_misc/yantra_description
+cd ~/Documents/Yantravira/src/yantra_misc/yantra_description
 
-python3 ~/Downloads/check_robot.py urdf/<MAIN_FILE> \
-        --pkg-path ~/Downloads/altair_lab/src \
+python3 ~/Documents/Yantravira/AI/check_robot.py urdf/<MAIN_FILE> \
+        --pkg-path ~/Documents/Yantravira/src \
         --world worlds/<WORLD_FILE>.sdf \
         --gz
 ```
@@ -108,7 +108,7 @@ These can only be done with Gazebo running:
 2. Re-run `check_robot.py` until it reports 0 errors.
 3. Rebuild if the launch uses the installed package:
    ```bash
-   cd ~/Downloads/altair_lab && colcon build --packages-select yantra_description
+   cd ~/Documents/Yantravira && colcon build --packages-select yantra_description
    source install/setup.bash
    ```
 4. Relaunch Gazebo and confirm that the robot is assembled while paused and stays assembled on play.
