@@ -193,6 +193,20 @@ walking:
         type: bool
         read_only: true
         description: "bioIK parameter"
+      clamp_to_workspace:
+        type: bool
+        description: "Pull foot goals that are beyond the leg's reach back onto the reachable sphere before solving IK"
+        default_value: true
+      reach_margin:
+        type: double
+        description: "Fraction of the full (straight-knee) leg length that IK goals are allowed to use"
+        default_value: 0.97
+        validation:
+          bounds<>: [0.5, 1.0]
+      hold_last_on_failure:
+        type: bool
+        description: "When IK fails for a leg, keep that leg's last valid joint positions instead of sending a partial result"
+        default_value: true
     debug_active:
       type: bool
       description: "Activate debug output"

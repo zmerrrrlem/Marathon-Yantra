@@ -3,6 +3,7 @@
 #include "quintic_walk/quintic_walk.hpp"
 #include "controller_interface/helpers.hpp"
 #include <stdexcept>
+#include <algorithm>
 #include <cmath> // For M_PI
 #include <iostream>
 #include <memory>
@@ -81,6 +82,7 @@ namespace quintic_walk
       // pub_joint_states_ = node_->create_publisher<sensor_msgs::msg::JointState>("joint_states", 1);
       pub_odometry_ = node_->create_publisher<nav_msgs::msg::Odometry>("walk_engine_odometry", 1);
       pub_support_ = node_->create_publisher<biped_interfaces::msg::Phase>("walk_support_state", 1);
+      pub_walk_status_ = node_->create_publisher<std_msgs::msg::Int32>("walk_status", 1);
       step_sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("step", 1, std::bind(&QuinticWalk::stepCb, this, _1));
       cmd_vel_sub_ =
         node_->create_subscription<geometry_msgs::msg::Twist>("cmd_vel", 1, std::bind(&QuinticWalk::cmdVelCb, this, _1));
@@ -606,6 +608,33 @@ namespace quintic_walk
   }
 
 
+  bool QuinticWalk::readJointState(const std::string& joint_name, double& value) {
+    auto it = joint_map_.find(joint_name);
+    if (it == joint_map_.end() || it->second >= state_interfaces_.size()) {
+      RCLCPP_ERROR_THROTTLE(node_->get_logger(), *node_->get_clock(), 2000,
+        "No claimed state interface for joint '%s', skipping", joint_name.c_str());
+      return false;
+    }
+    value = state_interfaces_[it->second].get_value();
+    return std::isfinite(value);
+  }
+
+  bool QuinticWalk::writeJointCommand(const std::string& joint_name, double value) {
+    if (!std::isfinite(value)) {
+      RCLCPP_ERROR_THROTTLE(node_->get_logger(), *node_->get_clock(), 2000,
+        "Non-finite command for joint '%s', skipping", joint_name.c_str());
+      return false;
+    }
+    auto it = joint_map_.find(joint_name);
+    if (it == joint_map_.end() || it->second >= command_interfaces_.size()) {
+      RCLCPP_ERROR_THROTTLE(node_->get_logger(), *node_->get_clock(), 2000,
+        "No claimed command interface for joint '%s' (IK/URDF name mismatch?), skipping", joint_name.c_str());
+      return false;
+    }
+    (void)command_interfaces_[it->second].set_value(value);
+    return true;
+  }
+
   void QuinticWalk::move_smoother(double& buffer, double current, double target) {
     // Arguments: current: reference to current servo position, target: target servo position
     // Optional steps parameter to control smoothing rate (higher = smoother but slower)
@@ -715,16 +744,23 @@ namespace quintic_walk
         if (robot_state_ == yantra_msgs::msg::RobotControlState::WALKING_INIT) {
 
           yantra_msgs::msg::JointCommand joint_goals = initial_position(dt);
-          
+
+          // Only the leg joints come out of IK; never index past what was actually returned
+          const size_t n_init = std::min({ joint_goals.joint_names.size(), joint_goals.positions.size(),
+            sizeof(goal_pos_temp_) / sizeof(goal_pos_temp_[0]) });
+
           if (mot_cont_ == 100) {
-            for (uint8_t i = 0; i < joint_size_ - 6; ++i) {
-              goal_pos_temp_[i] = state_interfaces_[joint_map_[joint_goals.joint_names[i]]].get_value();
+            for (size_t i = 0; i < n_init; ++i) {
+              double current = 0.0;
+              if (readJointState(joint_goals.joint_names[i], current)) goal_pos_temp_[i] = current;
             }
           }
 
-          for (uint8_t i = 0; i < joint_size_ - 6; ++i) {
-            move_smoother(goal_pos_temp_[i], state_interfaces_[joint_map_[joint_goals.joint_names[i]]].get_value(), joint_goals.positions[i]);
-            command_interfaces_[joint_map_[joint_goals.joint_names[i]]].set_value(goal_pos_temp_[i]);
+          for (size_t i = 0; i < n_init; ++i) {
+            double current = 0.0;
+            if (!readJointState(joint_goals.joint_names[i], current)) continue;
+            move_smoother(goal_pos_temp_[i], current, joint_goals.positions[i]);
+            writeJointCommand(joint_goals.joint_names[i], goal_pos_temp_[i]);
           }
           pub_controller_command_->publish(joint_goals);
           if (mot_cont_ > 0) --mot_cont_;
@@ -739,11 +775,11 @@ namespace quintic_walk
           pub_controller_command_->publish(joint_goals);
           init_position_ = false;
 
-          // Passing joints command value to the shared memory hardware_interface, minus 6 to exclude the arm
-          for (uint8_t i = 0; i < joint_size_ - 6; ++i) {
-            auto temp = state_interfaces_[joint_map_[joint_goals.joint_names[i]]].get_value();
-            // access the joint name from the joint_goals msg step(dt) and set the value to the corresponding joint index
-            command_interfaces_[joint_map_[joint_goals.joint_names[i]]].set_value(joint_goals.positions[i]);
+          // Pass the IK output (leg joints only) to the hardware interface, looked up by name.
+          // Iterate over what IK actually returned so an empty/short result can never index out of bounds.
+          const size_t n_goals = std::min(joint_goals.joint_names.size(), joint_goals.positions.size());
+          for (size_t i = 0; i < n_goals; ++i) {
+            writeJointCommand(joint_goals.joint_names[i], joint_goals.positions[i]);
           }
           // set command for the hands
           double r_sho_pitch;
@@ -778,6 +814,10 @@ namespace quintic_walk
       // always publish odometry to not confuse odometry fuser
       // (also broadcasts odom -> base_link before the debug visualizer runs)
       pub_odometry_->publish(getOdometry());
+      // engine state for external supervisors (heading hold / turning)
+      std_msgs::msg::Int32 walk_status;
+      walk_status.data = static_cast<int>(walk_engine_->getState());
+      pub_walk_status_->publish(walk_status);
       // publish debug information
       if (config_.node.debug_active) {
         publish_debug();

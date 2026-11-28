@@ -26,15 +26,34 @@ class WalkIK : public quintic_splines::AbstractIK<WalkResponse> {
 
   moveit::core::RobotStatePtr get_goal_state();
 
+  // Number of consecutive cycles in which at least one leg failed IK (0 = last cycle was fine)
+  int getConsecutiveFailures() const { return consecutive_failures_; }
+
  private:
+  // Geometry of one leg, measured from the robot model at init (zero joint configuration).
+  struct LegGeometry {
+    bool valid = false;
+    tf2::Vector3 hip_in_root;        // hip-pitch joint origin, root frame
+    tf2::Vector3 tip_to_ankle;       // ankle-pitch joint origin expressed in the IK tip frame
+    double max_reach = 0.0;          // thigh + shank length
+  };
+
+  LegGeometry measureLeg(const moveit::core::JointModelGroup* leg_group);
+  geometry_msgs::msg::Pose clampToReach(const geometry_msgs::msg::Pose& goal, const LegGeometry& leg, bool& clamped) const;
+  bool solveLeg(const moveit::core::JointModelGroup* leg_group, const geometry_msgs::msg::Pose& goal);
+
   rclcpp_lifecycle::LifecycleNode::SharedPtr node_;
+
+  LegGeometry left_leg_geometry_;
+  LegGeometry right_leg_geometry_;
+  int consecutive_failures_ = 0;
 
   std::array<double, 12> joint_axis_direction_;
 
   moveit::core::RobotStatePtr goal_state_;
-  const moveit::core::JointModelGroup* legs_joints_group_;
-  const moveit::core::JointModelGroup* left_leg_joints_group_;
-  const moveit::core::JointModelGroup* right_leg_joints_group_;
+  const moveit::core::JointModelGroup* legs_joints_group_ = nullptr;
+  const moveit::core::JointModelGroup* left_leg_joints_group_ = nullptr;
+  const moveit::core::JointModelGroup* right_leg_joints_group_ = nullptr;
   walking::Params::Node::Ik config_;
 };
 }  // namespace quintic_walk

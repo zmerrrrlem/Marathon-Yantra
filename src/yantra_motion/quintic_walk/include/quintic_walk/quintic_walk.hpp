@@ -72,6 +72,7 @@
 #include <std_msgs/msg/bool.hpp>
 #include <std_msgs/msg/char.hpp>
 #include <std_msgs/msg/float64.hpp>
+#include <std_msgs/msg/int32.hpp>
 #include <std_msgs/msg/string.hpp>
 #include <string>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
@@ -139,6 +140,9 @@ namespace quintic_walk
     rclcpp::TimerBase::SharedPtr startTimer();
     double getTimerFreq();
     void move_smoother(double &buffer, double current, double target);
+    // Safe access to the claimed interfaces by joint name. Unknown names are reported (throttled) and skipped.
+    bool readJointState(const std::string& joint_name, double& value);
+    bool writeJointCommand(const std::string& joint_name, double value);
 
 
     controller_interface::CallbackReturn on_init() override;
@@ -232,6 +236,8 @@ namespace quintic_walk
     rclcpp::Publisher<yantra_msgs::msg::JointCommand>::SharedPtr pub_controller_command_;
     rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr pub_odometry_;
     rclcpp::Publisher<biped_interfaces::msg::Phase>::SharedPtr pub_support_;
+    // Engine state (WalkState enum as int) for external nodes such as yantra_heading
+    rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr pub_walk_status_;
 
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr pub_joint_states_;
 
